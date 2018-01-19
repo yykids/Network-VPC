@@ -2,7 +2,7 @@
 
 ## 사전 준비
 
-인스턴스 API를 사용하려면 토큰 발급과 같은 사전 준비가 필요합니다. [API 사용 준비 가이드](/Infrastructure%20Common/ko/api-guide/)를 참조합니다.
+네트워크 VPC API를 사용하려면 앱키와 토큰이 필요합니다. [API Endpoint URL](/Compute/Instance/ko/api-guide/#api-endpoint-url)과 [토큰 API](/Compute/Instance/ko/api-guide/#api)를 이용하여 앱키와 토큰을 준비합니다. 앱키는 API Endpoint URL에 토큰은 Request Body에 포함하여 사용합니다.
 
 
 ## 보안 그룹 API
@@ -62,7 +62,7 @@ X-Auth-Token: {tokenId}
 | Description | Body | String | 보안 그룹 설명 |
 | Security Group ID | Body | String | 보안 그룹 ID |
 | Name | Body | String | 보안 그룹 이름 |
-| securityGroupRules | Body | List | 보안 그룹 규칙 목록, [보안 그룹 규칙 API](#security-group-rules-api) 참조 |
+| securityGroupRules | Body | List | 보안 그룹 규칙 목록, [보안 그룹 규칙 API](#api_1) 참조 |
 
 ### 보안 그룹 생성
 새로운 보안 그룹을 생성합니다.
@@ -128,9 +128,9 @@ Content-Type: application/json;charset=UTF-8
 | Description | Body | String | 보안 그룹 설명 |
 | Security Group ID | Body | String | 보안 그룹 ID |
 | Name | Body | String | 보안 그룹 이름 |
-| securityGroupRules | Body | List | 보안 그룹 규칙 목록, [보안 그룹 규칙 API](#security-group-rules-api) 참조 |
+| securityGroupRules | Body | List | 보안 그룹 규칙 목록, [보안 그룹 규칙 API](#api_1) 참조 |
 
-### 보안 그룹 업데이트
+### 보안 그룹 수정
 보안 그룹의 이름, 설명을 변경합니다.
 
 #### Method, URL

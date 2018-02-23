@@ -501,6 +501,44 @@ X-Auth-Token: {tokenId}
 | DOWN | 플로팅 IP가 연결되어 있지 않은 상태 |
 | ERROR | 에러 발생 |
 
+
+#### 플로팅 IP Pool 조회
+플로팅 IP Pool 목록을 조회합니다.
+
+##### Method, URL
+```
+GET /v1.0/appkeys/{appkey}/floating-ip-pools
+X-Auth-Token: {tokenId}
+```
+|  Name | In | Type | Optional | Description |
+|--|--|--|--|--|
+| tokenId | Header | String | - | 토큰 ID |
+
+##### Request Body
+이 API는 Request Body를 필요로 하지 않습니다.
+
+##### Response Body
+```json
+{
+    "header" : {
+        "resultMessage" :  "SUCCESS",
+        "isSuccessful" :  true,
+        "resultCode" :  0
+    },
+    "pools" : [
+         {
+              "id" :  "{Pool ID}",
+              "name" :  "{Pool Name}"
+         }
+    ]
+}
+```
+|  Name | In | Type | Description |
+|--|--|--|--|
+| Pool ID | Body | String | 플로팅 IP Pool 식별자 |
+| Pool Name | Body | String | 플로팅 IP Pool 이름 |
+
+
 ### 플로팅 IP 조회
 사용 가능한, 또는 사용 중인 플로팅 IP 정보를 조회합니다.
 #### Method, URL
@@ -530,7 +568,10 @@ X-Auth-Token: {tokenId}
         	"id": "{Floating IP ID}",
             "floatingIpAddress": "{Floating IP Address}",
             "fixedIpAddress": "{Fixed IP Address}",
-            "floatingNetworkId": "{Floating IP Network ID}",
+            "pool" : {
+                "id" :  "{Pool ID}",
+                "name" :  "{Pool Name}"
+            },
             "portId": "{Port ID}",
             "routerId": "{Router ID}",
             "status": "{Status}"
@@ -544,9 +585,10 @@ X-Auth-Token: {tokenId}
 | Floating IP ID | Body | String | 플로팅 IP ID |
 | Floating IP Address | Body | String | 플로팅 IP 주소 |
 | Fixed IP Address | Body | String | 플로팅 IP가 연결된 인스턴스 NIC의 IP 주소. Status가 "ACTIVE" 인 경우에만 표시 |
-| Floating Network ID | Body | String | 플로팅 IP가 연결된 네트워크 ID |
 | Port ID | Body | String | 플로팅 IP가 연결된 포트 ID. 상태가 "ACTIVE" 인 경우에만 표시 |
 | Router ID | Body | String | 플로팅 IP의 라우터 ID. 상태가 "ACTIVE" 인 경우에만 표시 |
+| Pool ID | Body | String | 플로팅 IP가 속한 Pool 식별자 |
+| Pool Name | Body | String | 플로팅 IP가 속한 Pool 이름 |
 | Status | Body | String | 플로팅 IP의 상태 |
 
 ### 플로팅 IP 생성
@@ -562,7 +604,17 @@ X-Auth-Token: {tokenId}
 | tokenId | Header | String | - | 토큰 ID |
 
 #### Request Body
-이 API는 Request Body를 필요로 하지 않습니다.
+```json
+{
+        "pool" : {
+                "id" :  "{Pool ID}"
+        }
+}
+```
+
+|  Name | In | Type | Optional | Description |
+|--|--|--|--|--|
+|  Pool ID | Body | String | - | 플로팅 IP Pool 식별자 |
 
 #### Response Body
 ```json
@@ -574,8 +626,11 @@ X-Auth-Token: {tokenId}
     },
     "floatingip": {
     	"id": "{Floating IP ID}",
-        "floatingIpAddress": "{Floating IP Address",
-        "floatingNetworkId": "{Floating IP Network ID}",
+        "floatingIpAddress": "{Floating IP Address}",
+        "pool": {
+              "id" :  "{Pool ID}",
+              "name" :  "{Pool Name}"
+        },
         "status": "{Status}"
     }
 }
@@ -585,11 +640,12 @@ X-Auth-Token: {tokenId}
 |--|--|--|--|
 | Floating IP ID | Body | String | 플로팅 IP ID |
 | Floating IP Address | Body | String | 플로팅 IP 주소 |
-| Floating Network ID | Body | String | 플로팅 IP가 연결된 네트워크의 ID |
+| Pool ID | Body | String | 플로팅 IP가 속한 Pool 식별자 |
+| Pool Name | Body | String | 플로팅 IP가 속한 Pool 이름 |
 | Status | Body | String | 플로팅 IP의 상태 |
 
 ### 플로팅 IP 삭제
-지정한 플로팅 IP를 삭제합니다.
+지정한 플로팅 IP를 삭제합니다. 사용중(ACTIVE)인 플로팅 IP는 연결 해제 후 삭제할 수 있습니다.
 #### Method, URL
 ```
 DELETE /v1.0/appkeys/{appkey}/floating-ips?id={floatingIpId}

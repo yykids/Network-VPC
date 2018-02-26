@@ -502,10 +502,10 @@ X-Auth-Token: {tokenId}
 | ERROR | 에러 발생 |
 
 
-#### 플로팅 IP Pool 조회
+### 플로팅 IP Pool 조회
 플로팅 IP Pool 목록을 조회합니다.
 
-##### Method, URL
+#### Method, URL
 ```
 GET /v1.0/appkeys/{appkey}/floating-ip-pools
 X-Auth-Token: {tokenId}
@@ -514,10 +514,10 @@ X-Auth-Token: {tokenId}
 |--|--|--|--|--|
 | tokenId | Header | String | - | 토큰 ID |
 
-##### Request Body
+#### Request Body
 이 API는 Request Body를 필요로 하지 않습니다.
 
-##### Response Body
+#### Response Body
 ```json
 {
     "header" : {

@@ -302,12 +302,12 @@ Content-Type: application/json;charset=UTF-8
 |  Name | In | Type | Optional | Description |
 | --- | --- | --- | --- | --- |
 | Direction | Body | String | - | 규칙이 적용되는 방향, "ingress" 또는 "egress" |
-| Ethernet Type | Body | String | O | "IPv4" 또는 "IPv6" |
+| Ethernet Type | Body | String | - | "IPv4" 또는 "IPv6" |
 | Port Range MAX | Body | Integer | O | 규칙이 적용되는 최대 포트 번호. 1~65535 범위. 설정 시 "protocol" 항목 생략 불가 |
 | Port Range MIN | Body | Integer | O | 규칙이 적용되는 최소 포트 번호. 1~65535 범위. 설정 시 "protocol" 항목 생략 불가 |
-| Protocol | Body | String | O | IP 프로토콜. "icmp", "tcp", "udp", "null" |
+| Protocol | Body | String | O | IP 프로토콜. "icmp", "tcp", "udp", null. |
 | Remote Group ID | Body | String | O | 규칙이 적용되는 Remote 보안 그룹의 ID. <br />"remoteIpPrefix" 값을 설정할 경우 생략<Paste> |
-| Remote IP Prefix | Body | String | - | 규칙이 적용되는 Remote IP의 Prefix. <br />"remoteGroupId" 값을 설정할 경우 생략. |
+| Remote IP Prefix | Body | String | O | 규칙이 적용되는 Remote IP의 Prefix. <br />"remoteGroupId" 값을 설정할 경우 생략. |
 | Security Group ID | Body | String | - | 규칙이 적용되는 보안 그룹의 ID |
 
 ##### Response Body

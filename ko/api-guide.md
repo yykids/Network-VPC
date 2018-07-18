@@ -289,8 +289,8 @@ Content-Type: application/json;charset=UTF-8
     "securityGroupRule": {
         "direction": "{Direction}",
         "ethertype": "{Ethernet Type}",
-				"portRangeMax": "{Port Range MAX}",
-				"portRangeMin": "{Port Range MIN}",
+        "portRangeMax": "{Port Range MAX}",
+        "portRangeMin": "{Port Range MIN}",
         "protocol": "{Protocol}",
         "remoteGroupId": "{Remote Group ID}",
         "remoteIpPrefix": "{Remote IP Prefix}",

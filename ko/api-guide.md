@@ -289,8 +289,8 @@ Content-Type: application/json;charset=UTF-8
     "securityGroupRule": {
         "direction": "{Direction}",
         "ethertype": "{Ethernet Type}",
-        "portRangeMin": "{Port Range MAX}",
-        "portRangeMax": "{Port Range MIN}",
+        "portRangeMax": "{Port Range MAX}",
+        "portRangeMin": "{Port Range MIN}",
         "protocol": "{Protocol}",
         "remoteGroupId": "{Remote Group ID}",
         "remoteIpPrefix": "{Remote IP Prefix}",
@@ -309,6 +309,10 @@ Content-Type: application/json;charset=UTF-8
 | Remote Group ID | Body | String | O | 규칙이 적용되는 Remote 보안 그룹의 ID. <br />"remoteIpPrefix" 값을 설정할 경우 생략<Paste> |
 | Remote IP Prefix | Body | String | O | 규칙이 적용되는 Remote IP의 Prefix. <br />"remoteGroupId" 값을 설정할 경우 생략. |
 | Security Group ID | Body | String | - | 규칙이 적용되는 보안 그룹의 ID |
+
+> [Notice]
+> `Remote Group ID`와 `Remote IP Prefix` 둘 다 생략하면, 기본 값인 0.0.0.0/0으로 지정됩니다.
+> 즉, 모든 트래픽에 적용되는 규칙이 생성됩니다.
 
 ##### Response Body
 ```json

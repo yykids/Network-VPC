@@ -2,7 +2,7 @@
 
 ## 事前準備
 
-ネットワークVPC APIを使用するにはアプリケーションキーとトークンが必要です。 [API Endpoint URL](/Compute/Instance/jp/api-guide/#api-endpoint-url)と[トークンAPI](/Compute/Instance/jp/api-guide/#api)を利用してアプリケーションキーとトークンを準備します。アプリケーションキーはAPI Endpoint URLにトークンはRequest Bodyに含めて使用します。
+ネットワークVPC APIを使用するにはアプリケーションキーとトークンが必要です。 [API Endpoint URL](/Compute/Instance/ja/api-guide/#api-endpoint-url)と[トークンAPI](/Compute/Instance/ja/api-guide/#api)を利用してアプリケーションキーとトークンを準備します。アプリケーションキーはAPI Endpoint URLにトークンはRequest Bodyに含めて使用します。
 
 例えば、セキュリティーグループリスト照会は次のURでリクエストする必要があります。
 
@@ -10,7 +10,7 @@
 
 
 ## セキュリティーグループAPI
-セキュリティーグループの生成、削除、照会およびアップデート機能を提供します。セキュリティーグループをインスタンスに登録、解除する機能は[インスタンスAPI](/Compute/Instance/jp/api-guide/)を通して提供されます。
+セキュリティーグループの生成、削除、照会およびアップデート機能を提供します。セキュリティーグループをインスタンスに登録、解除する機能は[インスタンスAPI](/Compute/Instance/ja/api-guide/)を通して提供されます。
 
 ### セキュリティーグループリスト照会
 アクセス可能なセキュリティーグループの情報を照会します。

@@ -302,13 +302,17 @@ Content-Type: application/json;charset=UTF-8
 |  Name | In | Type | Optional | Description |
 | --- | --- | --- | --- | --- |
 | Direction | Body | String | - | 規則が適用される方向、 "ingress"または"egress" |
-| Ethernet Type | Body | String | O | "IPv4"または"IPv6" |
+| Ethernet Type | Body | String | - | "IPv4"または"IPv6" |
 | Port Range MAX | Body | Integer | O | 規則が適用される最大ポート番号。 1~65535の範囲。設定時、 "protocol"項目省略不可 |
 | Port Range MIN | Body | Integer | O | 規則が適用される最小ポート番号。 1~65535の範囲。設定時、 "protocol"項目省略不可 |
-| Protocol | Body | String | O | IPプロトコル。 "icmp"、 "tcp"、 "udp"、 "null" |
+| Protocol | Body | String | O | IPプロトコル。 "icmp"、 "tcp"、 "udp"、 null. |
 | Remote Group ID | Body | String | O | 規則が適用されるRemoteセキュリティーグループのID。 <br />"remoteIpPrefix"値を設定する場合は省略<Paste> |
-| Remote IP Prefix | Body | String | - | 規則が適用されるRemote IPのPrefix。 <br />"remoteGroupId"値を設定する場合は省略。 |
+| Remote IP Prefix | Body | String | O | 規則が適用されるRemote IPのPrefix。 <br />"remoteGroupId"値を設定する場合は省略。 |
 | Security Group ID | Body | String | - | 規則が適用されるセキュリティーグループのID |
+
+> [Notice]
+> `Remote Group ID`と`Remote IP Prefix`両方省略した場合、デフォルト値0.0.0.0/0に指定されます。
+> つまり、すべてのトラフィックに適用されるルールが作成されます。
 
 ##### Response Body
 ```json

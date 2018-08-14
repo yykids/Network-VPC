@@ -1,21 +1,21 @@
-## Network > VPC > API 가이드
+## Network > VPC > APIガイド
 
-## 사전 준비
+## 事前準備
 
-네트워크 VPC API를 사용하려면 앱키와 토큰이 필요합니다. [API Endpoint URL](/Compute/Instance/ko/api-guide/#api-endpoint-url)과 [토큰 API](/Compute/Instance/ko/api-guide/#api)를 이용하여 앱키와 토큰을 준비합니다. 앱키는 API Endpoint URL에 토큰은 Request Body에 포함하여 사용합니다.
+ネットワークVPC APIを使用するにはアプリケーションキーとトークンが必要です。 [API Endpoint URL](/Compute/Instance/jp/api-guide/#api-endpoint-url)と[トークンAPI](/Compute/Instance/jp/api-guide/#api)を利用してアプリケーションキーとトークンを準備します。アプリケーションキーはAPI Endpoint URLにトークンはRequest Bodyに含めて使用します。
 
-예를 들어, 보안 그룹 목록 조회는 다음 URL로 요청해야 합니다.
+例えば、セキュリティーグループリスト照会は次のURでリクエストする必要があります。
 
 	GET https://api-compute.cloud.toast.com/compute/v1.0/appkeys/{appkey}/security-groups?id={securityGroupId}
 
 
-## 보안 그룹 API
-보안 그룹 생성, 삭제, 조회 및 업데이트 기능을 제공합니다. 보안 그룹을 인스턴스에 등록/해제하는 기능은 [인스턴스 API](/Compute/Instance/ko/api-guide/)를 통해 제공됩니다.
+## セキュリティーグループAPI
+セキュリティーグループの生成、削除、照会およびアップデート機能を提供します。セキュリティーグループをインスタンスに登録、解除する機能は[インスタンスAPI](/Compute/Instance/jp/api-guide/)を通して提供されます。
 
-### 보안 그룹 목록 조회
-접근 가능한 보안 그룹의 정보를 조회합니다.
+### セキュリティーグループリスト照会
+アクセス可能なセキュリティーグループの情報を照会します。
 
-#### Method, URL
+#### Method、 URL
 ```
 GET /v1.0/appkeys/{appkey}/security-groups?id={securityGroupId}
 X-Auth-Token: {tokenId}
@@ -23,36 +23,36 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Optional | Description |
 | --- | --- | --- | --- | --- |
-| tokenId | Header | String | - | 토큰 ID |
-| securityGroupId | Query | String | O | 조회할 보안 그룹 ID. 기재하지 않을 경우 모든 보안 그룹의 정보를 조회합니다. |
+| tokenId | Header | String | - | トークンID |
+| securityGroupId | Query | String | O | 照会するセキュリティーグループID。記載していない場合、全てのセキュリティーグループの情報を照会します。 |
 
 #### Request Body
-이 API는 Request Body를 필요로 하지 않습니다.
+このAPIはRequest Bodyを必要としません。
 
 #### Response Body
 ```json
 {
     "header" : {
-        "isSuccessful" :  true,
-        "resultCode" :  0,
+        "isSuccessful" :  true、
+        "resultCode" :  0、
         "resultMessage" :  "SUCCESS"
-    },
+    }、
     "securityGroups": [
         {
-            "description": "{Desctiption}",
-            "id": "{Security Group ID}",
-            "name": "{Name}",
+            "description": "{Desctiption}"、
+            "id": "{Security Group ID}"、
+            "name": "{Name}"、
             "securityGroupRules": [
                 {
-                    "direction": "egress",
-                    "ethertype": "IPv4",
-                    "id": "3c0e45ff-adaf-4124-b083-bf390e5482ff",
-                    "portRangeMax": null,
-                    "portRangeMin": null,
-                    "protocol": null,
-                    "remoteGroupId": null,
-                    "remoteIpPrefix": null,
-                    "securityGroupId": "85cc3048-abc3-43cc-89b3-377341426ac5",
+                    "direction": "egress"、
+                    "ethertype": "IPv4"、
+                    "id": "3c0e45ff-adaf-4124-b083-bf390e5482ff"、
+                    "portRangeMax": null、
+                    "portRangeMin": null、
+                    "protocol": null、
+                    "remoteGroupId": null、
+                    "remoteIpPrefix": null、
+                    "securityGroupId": "85cc3048-abc3-43cc-89b3-377341426ac5"、
                     "description": ""
                 }
             ]
@@ -63,15 +63,15 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Description |
 |--|--|--|--|
-| Description | Body | String | 보안 그룹 설명 |
-| Security Group ID | Body | String | 보안 그룹 ID |
-| Name | Body | String | 보안 그룹 이름 |
-| securityGroupRules | Body | List | 보안 그룹 규칙 목록, [보안 그룹 규칙 API](#api_1) 참조 |
+| Description | Body | String | セキュリティーグループの説明 |
+| Security Group ID | Body | String | セキュリティーグループのID |
+| Name | Body | String | セキュリティーグループの名前 |
+| securityGroupRules | Body | List | セキュリティーグループ規則リスト、 [セキュリティーグループ規則API](#api_1)参照 |
 
-### 보안 그룹 생성
-새로운 보안 그룹을 생성합니다.
+### セキュリティーグループ作成
+新たなセキュリティーグループを作成します。
 
-#### Method, URL
+#### Method、 URL
 ```
 POST /v1.0/appkeys/{appkey}/security-groups
 X-Auth-Token: {tokenId}
@@ -80,13 +80,13 @@ Content-Type: application/json;charset=UTF-8
 
 |  Name | In | Type | Optional | Description |
 | --- | --- | --- | --- | --- |
-| tokenId | Header | String | - | 토큰 ID |
+| tokenId | Header | String | - | トークンID |
 
 #### Request Body
 ```json
 {
     "securityGroup": {
-        "name": "{Name}",
+        "name": "{Name}"、
         "description": "{Description}"
     }
 }
@@ -94,32 +94,32 @@ Content-Type: application/json;charset=UTF-8
 
 |  Name | In | Type | Optional | Description |
 |--|--|--|--|--|
-| name | Body | String | - |보안 그룹 이름 |
-| description | Body | String | O | 보안 그룹 설명 |
+| name | Body | String | - |セキュリティーグループの名前 |
+| description | Body | String | O | セキュリティーグループの説明 |
 
 #### Response Body
 ```json
 {
     "header" : {
-        "isSuccessful" :  true,
-        "resultCode" :  0,
+        "isSuccessful" :  true、
+        "resultCode" :  0、
         "resultMessage" :  "SUCCESS"
-    },
+    }、
     "securityGroup": {
-        "description": "{Description}",
-        "id": "{Security Group ID}",
-        "name": "{Name}",
+        "description": "{Description}"、
+        "id": "{Security Group ID}"、
+        "name": "{Name}"、
         "securityGroupRules": [
             {
-                "direction": "egress",
-                "ethertype": "IPv4",
-                "id": "3c0e45ff-adaf-4124-b083-bf390e5482ff",
-                "portRangeMax": null,
-                "portRangeMin": null,
-                "protocol": null,
-                "remoteGroupId": null,
-                "remoteIpPrefix": null,
-                "securityGroupId": "85cc3048-abc3-43cc-89b3-377341426ac5",
+                "direction": "egress"、
+                "ethertype": "IPv4"、
+                "id": "3c0e45ff-adaf-4124-b083-bf390e5482ff"、
+                "portRangeMax": null、
+                "portRangeMin": null、
+                "protocol": null、
+                "remoteGroupId": null、
+                "remoteIpPrefix": null、
+                "securityGroupId": "85cc3048-abc3-43cc-89b3-377341426ac5"、
                 "description": ""
             }
         ]
@@ -129,15 +129,15 @@ Content-Type: application/json;charset=UTF-8
 
 |  Name | In | Type | Description |
 |--|--|--|--|
-| Description | Body | String | 보안 그룹 설명 |
-| Security Group ID | Body | String | 보안 그룹 ID |
-| Name | Body | String | 보안 그룹 이름 |
-| securityGroupRules | Body | List | 보안 그룹 규칙 목록, [보안 그룹 규칙 API](#api_1) 참조 |
+| Description | Body | String | セキュリティーグループの説明 |
+| Security Group ID | Body | String | セキュリティーグループのID |
+| Name | Body | String | セキュリティーグループの名前 |
+| securityGroupRules | Body | List | セキュリティーグループ規則リスト、 [セキュリティーグループ規則API](#api_1)参照 |
 
-### 보안 그룹 수정
-보안 그룹의 이름, 설명을 변경합니다.
+### セキュリティーグループ修正
+セキュリティーグループの名前、説明を変更します。
 
-#### Method, URL
+#### Method、 URL
 ```
 PUT /v1.0/appkeys/{appkey}/security-groups/{securityGroupId}
 X-Auth-Token: {tokenId}
@@ -146,14 +146,14 @@ Content-Type: application/json;charset=UTF-8
 
 |  Name | In | Type | Optional | Description |
 | --- | --- | --- | --- | --- |
-| tokenId | Header | String | - | 토큰 ID |
-| securityGroupId | Path | String | - | 변경할 보안 그룹의 ID |
+| tokenId | Header | String | - | トークンID |
+| securityGroupId | Path | String | - | 変更するセキュリティーグループのID |
 
 #### Request Body
 ```json
 {
     "securityGroup": {
-        "name": "{Name}",
+        "name": "{Name}"、
         "description": "{Description}"
     }
 }
@@ -161,20 +161,20 @@ Content-Type: application/json;charset=UTF-8
 
 |  Name | In | Type | Optional | Description |
 |--|--|--|--|--|
-| Name | Body | String | - | 보안 그룹 이름 |
-| Description | Body | String | O | 보안 그룹 설명 |
+| Name | Body | String | - | セキュリティーグループの名前 |
+| Description | Body | String | O | セキュリティーグループの説明 |
 
 #### Response Body
 ```json
 {
     "header" : {
-        "isSuccessful" :  true,
-        "resultCode" :  0,
+        "isSuccessful" :  true、
+        "resultCode" :  0、
         "resultMessage" :  "SUCCESS"
-    },
+    }、
     "securityGroup": {
-        "id": "{Security Group ID}",
-        "name": "{Name}",
+        "id": "{Security Group ID}"、
+        "name": "{Name}"、
         "description": "{Description}"
     }
 }
@@ -182,14 +182,14 @@ Content-Type: application/json;charset=UTF-8
 
 |  Name | In | Type | Description |
 |--|--|--|--|
-| Security Group ID | Body | String | 보안 그룹 ID |
-| Name | Body | String | 보안 그룹 이름 |
-| Description | Body | String | 보안 그룹 설명 |
+| Security Group ID | Body | String | セキュリティーグループのID |
+| Name | Body | String | セキュリティーグループの名前 |
+| Description | Body | String | セキュリティーグループの説明 |
 
-### 보안 그룹 삭제
-지정한 보안 그룹을 삭제합니다.
+### セキュリティーグループ削除
+指定したセキュリティーグループを削除します。
 
-#### Method, URL
+#### Method、 URL
 ```
 DELETE /v1.0/appkeys/{appkey}/security-groups?id={securityGroupId}
 X-Auth-Token: {tokenId}
@@ -197,30 +197,30 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Optional | Description |
 | --- | --- | --- | --- | --- |
-| tokenId | Header | String | - | 토큰 ID |
-| securityGroupId | Query | String | - | 삭제할 보안 그룹 ID |
+| tokenId | Header | String | - | トークンID |
+| securityGroupId | Query | String | - | 削除するセキュリティーグループID |
 
 #### Request Body
-이 API는 Request Body를 필요로 하지 않습니다.
+このAPIはRequest Bodyを必要としません。
 
 #### Response Body
 ```json
 {
     "header" : {
-        "isSuccessful" :  true,
-        "resultCode" :  0,
+        "isSuccessful" :  true、
+        "resultCode" :  0、
         "resultMessage" :  "SUCCESS"
     }
 }
 ```
 
 
-## 보안 그룹 규칙 API
-보안 그룹 규칙 추가/삭제 및 조회 기능을 제공합니다.
+## セキュリティーグループ規則API
+セキュリティーグループ規則追加/削除及び照会機能を提供します。
 
-### 보안 그룹 규칙 조회
-접근 가능한 모든 보안 그룹 규칙의 정보를 조회합니다.
-#### Method, URL
+### セキュリティーグループ規則照会
+アクセス可能な全てのセキュリティーグループ規則の情報を照会します。
+#### Method、 URL
 ```
 GET /v1.0/appkeys/{appkey}/security-group-rules?id={securityGroupRuleId}
 X-Auth-Token: {tokenId}
@@ -228,30 +228,30 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Optional | Description |
 | --- | --- | --- | --- | --- |
-| tokenId | Header | String | - | 토큰 ID |
-| securityGroupRuleId | Query | String | O | 조회할 보안 그룹 규칙 ID. 기재하지 않을 경우 모든 보안 그룹 규칙의 정보를 조회합니다. |
+| tokenId | Header | String | - | トークンID |
+| securityGroupRuleId | Query | String | O | 照会するセキュリティーグループ規則のID。記載していない場合、全てのセキュリティーグループ規則の情報を照会します。 |
 
 #### Request Body
-이 API는 Request Body를 필요로 하지 않습니다.
+このAPIはRequest Bodyを必要としません。
 
 #### Response Body
 ```json
 {
     "header" : {
-        "isSuccessful" :  true,
-        "resultCode" :  0,
+        "isSuccessful" :  true、
+        "resultCode" :  0、
         "resultMessage" :  "SUCCESS"
-    },
+    }、
     "securityGroupRules": [
         {
-            "direction": "{Direction}",
-            "ethertype": "{Ethernet Type}",
-            "id": "{Rule ID}",
-            "portRangeMax": "{Port Range MAX}",
-            "portRangeMin": "{Port Range MIN}",
-            "protocol": "{Protocol}",
-            "remoteGroupId": "{Remote Group ID}",
-            "remoteIpPrefix": "{Remote IP Prefix}",
+            "direction": "{Direction}"、
+            "ethertype": "{Ethernet Type}"、
+            "id": "{Rule ID}"、
+            "portRangeMax": "{Port Range MAX}"、
+            "portRangeMin": "{Port Range MIN}"、
+            "protocol": "{Protocol}"、
+            "remoteGroupId": "{Remote Group ID}"、
+            "remoteIpPrefix": "{Remote IP Prefix}"、
             "securityGroupId": "{Security Group ID}"
         }
     ]
@@ -260,19 +260,19 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Description |
 | --- | --- | --- | --- |
-| Direction | Body | String | 규칙이 적용되는 방향, "ingress" 또는 "egress" |
-| Ethernet Type | Body | String | "IPv4" 또는 "IPv6" |
-| Rule ID | Body | String | 보안 그룹 규칙 ID |
-| Port Range MAX | Body | Integer | 규칙이 적용되는 최대 포트 번호 |
-| Port Range MIN | Body | Integer | 규칙이 적용되는 최소 포트 번호 |
-| Protocol | Body | String | IP 프로토콜 "icmp", "tcp", "udp", "null" |
-| Remote Group ID | Body | String | 규칙이 적용되는 Remote Group의 ID |
-| Remote IP Prefix | Body | String | 규칙이 적용되는 Remote IP의 Prefix |
-| Security Group ID | Body | String | 규칙이 적용되는 보안 그룹의 ID |
+| Direction | Body | String | 規則が適用される方向、 "ingress"または"egress" |
+| Ethernet Type | Body | String | "IPv4"または"IPv6" |
+| Rule ID | Body | String | セキュリティーグループ規則のID |
+| Port Range MAX | Body | Integer | 規則が適用される最大ポート番号 |
+| Port Range MIN | Body | Integer | 規則が適用される最小ポート番号 |
+| Protocol | Body | String | IPプロトコル"icmp"、 "tcp"、 "udp"、 "null" |
+| Remote Group ID | Body | String | 規則が適用されるRemote GroupのID |
+| Remote IP Prefix | Body | String | 規則が適用されるRemote IPのPrefix |
+| Security Group ID | Body | String | 規則が適用されるセキュリティーグループのID |
 
-### 보안 그룹 규칙 생성
-새로운 보안 그룹 규칙을 생성합니다.
-#### Method, URL
+### セキュリティーグループ規則の作成
+新しいセキュリティーグループ規則を作成します。
+#### Method、 URL
 ```
 POST /v1.0/appkeys/{appkey}/security-group-rules
 X-Auth-Token: {tokenId}
@@ -281,19 +281,19 @@ Content-Type: application/json;charset=UTF-8
 
 |  Name | In | Type | Optional | Description |
 | --- | --- | --- | --- | --- |
-| tokenId | Header | String | - | 토큰 ID |
+| tokenId | Header | String | - | トークンID |
 
 #### Request Body
 ```json
 {
     "securityGroupRule": {
-        "direction": "{Direction}",
-        "ethertype": "{Ethernet Type}",
-        "portRangeMin": "{Port Range MAX}",
-        "portRangeMax": "{Port Range MIN}",
-        "protocol": "{Protocol}",
-        "remoteGroupId": "{Remote Group ID}",
-        "remoteIpPrefix": "{Remote IP Prefix}",
+        "direction": "{Direction}"、
+        "ethertype": "{Ethernet Type}"、
+        "portRangeMin": "{Port Range MAX}"、
+        "portRangeMax": "{Port Range MIN}"、
+        "protocol": "{Protocol}"、
+        "remoteGroupId": "{Remote Group ID}"、
+        "remoteIpPrefix": "{Remote IP Prefix}"、
         "securityGroupId": "{Security Group ID}"
     }
 }
@@ -301,32 +301,32 @@ Content-Type: application/json;charset=UTF-8
 
 |  Name | In | Type | Optional | Description |
 | --- | --- | --- | --- | --- |
-| Direction | Body | String | - | 규칙이 적용되는 방향, "ingress" 또는 "egress" |
-| Ethernet Type | Body | String | O | "IPv4" 또는 "IPv6" |
-| Port Range MAX | Body | Integer | O | 규칙이 적용되는 최대 포트 번호. 1~65535 범위. 설정 시 "protocol" 항목 생략 불가 |
-| Port Range MIN | Body | Integer | O | 규칙이 적용되는 최소 포트 번호. 1~65535 범위. 설정 시 "protocol" 항목 생략 불가 |
-| Protocol | Body | String | O | IP 프로토콜. "icmp", "tcp", "udp", "null" |
-| Remote Group ID | Body | String | O | 규칙이 적용되는 Remote 보안 그룹의 ID. <br />"remoteIpPrefix" 값을 설정할 경우 생략<Paste> |
-| Remote IP Prefix | Body | String | - | 규칙이 적용되는 Remote IP의 Prefix. <br />"remoteGroupId" 값을 설정할 경우 생략. |
-| Security Group ID | Body | String | - | 규칙이 적용되는 보안 그룹의 ID |
+| Direction | Body | String | - | 規則が適用される方向、 "ingress"または"egress" |
+| Ethernet Type | Body | String | O | "IPv4"または"IPv6" |
+| Port Range MAX | Body | Integer | O | 規則が適用される最大ポート番号。 1~65535の範囲。設定時、 "protocol"項目省略不可 |
+| Port Range MIN | Body | Integer | O | 規則が適用される最小ポート番号。 1~65535の範囲。設定時、 "protocol"項目省略不可 |
+| Protocol | Body | String | O | IPプロトコル。 "icmp"、 "tcp"、 "udp"、 "null" |
+| Remote Group ID | Body | String | O | 規則が適用されるRemoteセキュリティーグループのID。 <br />"remoteIpPrefix"値を設定する場合は省略<Paste> |
+| Remote IP Prefix | Body | String | - | 規則が適用されるRemote IPのPrefix。 <br />"remoteGroupId"値を設定する場合は省略。 |
+| Security Group ID | Body | String | - | 規則が適用されるセキュリティーグループのID |
 
 ##### Response Body
 ```json
 {
     "header" : {
-        "isSuccessful" :  true,
-        "resultCode" :  0,
+        "isSuccessful" :  true、
+        "resultCode" :  0、
         "resultMessage" :  "SUCCESS"
-    },
+    }、
     "securityGroupRule": {
-        "direction": "{Direction}",
-        "ethertype": "{Ethernet Type}",
-        "id": "{Rule ID}",
-        "portRangeMax": "{Port Range MAX}",
-        "portRangeMin": "{Port Range MIN}",
-        "protocol": "{Protocol}",
-        "remoteGroupId": "{Remote Group ID}",
-        "remoteIpPrefix": "{Remote IP Prefix}",
+        "direction": "{Direction}"、
+        "ethertype": "{Ethernet Type}"、
+        "id": "{Rule ID}"、
+        "portRangeMax": "{Port Range MAX}"、
+        "portRangeMin": "{Port Range MIN}"、
+        "protocol": "{Protocol}"、
+        "remoteGroupId": "{Remote Group ID}"、
+        "remoteIpPrefix": "{Remote IP Prefix}"、
         "securityGroupId": "{Security Group ID}"
     }
 }
@@ -334,19 +334,19 @@ Content-Type: application/json;charset=UTF-8
 
 |  Name | In | Type | Description |
 | --- | --- | --- | --- |
-| Direction | Body | String | 규칙이 적용되는 방향, "ingress" 또는 "egress" |
-| Ethernet Type | Body | String | "IPv4" 또는 "IPv6" |
-| Rule ID | Body | String | 보안 그룹 규칙 ID |
-| Port Range MAX | Body | Integer | 규칙이 적용되는 최대 포트 번호 |
-| Port Range MIN | Body | Integer | 규칙이 적용되는 최소 포트 번호 |
-| Protocol | Body | String | IP 프로토콜. "icmp", "tcp", "udp", "null" |
-| Remote Group ID | Body | String | 규칙이 적용되는 Remote 보안 그룹의 ID |
-| Remote IP Prefix | Body | String | 규칙이 적용되는 Remote IP의 Prefix |
-| Security Group ID | Body | String | 규칙이 적용되는 보안 그룹의 ID |
+| Direction | Body | String | 規則が適用される方向、 "ingress"または"egress" |
+| Ethernet Type | Body | String | "IPv4"または"IPv6" |
+| Rule ID | Body | String | セキュリティーグループ規則ID |
+| Port Range MAX | Body | Integer | 規則が適用される最大ポート番号 |
+| Port Range MIN | Body | Integer | 規則が適用される最小ポート番号 |
+| Protocol | Body | String | IPプロトコル。 "icmp"、 "tcp"、 "udp"、 "null" |
+| Remote Group ID | Body | String | 規則が適用されるRemoteセキュリティーグループのID |
+| Remote IP Prefix | Body | String | 規則が適用されるRemote IPのPrefix |
+| Security Group ID | Body | String | 規則が適用されるセキュリティーグループのID |
 
-### 보안 그룹 규칙 삭제
-지정한 보안 그룹 규칙을 삭제합니다.
-#### Method, URL
+### セキュリティーグループ規則の削除
+指定したセキュリティーグループ規則を削除します。
+#### Method、 URL
 ```
 DELETE /v1.0/appkeys/{appkey}/security-group-rules?id={securityGroupRuelsId}
 X-Auth-Token: {tokenId}
@@ -354,40 +354,40 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Optional | Description |
 | --- | --- | --- | --- | --- |
-| tokenId | Header | String | - | 토큰 ID |
-| securityGroupRuleId | Query | String | - | 삭제할 보안 그룹 규칙 ID |
+| tokenId | Header | String | - | トークンID |
+| securityGroupRuleId | Query | String | - | 削除するセキュリティーグループ規則ID |
 
 #### Request Body
-이 API는 Request Body를 필요로 하지 않습니다.
+このAPIはRequest Bodyを必要としません。
 
 #### Response Body
 ```json
 {
     "header" : {
-        "isSuccessful" :  true,
-        "resultCode" :  0,
+        "isSuccessful" :  true、
+        "resultCode" :  0、
         "resultMessage" :  "SUCCESS"
     }
 }
 ```
 
-## 네트워크 API
-인스턴스에서 연결할 수 있는 네트워크 정보 조회 기능을 제공합니다.
+## ネットワークAPI
+インスタンスから接続できるネットワーク情報照会機能を提供します。
 
-### 네트워크 상태
-네트워크는 다음 상태 값을 같습니다.
+### ネットワーク状態
+ネットワークは次の状態値を持ちます。
 
 | Status | Description |
 | -- | -- |
-| BUILD | 네트워크 구축 중 |
-| ACTIVE | 네트워크 활성화 상태 |
-| DOWN | 네트워크 비활성화 상태 |
-| ERROR | 에러 발생 |
+| BUILD | ネットワーク構築中 |
+| ACTIVE | ネットワークアクティブ状態 |
+| DOWN | ネットワークダウン状態 |
+| ERROR | エラー発生 |
 
-### 네트워크 정보 조회
-접근 가능한 네트워크의 정보를 조회합니다.
+### ネットワーク情報の照会
+アクセス可能なネットワークの情報を照会します。
 
-#### Method, URL
+#### Method、 URL
 ```
 GET /v1.0/appkeys/{appkey}/networks?id={networkId}
 X-Auth-Token: {tokenId}
@@ -395,27 +395,27 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Optional |Description |
 | -- | -- | -- | -- | -- |
-| tokenId | Header | String | - | 토큰 ID |
-| networkId | Query | String | O | 조회할 네트워크 ID. 기재하지 않을 경우 모든 네트워크의 정보를 조회합니다. |
+| tokenId | Header | String | - | トークンID |
+| networkId | Query | String | O | 照会するネットワークID。記載していない場合、全てのネットワークの情報を照会します。 |
 
 #### Request Body
-이 Request는 Body를 필요로 하지 않습니다.
+このRequestはBodyを必要としません。
 
 #### Response Body
 ```json
 {
     "header": {
-        "isSuccessful": true,
-        "resultCode": 0,
+        "isSuccessful": true、
+        "resultCode": 0、
         "resultMessage": "SUCCESS"
-    },
+    }、
     "networks": [
         {
-            "adminStateUp": "{Administrative State}",
-            "id": "{Network ID}",
-            "name": "{Network Name}",
-            "router:external": "{External Router Provided}",
-            "status": "{Network Status}",
+            "adminStateUp": "{Administrative State}"、
+            "id": "{Network ID}"、
+            "name": "{Network Name}"、
+            "router:external": "{External Router Provided}"、
+            "status": "{Network Status}"、
             "subnets": [
                 "{Subnet ID}"
             ]
@@ -426,17 +426,17 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Description |
 |--|--|--|--|
-| Administrative State | Body | Boolean |네트워크 관리 상태. true: up, false: down |
-| Network ID | Body | String | 네트워크 ID |
-| Network Name | Body | String | 네트워크 이름 |
-| External Router Provided | Body | Boolean | 라우터를 통한 플로팅 IP 제공 가능 여부 |
-| Network Status | Body | String | 네트워크 상태. ACTIVE, DOWN, BUILD, ERROR |
-| Subnet ID | Body | String | 서브넷 ID |
+| Administrative State | Body | Boolean |ネットワーク管理状態。 true: up、 false: down |
+| Network ID | Body | String | ネットワークID |
+| Network Name | Body | String | ネットワークの名前 |
+| External Router Provided | Body | Boolean | ルーターによるFloating IP提供可否 |
+| Network Status | Body | String | ネットワーク状態。 ACTIVE、 DOWN、 BUILD、 ERROR |
+| Subnet ID | Body | String | サブネットID |
 
-## 서브넷 API
-### 서브넷 정보 조회
-접근 가능한 서브넷의 정보를 조회합니다.
-#### Method, URL
+## サブネットAPI
+### サブネット情報照会
+アクセス可能なサブネットの情報を照会します。
+#### Method、 URL
 ```
 GET /v1.0/appkeys/{appkey}/subnets
 X-Auth-Token: {tokenId}
@@ -444,34 +444,34 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Optional |Description |
 | -- | -- | -- | -- | -- |
-| tokenId | Header | String | - | 토큰 ID |
+| tokenId | Header | String | - | トークンID |
 
 #### Request Body
-이 API는 Request Body를 필요로 하지 않습니다.
+このAPIはRequest Bodyを必要としません。
 
 #### Response Body
 ```json
 {
     "header": {
-        "isSuccessful": true,
-        "resultCode": 0,
+        "isSuccessful": true、
+        "resultCode": 0、
         "resultMessage": "SUCCESS"
-    },
+    }、
     "subnets": [
         {
             "allocationPools": [
                 {
-                    "start": "{Start IP}",
+                    "start": "{Start IP}"、
                     "end": "{End IP}"
                 }
-            ],
-            "cidr": "{CIDR}",
-            "enableDhcp": "{Enable DHCP}",
-            "gatewayIp": "{Gateway IP}",
-            "hostRoutes": [],
-            "id": "{Subnet ID}",
-            "ipVersion": "{IP version}",
-            "name": "{Subnet Name}",
+            ]、
+            "cidr": "{CIDR}"、
+            "enableDhcp": "{Enable DHCP}"、
+            "gatewayIp": "{Gateway IP}"、
+            "hostRoutes": []、
+            "id": "{Subnet ID}"、
+            "iPvErsion": "{IP version}"、
+            "name": "{Subnet Name}"、
             "networkId": "{Network ID}"
         }
     ]
@@ -480,54 +480,54 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Description |
 |--|--|--|--|
-| Start IP | Body | String | 할당 Pool의 시작 IP. 예) 10.161.244.13 |
-| End IP | Body | String | 할당 Pool의 마지막 IP. 예) 10.161.244.121 |
-| CIDR | Body | String | Classless Inter-Domain Routing. 예) 10.161.244.0/25 |
-| Enable DHCP | Body | Boolean | DHCP 활성화 여부 |
-| Subnet ID | Body | String | 서브넷 ID |
-| IP Version | Body | Integer | 서브넷의 IP 버전 |
-| Subnet Name | Body | Integer | 서브넷 이름 |
-| Network ID | Body | Integer | 서브넷이 속한 네트워크 ID |
+| Start IP | Body | String | 割り当てPoolの開始IP。例) 10.161.244.13 |
+| End IP | Body | String | 割り当てPoolの最後のIP。例) 10.161.244.121 |
+| CIDR | Body | String | Classless Inter-Domain Routing. 例) 10.161.244.0/25 |
+| Enable DHCP | Body | Boolean | DHCP活性化可否 |
+| Subnet ID | Body | String | サブネットID |
+| IP Version | Body | Integer | サブネットのIPバージョン |
+| Subnet Name | Body | Integer | サブネットの名前 |
+| Network ID | Body | Integer | サブネットが属するネットワークID |
 
-## 플로팅 IP API
-플로팅 IP 생성, 삭제, 정보 조회 기능을 제공합니다.
+## Floating IP API
+Floating IP生成、削除、情報照会機能を提供します。
 
-### 플로팅 IP Status
-플로팅 IP는 다음 상태값을 갖습니다.
+### Floating IP Status
+Floating IPは次の状態値を持ちます。
 
 | Status | Description |
 | -- | -- |
-| ACTIVE | 플로팅 IP가 인스턴스와 연결되어 사용중인 상태 |
-| DOWN | 플로팅 IP가 연결되어 있지 않은 상태 |
-| ERROR | 에러 발생 |
+| ACTIVE | Floating IPがインスタンスと接続されていて使用中の状態 |
+| DOWN | Floating IPが接続されていない状態 |
+| ERROR | エラー発生 |
 
 
-### 플로팅 IP Pool 조회
-플로팅 IP Pool 목록을 조회합니다.
+### Floating IP Pool照会
+Floating IP Poolリストを照会します。
 
-#### Method, URL
+#### Method、 URL
 ```
 GET /v1.0/appkeys/{appkey}/floating-ip-pools
 X-Auth-Token: {tokenId}
 ```
 |  Name | In | Type | Optional | Description |
 |--|--|--|--|--|
-| tokenId | Header | String | - | 토큰 ID |
+| tokenId | Header | String | - | トークンID |
 
 #### Request Body
-이 API는 Request Body를 필요로 하지 않습니다.
+このAPIはRequest Bodyを必要としません。
 
 #### Response Body
 ```json
 {
     "header" : {
-        "resultMessage" :  "SUCCESS",
-        "isSuccessful" :  true,
+        "resultMessage" :  "SUCCESS"、
+        "isSuccessful" :  true、
         "resultCode" :  0
-    },
+    }、
     "pools" : [
          {
-              "id" :  "{Pool ID}",
+              "id" :  "{Pool ID}"、
               "name" :  "{Pool Name}"
          }
     ]
@@ -535,13 +535,13 @@ X-Auth-Token: {tokenId}
 ```
 |  Name | In | Type | Description |
 |--|--|--|--|
-| Pool ID | Body | String | 플로팅 IP Pool 식별자 |
-| Pool Name | Body | String | 플로팅 IP Pool 이름 |
+| Pool ID | Body | String | Floating IP Poolの識別子 |
+| Pool Name | Body | String | Floating IP Poolの名前 |
 
 
-### 플로팅 IP 조회
-사용 가능한, 또는 사용 중인 플로팅 IP 정보를 조회합니다.
-#### Method, URL
+### Floating IP照会
+使用可能または使用中のFloating IP情報を照会します。
+#### Method、 URL
 ```
 GET /v1.0/appkeys/{appkey}/floating-ips?id={floatingIpId}
 X-Auth-Token: {tokenId}
@@ -549,31 +549,31 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Optional | Description |
 |--|--|--|--|--|
-| tokenId | Header | String | - |토큰 ID |
-| floatingIpId | Query | String | O | 조회할 플로팅 IP의 ID. 기재하지 않을 경우 모든 플로팅 IP의 정보를 조회합니다. |
+| tokenId | Header | String | - |トークンID |
+| floatingIpId | Query | String | O | 照会するFloating IPのID。記載していない場合、全てのFloating IPの情報を照会します。 |
 
 #### Request Body
-이 API는 Request Body를 필요로 하지 않습니다.
+このAPIはRequest Bodyを必要としません。
 
 #### Response Body
 ```json
 {
 	"header": {
-        "isSuccessful": true,
-        "resultCode": 0,
+        "isSuccessful": true、
+        "resultCode": 0、
         "resultMessage": "SUCCESS"
-    },
+    }、
     "floatingips": [
         {
-        	"id": "{Floating IP ID}",
-            "floatingIpAddress": "{Floating IP Address}",
-            "fixedIpAddress": "{Fixed IP Address}",
-            "portId": "{Port ID}",
-            "routerId": "{Router ID}",
+        	"id": "{Floating IP ID}"、
+            "floatingIpAddress": "{Floating IP Address}"、
+            "fixedIpAddress": "{Fixed IP Address}"、
+            "portId": "{Port ID}"、
+            "routerId": "{Router ID}"、
             "pool" : {
-                "id" :  "{Pool ID}",
+                "id" :  "{Pool ID}"、
                 "name" :  "{Pool Name}"
-            },
+            }、
             "status": "{Status}"
         }
     ]
@@ -582,18 +582,18 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Description |
 |--|--|--|--|
-| Floating IP ID | Body | String | 플로팅 IP ID |
-| Floating IP Address | Body | String | 플로팅 IP 주소 |
-| Fixed IP Address | Body | String | 플로팅 IP가 연결된 인스턴스 NIC의 IP 주소. Status가 "ACTIVE" 인 경우에만 표시 |
-| Port ID | Body | String | 플로팅 IP가 연결된 포트 ID. 상태가 "ACTIVE" 인 경우에만 표시 |
-| Router ID | Body | String | 플로팅 IP의 라우터 ID. 상태가 "ACTIVE" 인 경우에만 표시 |
-| Pool ID | Body | String | 플로팅 IP가 속한 Pool 식별자 |
-| Pool Name | Body | String | 플로팅 IP가 속한 Pool 이름 |
-| Status | Body | String | 플로팅 IP의 상태 |
+| Floating IP ID | Body | String | Floating IP ID |
+| Floating IP Address | Body | String | Floating IPアドレス |
+| Fixed IP Address | Body | String | Floating IPが接続されたインスタンスNICのIPアドレス。 Statusが"ACTIVE"の場合にのみ表示 |
+| Port ID | Body | String | Floating IPが接続されたポートID。状態が"ACTIVE"の場合にのみ表示 |
+| Router ID | Body | String | Floating IPのルーターID。状態が"ACTIVE"の場合にのみ表示 |
+| Pool ID | Body | String | Floating IPが属するPoolの識別子 |
+| Pool Name | Body | String | Floating IPが属するPoolの名前 |
+| Status | Body | String | Floating IPの状態 |
 
-### 플로팅 IP 생성
-플로팅 IP를 생성합니다.
-#### Method, URL
+### Floating IP生成
+Floating IPを生成します。
+#### Method、 URL
 ```
 POST /v1.0/appkeys/{appkey}/floating-ips
 X-Auth-Token: {tokenId}
@@ -601,7 +601,7 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Optional | Description |
 |--|--|--|--|--|
-| tokenId | Header | String | - | 토큰 ID |
+| tokenId | Header | String | - | トークンID |
 
 #### Request Body
 ```json
@@ -614,23 +614,23 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Optional | Description |
 |--|--|--|--|--|
-|  Pool ID | Body | String | - | 플로팅 IP Pool 식별자 |
+|  Pool ID | Body | String | - | Floating IP Poolの識別子 |
 
 #### Response Body
 ```json
 {
 	"header": {
-        "isSuccessful": true,
-        "resultCode": 0,
+        "isSuccessful": true、
+        "resultCode": 0、
         "resultMessage": "SUCCESS"
-    },
+    }、
     "floatingip": {
-    	"id": "{Floating IP ID}",
-        "floatingIpAddress": "{Floating IP Address}",
+    	"id": "{Floating IP ID}"、
+        "floatingIpAddress": "{Floating IP Address}"、
         "pool": {
-              "id" :  "{Pool ID}",
+              "id" :  "{Pool ID}"、
               "name" :  "{Pool Name}"
-        },
+        }、
         "status": "{Status}"
     }
 }
@@ -638,15 +638,15 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Description |
 |--|--|--|--|
-| Floating IP ID | Body | String | 플로팅 IP ID |
-| Floating IP Address | Body | String | 플로팅 IP 주소 |
-| Pool ID | Body | String | 플로팅 IP가 속한 Pool 식별자 |
-| Pool Name | Body | String | 플로팅 IP가 속한 Pool 이름 |
-| Status | Body | String | 플로팅 IP의 상태 |
+| Floating IP ID | Body | String | Floating IP ID |
+| Floating IP Address | Body | String | Floating IPアドレス |
+| Pool ID | Body | String | Floating IPが属するPoolの識別子|
+| Pool Name | Body | String | Floating IPが属するPoolの名前 |
+| Status | Body | String | Floating IPの状態 |
 
-### 플로팅 IP 삭제
-지정한 플로팅 IP를 삭제합니다. 사용중(ACTIVE)인 플로팅 IP는 연결 해제 후 삭제할 수 있습니다.
-#### Method, URL
+### Floating IP削除
+指定したFloating IPを削除します。使用中(ACTIVE)のFloating IPは接続解除後に削除できます。
+#### Method、 URL
 ```
 DELETE /v1.0/appkeys/{appkey}/floating-ips?id={floatingIpId}
 X-Auth-Token: {tokenId}
@@ -654,20 +654,21 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Optional | Description |
 |--|--|--|--|--|
-| tokenId | Header | String | - | 토큰 ID |
-| floatingIpId | Path | String | - | 삭제할 플로팅 IP ID |
+| tokenId | Header | String | - | トークンID |
+| floatingIpId | Path | String | - | 削除するFloating IPのID |
 
 #### Request Body
-이 API는 request body를 필요로 하지 않습니다.
+このAPIはrequest bodyを必要としません。
 
 #### Response Body
 
 ```json
 {
     "header": {
-        "isSuccessful": true,
-        "resultCode": 0,
+        "isSuccessful": true、
+        "resultCode": 0、
         "resultMessage": "SUCCESS"
     }
 }
 ```
+

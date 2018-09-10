@@ -1,213 +1,209 @@
 ## Network > VPC > Console Guide
 
-본 문서에서는 콘솔에서 VPC를 다룰 때 필요한 내용을 기술합니다.
+This document describes what is required to deal with VPCs in the console.
 
 ## VPC
 
-VPC는 여러 서브넷을 가질 수 있기 때문에 서브넷을 분할하여 사용하는 경우 충분히 큰 네트워크를 설정해야 합니다. VPC 네트워크를 기술하는 방법은 [CIDR Notation](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing)을 사용하여 기술 할 수 있습니다. 모든 VPC는 [프라이빗 네트워크](https://en.wikipedia.org/wiki/Private_network)를 구성할 수 있는 아래 3개의 주소 영역에 있어야 하며 링크 로컬 주소는 사용할 수 없습니다. 또한 적어도 24bit-256개 보다 큰 네트워크 영역을 지정해야 합니다.
+AS a VPC may have many subnets, a sufficiently large network must be configured when divided subnets are used. VPC network can be described by using [CIDR Notation](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing).  All VPCs must be located in the three address areas as below, to be able to configure a [Private Network](https://en.wikipedia.org/wiki/Private_network) and link-local addresses cannot be used. Furthermore, the network area must be larger than 24bit-256 at the least. 
 
-### 프라이빗 네트워크
+### Private Network 
 
-RFC1918 | IP 주소 영역 | 사용 가능한 주소 개수
+RFC1918 | IP Address Area | Available Number of Addresses 
 -------- | ---------- | -----------------
 24bit block | 10.0.0.0/8 | 16,777,216
 20bit block | 172.16.0.0/12 | 1,047,576
 16bit block | 192.168.0.0/16 | 65,536
 
-### 링크 로컬 주소
+### Link-Local Addresses 
 
-169.254.0.0/16에 포함되는 65,536개의 IP 주소는 사용할 수 없습니다.
+Cannot use 65,536 IP addresses that are included to 169.254.0.0/16. 
 
-### 예제
+### Examples 
 
-예시 | 사용 가능 여부
+Example | Availability 
 -------- | ---------- 
-10.0.0.0/8 | 사용 가능합니다.
-10.0.0.0/16 | 사용 가능합니다.
-10.0.0.0/24 | 사용 가능합니다.
-10.0.0.0/28 | 사용이 불가합니다. 범위가 너무 작습니다.
-172.16.0.0/16 | 사용 가능합니다.
-172.16.0.0/8 | 사용이 불가합니다. 사용 가능 범위를 벗어났습니다.
-192.168.0.0/16 | 사용 가능합니다. 기본 사용 범위로 지정됩니다.
-192.168.0.0/24 | 사용 가능합니다.
-192.253.0.0/24 | 사용 가능합니다. 사용 가능 범위를 벗어났습니다.
+10.0.0.0/8 | Available. 
+10.0.0.0/16 | Available. 
+10.0.0.0/24 | Available. 
+10.0.0.0/28 | Unavailable. Range is too short. 
+172.16.0.0/16 | Available. 
+172.16.0.0/8 | Unavailable. Out of available range. 
+192.168.0.0/16 | Available. Specified as default range. 
+192.168.0.0/24 | Available. 
+192.253.0.0/24 | Available. Out of available range. 
 
 <br>
 
 
-최초 Compute 와 Network 상품을 사용하면 아래와 같은 항목을 자동으로 구성합니다.
+By using initial compute and network products, items as below are to be automatically configured. 
 
-항목 | 이름 | 요약
+Item | Name | Summary 
 -------- | ---------- | --------------
-VPC | Default Network | 192.168.0.0/16 범위의 VPC 1개가 만들어집니다.
-서브넷 | Default Network | 192.168.0.0/24 범위의 서브넷 1개가 만들어집니다.
-라우팅 테이블 | vpc-[id] | VPC 아이디의 일부를 이름으로 갖는 라우팅 테이블 1개가 만들어집니다.
-인터넷 게이트웨이 | ig-[id] | 라우팅 테이블 아이디의 일부를 이름으로 갖는 인터넷 게이이트웨이 1개가 만들어집니다.
-보안 그룹 | default | default라는 이름을 갖는 보안 그룹 1개가 만들어집니다.
+VPC | Default Network | Creates one VPC within the range of 192.168.0.0/16. 
+Subnet | Default Network | Creates one subnet within the range of 192.168.0.0/24. 
+Routing Table | vpc-[id] | Creates one routing table named after a part of VPC ID. 
+Internet Gateway | ig-[id] | Creates one internet gateway named after a part of routing table ID. 
+Security Group | default | Creates a security group named default. 
 
-초기 구성이 아니라 VPC를 추가하는 경우는 아래 항목을 구성합니다.
+To add VPC, not as an initial configuration, configure items as below: 
 
-항목 | 이름 | 요약
+Item | Name | Summary 
 -------- | ---------- | --------------
-VPC | 지정한 이름 | 지정한 범위의 VPC 1개가 만들어집니다.
-서브넷 | - | 생성되지 않음
-라우팅 테이블 | vpc-[id] | VPC 아이디의 일부를 이름으로 갖는 라우팅 테이블 1개가 만들어집니다.
-인터넷 게이트웨이 | - | 생성되지 않기 때문에 별도 생성후 연결해야 합니다.
-보안 그룹 | - | 추가로 생성되지 않습니다.
+VPC | As specified | Creates one VPC within the specified range. 
+Subnet | - | Not created. 
+Routing Table | vpc-[id] | Creates one routing table named after a part of VPC ID. 
+Internet Gateway | - | Not created: create additionally and connect. 
+Security Group | - | Not created additionally. 
 
-VPC와 각 항목의 Quota는 아래와 같습니다.
+Here is the quota for VPC and each item.  
 
-항목 | 최대값
+Item | Max 
 -------- | ---------- 
 VPC | 3
-서브넷 | 10
-인터넷 게이트웨이 | 2
-Floating IP | 제한 없음
-라우팅 테이블 | 6
-피어링 | 제한 없음
+Subnet | 10 per VPC 
+Internet Gateway | 3 
+Floating IP | Unlimited 
+Routing Table | 10 per VPC 
+Route | 10 per Routing Table 
+Peering | Unlimited 
 
 
 
-> [참고]
-VPC를 삭제하기 위해서 서브넷을 모두 삭제 할 수 있는 상태에서만 가능하며, 그런 경우라면 서브넷, 라우팅 테이블, 인터넷 게이트웨이와 함께 삭제합니다.
+> [Note]
+VPCs can be deleted only when subnets are deleted altogether, and in such case, delete along with subnets, routing tables, and internet gateways. 
 
-* VPC는 다른 VPC와 완전히 격리되어 트래픽으로부터 안전합니다.
+* VPC is safe from traffic as it is completed isolated from other VPCs .
 
-* VPC는 프라이빗 네트워크이기 때문에 인터넷에서 직접 액세스는 불가능합니다.
+* Direct access of VPC from the internet is unavailable as it is a private network.  
 
-* VPC 내 모든 요소는 VLAN을 사용할 수 없습니다.
+* All elements within VPC cannot use VLAN. 
 
-* Region을 넘어서는 트래픽에 대해서는 로컬 통신을 제공하지 않습니다.
+* For those traffic beyond  a region, local communication is not provided.  
 
-* 인터넷 게이트웨이 없이는 VPC 내 모든 인스턴스가 인터넷에 연결되지 않습니다.
+* All instances within a VPC cannot access the internet without internet gateway. 
 
-* 과도하게 전송되는 "Broadcast, Multicast, Unknown Unicast"는 예고없이 차단될 수 있습니다.
-
-
-## 서브넷
-
-VPC는 서브넷으로 나누어 작은 네트워크 여러개를 구성할 수 있습니다. 다만 서브넷의 경우에는 VPC 주소 범위에 포함되어야 하며 주소 길이가 같거나 작아야 합니다. 예를 들면 192.168.0.0/16의 경우 192.168.0.0 ~ 192.168.255.255까지 총 65536개의 IP 주소를 사용할 수 있습니다. 또한 가장 작은 서브넷은 30bit이며 이것 보다 작게 구성할 수는 없습니다. 서브넷도 VPC와 같이 CIDR 표기법을 사용합니다.
-
-서브넷이 생성되면 게이트웨이 IP 주소는 자동으로 지정되며 이를 변경 할 수 없습니다. 또한 VPC에 포함된 라우팅 테이블에 자동으로 등록됩니다. 
-
-> [참고]
-서브넷을 삭제하기 위해서는 인스턴스나 로드 밸런서 등이 해당 서브넷에 포함되어 있지 않은 비어있는 서브넷의 경우에만 삭제할 수 있습니다.
-
-* 인스턴스가 생성되면 지정한 서브넷으로부터 한개의 IP 주소를 할당받습니다. (Fixed IP라고 합니다.)
-
-* 인스턴스가 부팅되면 DHCP를 통하여 IP 주소가 인스턴스에 적용됩니다.
-
-* 서브넷의 주소 범위를 수정할 수 없습니다.
-
-* 같은 VPC 내에서 서로 다른 서브넷의 범위가 중복되거나 겹치게 생성할 수 없습니다.
-
-* 다른 VPC에서는 서브넷의 범위가 중복되거나 겹칠 수 있습니다.
-
-* 인스턴스에 할당된 MAC 주소가 아닌 경우 네트워크 상에서 차단될 수 있습니다. 따라서 VPN 서비스를 인스턴스에서 구동하는 경우 동작하지 않을 수 있습니다.
-
-* 인스턴스에 여러개의 서브넷을 연결하는 경우 인스턴스 내 OS에서 적절한 라우팅 설정이 필요합니다.
-
-* 동일한 VPC 내 두 개의 서브넷은 완전히 격리된 것이 아닙니다. 보안 그룹을 사용하여 인스턴스를 보호하세요.
-
-* 서브넷은 서로 다른 가용성 영역에 걸쳐서 로컬 통신을 지원합니다. 로컬 통신은 과금하지 않습니다.
+* Excessively transferred "Broadcast, Multicast, Unknown Unicast" may be blocked without prior notice. 
 
 
-## 인터넷 게이트웨이
+## Subnets 
 
-인터넷 게이트웨이는 라우팅 테이블과 연결할 수 있습니다. 프라이빗 네트워크로 만들어진 VPC는 외부 연결이 불가능한데, 인터넷 게이트웨이를 이용하여 인터넷을 액세스 할 수 있습니다. 인터넷으로 연결하기 위해서 각 인스턴스는 "기본 게이트웨이"를 서브넷의 게이트웨이 주소로 설정해야 하는데 TOAST에서는 이를 자동으로 처리합니다. 인터넷 게이트웨이를 생성하는 경우 외부 네트워크를 선택해야 하는데 TOAST에서 현재 "public_network" 1개만 운영하고 있습니다.
+A  VPC can be subdivided into subnets that are composed of many networks. However, a subnet must be included within the range of a VPC address, with its length the same or shorter.  For example, in the case of 192.168.0.0/16, a total of 65536 IP addresses are available between 192.168.0.0 and 192.168.255.255. In addition, the smallest subnet is 30 bits and any configuration cannot be smaller than that. Subnets also adopt CIDR display, just like VPC.  
 
-* 인터넷 게이트웨이 주소는 인스턴스가 생성되거나 VPC가 인터넷 연결이 요구되는 상태에 자동 할당 되며 임의로 변경할 수 없습니다.
+When a subnet is created, its gateway IP address is automatically designated and it cannot be modified. It is also automatically registered to a routing table included to the VPC. 
 
-* 인터넷 게이트웨이 주소로 인스턴스에 액세스 할 수 없습니다.
+> [Note]
+To delete a subnet, it should be empty with no instances or load balancers included. Also, make sure that the routing table which the subnet is connected to does not have  routes to that subnet.
 
-* 인터넷 게이트웨이 조소로 유입되는 트래픽은 전부 차단됩니다.
+* Assigns one IP address to a newly-created instance from a designated subnet (called a fixed IP).
 
-* 인터넷에 연결된 인스턴스가 인터넷 방향으로 트래픽을 유발하면 사용한 만큼 과금합니다.
+* Applies the IP address to the instance when it is booted, via DHCP.  
 
-* 인스턴스간 로컬 통신에 대해서는 과금하지 않습니다.
+* Cannot modify the address range of a subnet. 
 
+* Cannot redundantly create or overlap the range for different subnets within a same VPC.
 
-## 플로팅 IP
+* The range of subnets may be redundant or wrapped over for different VPCs. 
 
-인스턴스가 생성되면 지정한 서브넷으로 부터 하나의 IP 주소를 할당 받습니다. 해당하는 IP 주소는 서브넷의 주소이기 때문에 당연히 VPC에 포함됩니다. 이것을 Fixed IP라고 합니다. 이 주소는 프라이빗 네트워크의 주소이기 때문에 인터넷에서 액세스가 불가능합니다. 따라서 외부에서 직접 인스턴스를 액세스 하고 싶다면 외부에서 접근이 가능한 IP 주소를 사용해야 합니다. 플로팅 IP는 인터넷에서 인스턴스를 직접 액세스하기 위해 필요한 기능입니다. 플로팅 IP를 사용하면 해당 주소와 인스턴스가 1:1로 연결되어 인터넷에서 직접 액세스가 가능해집니다. 자세한 내용은 [개요]를 참고하세요.  플로팅 IP를 생성하기 위해서는 외부 네트워크를 선택해야 하는데 TOAST에서 현재 "Public Network" 1개만 운영하고 있습니다. 
+* MAC addresses that are not assigned to an instance may be blocked from the network; VPN service running on instances may not operate. 
 
-> [참고] 인스턴스에 플로팅 IP를 연결하기 위해서는 인스턴스가 포함된 서브넷이 라우팅 테이블과 연결되어 있고, <br>
-> 해당 라우팅 테이블이 인터넷 게이트웨이를 통해 인터넷에 연결 되어 있는 경우만 "연결" 동작을 수행할 수 있습니다.
+* When many subnets are connected to an instance, an appropriate routing setting is required within OS of the instance. 
 
-* 플로팅 IP는 생성과 함께 과금이 됩니다. 삭제하기 전까지는 지속적으로 과금됩니다. (인스턴스 연결과는 무관합니다.)
+* Two subnets within a same VPC are not completely isolated; apply security groups to protect instances. 
 
-* 플로팅 IP가 연결된다고 해서 Fixed IP가 플로팅 IP로 변경되는 것은 아닙니다.
-
-* 하나의 인스턴스에 두 개의 서브넷을 연결하고 두 개의 플로팅 IP를 연결할 수 있습니다.
-이 경우에 별도 설정이 필요합니다. [Linux Advanced Routing](http://lartc.org/)
-
-* 인터넷 방향으로 트래픽이 발생하면 과금합니다.
-
-* 동일 VPC 내 두 인스턴스가 플로팅 IP를 사용하여 통신하게 되면 사용량 만큼 과금합니다.
-
-> [참고] 동일 VPC 내 두 인스턴스가 Fixed IP를 사용하여 로컬 통신을 하게 되면 과금하지 않습니다.
+* Subnets support local communication through different areas of availability. Local communication shall not be charged.  
 
 
-## 보안 그룹
+## Internet Gateway
 
-인스턴스를 네트워크 상의 다른 트래픽으로 부터 보호할 목적으로 사용할 수 있습니다. 통상적으로 지정한 것을 허용하고, 나머지는 차단하는 "포지티브 시큐리티 모델"에 의해 동작합니다. 최초 서비스가 개시되면 1개의 기본 보안 그룹이 생성되며 모든 트래픽은 차단되어 있기 때문에 "ping", "ssh" 등의 서비스 조차 사용할 수 없으며 필요한 서비스를 열어아만 서비스가 가능합니다. 이것은 인터넷에서 액세스하건 같은 로컬에서 액세스 하건 똑같이 적용됩니다. 또한 추가적으로 보안 그룹을 추가하여 규칙을 더하여 인스턴스에 적용할 수 있습니다. 
+An internet gateway can be connected to a routing table. VPCs comprised of private networks cannot be connected externally, and may access the internet through internet gateway. Each instance, to be connected to an internet, must set "default gateway" as the gateway address of the subnet, and TOAST does the job automatically. To create an internet gateway, an external network is required and TOAST is operating only one "public_network" as of now.  
 
-예를 들면 "SSH"라는 규칙에 "INGRESS TCP PORT 23", "WEB"이라는 규칙에 "INGRESS TCP PORT 80" 과 같은 규칙이 있다고 하면, 하나의 인스턴스에 "SSH", "WEB" 두개의 보안 그룹을 설정하면 두 서비스 모두 사용할 수 있습니다.
+* An internet gateway address is automatically assigned when an instance is created or VPC requires an internet access, and it cannot be modified. 
+
+* Cannot access an instance with an internet gateway address. 
+
+* Blocks all traffic inflow via internet gateway address.
+
+* Charges by usage, when an instance connected to the internet triggers traffic to the internet direction.
+
+* Do not charge for local communication between instances. 
 
 
-항목 | 설명
+## Floating IP 
+
+When an instance is created, an IP address is assigned from a designated subnet. The IP address is certainly included to VPC, as it is the subnet address, and we call it Fixed IP. As it is a private network address, an access from the internet is not available. Therefore, to access the internet directly from outside, an accessible IP address from outside is required. Floating IP allows direct access to an instance from the internet, by linking the address to the instance 1:1. For more details, refer to [Overview]. To create a floating IP, an external network must be selected and TOAST currently operates only one "public network".   
+
+> [Note] To connect a floating IP to an instance, a subnet including the instance must be connected to a routing table,  <br>
+> and the routing table must be connected to the internet through an internet gateway, so as to perform "connection". 
+
+* Charges for a floating IP begin from the moment it is created, and charging shall continue before it is deleted (which is irrelevant to instance connection).  
+
+* A connection to a floating IP does not mean a change of a fixed IP to a floating IP. 
+
+* A single instance can have two subnets connected to two floating IPs, with additional configuration. For more details, refer to [Linux Advanced Routing](http://lartc.org/).
+
+* Traffic occurred to the internet direction shall be charged. 
+
+* Two instances, within a same VPC, communicating via floating IP shall be charged by the usage.  
+
+> [Note] Two instances, within a same VPC, communicating locally via fixed IP shall not be charged. 
+
+
+## Security Group 
+
+Security Group is used to protect instances from other traffic of the network. In general, "Positive Security Model" is applied to allow what is designated while blocking the others.  With a service initiated, a default security group is created, and as all traffic is blocked, even such services like "ping" and "ssh" are unavailable and are made available when they are opened. This shall apply the same for any access from the internet or a local. In addition, more security groups may be added with rules and applied to an instance.    
+
+For example, if a rule called "SSH" has a rule named "INGRESS TCP PORT 23", while "WEB" has "INGRESS TCP PORT 80", the two security groups, "SSH" and "WEB", can be assigned to an instance and make both available. 
+
+
+Item | Description 
 -------- | ---------- 
-Direction | Ingress 인스턴스로 유입되는 방향을 의미합니다. Egress는 인스턴스에 나가는 방향을 의미합니다.
-Ether Type | IP의 버전을 의미합니다.
-IP 프로토콜 | 특정한 프로토콜을 지정하거나 전체를 지정할 수 있습니다.
-포트 범위 | L4 프로토콜의 경우 포트의 범위를 지정할 수 있습니다.
-원격 | 원격지 주소 혹은 IP 주소 범위입니다. Ingress의 경우 출발지 주소, Egress의 경우 목적지 주소가 됩니다.
+Direction | Ingress refers to an inflow into an instance; on the other hands, Egress means an outflow of an instance. 
+Ether Type | Version of an IP 
+IP Protocol | Specify a particular protocol or all. 
+Port Range | Specify the range of a port, for L4 protocol. 
+Remote | Range of a remote or an IP address: for Ingress, it refers to a departure address while Egress to the destination address. 
 
-보안 그룹은 "Stateful"로 동작하기 때문에 규칙에 의해 한번 연결된 세션은 반대 방향의 룰이 없더라도 허용됩니다. 예를 들어 "INGRESS TCP PORT 80"에 의해 인스턴스로 향하는 TCP 80의 첫번째 패킷이 규칙에 의해 통과했다면 인스턴스의 TCP 80포트를 출발지로 하여 전송되는 패킷은 차단되지 않음을 의미합니다. 다만 비연결 지향성 프로토콜의 경우 특정한 시간동안 흐름이 없다면 그 이후부터 차단됩니다.
+ As security groups run by "Stateful", sessions, once connected, are to be allowed even without a rule for opposite direction. For instance, if the first packet of TCP 80 that directs to an instance, by "INGRESS TCP PORT 80", has passed by the rule, then packets transferred to the TCP 80 port of the instance shall not be blocked.  Nevertheless, in the case of a non-connected directional protocol, if there is not a flow during a particular period, it shall be blocked ever since.  
 
-* 규칙은 하나씩 추가하는 것보다 범위를 지정하는 것이 효율면에서 유리합니다.
+* Specifying a range is more effective than adding rules one by one.
 
-* 규칙이 증가하면 성능 저하가 발생할 수 있습니다.
+* Adding more rules may degrade performance. 
 
-* 세션의 상태가 맞지 않는 트래픽은 차단될 수 있습니다.
+* Traffic under inappropriate session status may be blocked. 
 
-* 유입 경로와 유출 경로가 다른 비대칭 트래픽은 차단됩니다.
+* Asymmetric traffic that has different inflow from outflow may be blocked. 
 
-* 목록에 없는 규칙은 정의하여 사용할 수 있습니다. [Well-known port](https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers)
-
-
-
-
-## 라우팅 테이블
-
-라우팅 테이블은 VPC와 함께 생성되며 VPC가 삭제되는 경우 함께 삭제됩니다. 라우팅 테이블은 VPC에 복수개가 생성될 수 있으며 기본 라우팅 테이블이 아니라면 명시적으로 삭제할 수 있습니다. 서브넷은 적어도 하나의 라우팅 테이블에 연결되어야 하며, 복수개의 라우팅 테이블이 하나의 인터넷 게이트웨이를 공유할 수 없습니다.
-
-라우팅 테이블 목록을 지정하는 경우 상세 화면에 요약된 정보가 표기되며, "Routes" 탭을 이용하여 경로를 추가할 수 있습니다.
-
-> [참고]
-경로를 추가하게 되는 경우 VPC내에 도달 가능한 영역을 지정해야만 추가할 수 있습니다. 그 외에는 실패 메시지가 발생합니다.
-
-* 라우팅 테이블에 포함되는 서브넷의 게이트웨이는 자동으로 추가됩니다.
-
-* "기본 라우팅 테이블"은 삭제할 수 없습니다.
-
-* 서브넷의 게이트웨이와 인터넷 게이트웨이는 라우트 목록에서 삭제할 수 없습니다.
-
-* 라우팅 테이블과 인터넷 게이트웨이 연결을 끊게 되면 인터넷 연결이 끊어집니다.
+* Rules not on the list may be defined to use. For more details, refer to [Well-known port](https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers). 
 
 
 
-## 피어링
 
-피어링은 서로 다른 두 개의 VPC를 연결하는 기능입니다. 보통의 경우 VPC는 네트워크 영역이 다르기 때문에 서로 통신이 불가능하며, 플로팅 IP를 이용하여 연결할 수 있으나 이는 네트워크 사용량에 따라 추가 과금됩니다. 따라서 두 개의 VPC를 연결하는 기능을 제공하는데 이를 피어링이라 합니다.
+## Routing Table 
 
-> [참고] 피어링은 서로 다른 두 VPC를 연결합니다. 다른 VPC를 건너서 또 다른 VPC로 연결은 지원하지 않습니다. A <-> B <-> C 연결에서 A와 C는 연결되지 않습니다.
+A routing table is created along with VPC, and is also deleted along with a deletion of VPC. Many of them can be created within a VPC, and they may be deleted if not a default routing table. Subnets must be connected to at least one routing table, and multiple routing tables cannot share an internet gateway.   
 
-* 두 VPC의 IP 주소 영역은 겹치면 사용할 수 없습니다.<br>
-IP 주소 영역이 한쪽이 다른 한쪽과 포함관계가 되어서는 안되며, 이런 경우 피어링 생성이 실패합니다.
+When a list of routing table is designated, summary information is displayed on the screen of details, and more routes may be added by using "Routes". 
 
-* IP 주소 영역의 크기는 무관하며 "기본 라우팅 테이블"에 연결되지 않은 서브넷으로는 통신이 불가능 합니다.
+> [Note]
+Adding more routes is available, only when available areas within VPC are designated. Otherwise, message will show failure. 
 
-* 피어링은 연결과 동시에 과금됩니다.
+* Gateways of subnets included to a routing table are automatically added.  
 
-* 피어링은 쿼터 제한이 없으나 서브넷 쿼터 1개를 소모합니다.
+* "Default Routing Table" cannot be deleted. 
+
+* Gateways of subnets and internet cannot be deleted from the list of routers. 
+
+* Disconnecting a routing table from the internet gateway will disconnect the internet. 
+
+
+
+## Peering 
+
+Peering refers to connecting two different VPCs. In general, VPCs cannot communicate as their network areas are different, and may be linked via floating IPs but charged further depending on the network usage. Hence, peering is provided to communicate two VPCs 
+
+> [Note] Peering connects two different VPCs; does not support a connection to a third VPC through another VPC. That is, for A <-> B <-> C, A and C cannot be linked.  
+
+* Cannot use overlapped IP address areas of two VPCs.<br>When IP address areas of two VPCs to create peering are redundant, peering fails. 
+* Size of an IP address area does not matter and communication with unlinked subnets to "default routing table" is unavailable. 
+* Peering is charged from the moment it is created. 
+* There's no quota limits for a peering, but a subnet quota is required. 

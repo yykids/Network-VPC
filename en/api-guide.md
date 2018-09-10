@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-Using a network VPC API requires an appkey and a token. Get an appkey and a token by using [API Endpoint URL](/Compute/Instance/ko/api-guide/#api-endpoint-url) and [Token API](/Compute/Instance/ko/api-guide/#api): include the appkey to API Endpoint URL and the token to the Request Body.
+Using a network VPC API requires an appkey and a token. Get an appkey and a token by using [API Endpoint URL](/Compute/Instance/en/api-guide/#api-endpoint-url) and [Token API](/Compute/Instance/en/api-guide/#api): include the appkey to API Endpoint URL and the token to the Request Body.
 
 For example, List Security Groups must be requested to the following URL:  
 
@@ -10,7 +10,7 @@ For example, List Security Groups must be requested to the following URL:
 
 
 ## Security Group API
-Create, delete, list and update security groups are available. Register/unregister security groups to instances is provided by [Instance API](/Compute/Instance/ko/api-guide/).
+Create, delete, list and update security groups are available. Register/unregister security groups to instances is provided by [Instance API](/Compute/Instance/en/api-guide/).
 
 ### List Security Groups
 List information of accessible security groups.

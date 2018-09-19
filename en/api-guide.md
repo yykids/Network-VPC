@@ -1,19 +1,19 @@
-## Network > VPC > API 가이드
+## Network > VPC > API Guide
 
-## 사전 준비
+## Prerequisites
 
-네트워크 VPC API를 사용하려면 앱키와 토큰이 필요합니다. [API Endpoint URL](/Compute/Instance/ko/api-guide/#api-endpoint-url)과 [토큰 API](/Compute/Instance/ko/api-guide/#api)를 이용하여 앱키와 토큰을 준비합니다. 앱키는 API Endpoint URL에 토큰은 Request Body에 포함하여 사용합니다.
+Using a network VPC API requires an appkey and a token. Get an appkey and a token by using [API Endpoint URL](/Compute/Instance/en/api-guide/#api-endpoint-url) and [Token API](/Compute/Instance/en/api-guide/#api): include the appkey to API Endpoint URL and the token to the Request Body.
 
-예를 들어, 보안 그룹 목록 조회는 다음 URL로 요청해야 합니다.
+For example, List Security Groups must be requested to the following URL:  
 
 	GET https://api-compute.cloud.toast.com/compute/v1.0/appkeys/{appkey}/security-groups?id={securityGroupId}
 
 
-## 보안 그룹 API
-보안 그룹 생성, 삭제, 조회 및 업데이트 기능을 제공합니다. 보안 그룹을 인스턴스에 등록/해제하는 기능은 [인스턴스 API](/Compute/Instance/ko/api-guide/)를 통해 제공됩니다.
+## Security Group API
+Create, delete, list and update security groups are available. Register/unregister security groups to instances is provided by [Instance API](/Compute/Instance/en/api-guide/).
 
-### 보안 그룹 목록 조회
-접근 가능한 보안 그룹의 정보를 조회합니다.
+### List Security Groups
+List information of accessible security groups.
 
 #### Method, URL
 ```
@@ -23,11 +23,11 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Optional | Description |
 | --- | --- | --- | --- | --- |
-| tokenId | Header | String | - | 토큰 ID |
-| securityGroupId | Query | String | O | 조회할 보안 그룹 ID. 기재하지 않을 경우 모든 보안 그룹의 정보를 조회합니다. |
+| tokenId | Header | String | - | Token ID |
+| securityGroupId | Query | String | O | Security Group ID to list: if left empty, list information of all security groups. |
 
 #### Request Body
-이 API는 Request Body를 필요로 하지 않습니다.
+This API does not require a request body.
 
 #### Response Body
 ```json
@@ -63,13 +63,13 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Description |
 |--|--|--|--|
-| Description | Body | String | 보안 그룹 설명 |
-| Security Group ID | Body | String | 보안 그룹 ID |
-| Name | Body | String | 보안 그룹 이름 |
-| securityGroupRules | Body | List | 보안 그룹 규칙 목록, [보안 그룹 규칙 API](#api_1) 참조 |
+| Description | Body | String | Description of a security group |
+| Security Group ID | Body | String | Security group ID |
+| Name | Body | String | Name of a security group |
+| securityGroupRules | Body | List | List of security group rules, in reference of [Security Group Rules API](#api_1) |
 
-### 보안 그룹 생성
-새로운 보안 그룹을 생성합니다.
+### Create Security Groups
+Create a new security group.
 
 #### Method, URL
 ```
@@ -80,7 +80,7 @@ Content-Type: application/json;charset=UTF-8
 
 |  Name | In | Type | Optional | Description |
 | --- | --- | --- | --- | --- |
-| tokenId | Header | String | - | 토큰 ID |
+| tokenId | Header | String | - | Token ID |
 
 #### Request Body
 ```json
@@ -94,8 +94,8 @@ Content-Type: application/json;charset=UTF-8
 
 |  Name | In | Type | Optional | Description |
 |--|--|--|--|--|
-| name | Body | String | - |보안 그룹 이름 |
-| description | Body | String | O | 보안 그룹 설명 |
+| Name | Body | String | - |Name of a security group |
+| Description | Body | String | O | Description of a security group |
 
 #### Response Body
 ```json
@@ -129,13 +129,13 @@ Content-Type: application/json;charset=UTF-8
 
 |  Name | In | Type | Description |
 |--|--|--|--|
-| Description | Body | String | 보안 그룹 설명 |
-| Security Group ID | Body | String | 보안 그룹 ID |
-| Name | Body | String | 보안 그룹 이름 |
-| securityGroupRules | Body | List | 보안 그룹 규칙 목록, [보안 그룹 규칙 API](#api_1) 참조 |
+| Description | Body | String | Description of a security group |
+| Security Group ID | Body | String | Security group ID |
+| Name | Body | String | Name of a security group |
+| securityGroupRules | Body | List | List of security group rules, in reference of [Security Group Rules API](#api_1) |
 
-### 보안 그룹 수정
-보안 그룹의 이름, 설명을 변경합니다.
+### Modify Security Groups
+Modify name and description of a security group.
 
 #### Method, URL
 ```
@@ -146,8 +146,8 @@ Content-Type: application/json;charset=UTF-8
 
 |  Name | In | Type | Optional | Description |
 | --- | --- | --- | --- | --- |
-| tokenId | Header | String | - | 토큰 ID |
-| securityGroupId | Path | String | - | 변경할 보안 그룹의 ID |
+| tokenId | Header | String | - | Token ID |
+| securityGroupId | Path | String | - | Security group ID to modify |
 
 #### Request Body
 ```json
@@ -161,8 +161,8 @@ Content-Type: application/json;charset=UTF-8
 
 |  Name | In | Type | Optional | Description |
 |--|--|--|--|--|
-| Name | Body | String | - | 보안 그룹 이름 |
-| Description | Body | String | O | 보안 그룹 설명 |
+| Name | Body | String | - | Name of a security group |
+| Description | Body | String | O | Description of a security group |
 
 #### Response Body
 ```json
@@ -182,12 +182,12 @@ Content-Type: application/json;charset=UTF-8
 
 |  Name | In | Type | Description |
 |--|--|--|--|
-| Security Group ID | Body | String | 보안 그룹 ID |
-| Name | Body | String | 보안 그룹 이름 |
-| Description | Body | String | 보안 그룹 설명 |
+| Security Group ID | Body | String | Security group ID |
+| Name | Body | String | Name of a security group |
+| Description | Body | String | Description of a security group |
 
-### 보안 그룹 삭제
-지정한 보안 그룹을 삭제합니다.
+### Delete Security Groups
+Delete a specified security group.
 
 #### Method, URL
 ```
@@ -197,11 +197,11 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Optional | Description |
 | --- | --- | --- | --- | --- |
-| tokenId | Header | String | - | 토큰 ID |
-| securityGroupId | Query | String | - | 삭제할 보안 그룹 ID |
+| tokenId | Header | String | - | Token ID |
+| securityGroupId | Query | String | - | Security group ID to delete |
 
 #### Request Body
-이 API는 Request Body를 필요로 하지 않습니다.
+This API does not require a request body.
 
 #### Response Body
 ```json
@@ -215,11 +215,11 @@ X-Auth-Token: {tokenId}
 ```
 
 
-## 보안 그룹 규칙 API
-보안 그룹 규칙 추가/삭제 및 조회 기능을 제공합니다.
+## Security Group Rules API
+Add/Delete and List security group rules.  
 
-### 보안 그룹 규칙 조회
-접근 가능한 모든 보안 그룹 규칙의 정보를 조회합니다.
+### List Security Group Rules
+List information of all accessible security group rules.  
 #### Method, URL
 ```
 GET /v1.0/appkeys/{appkey}/security-group-rules?id={securityGroupRuleId}
@@ -228,11 +228,11 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Optional | Description |
 | --- | --- | --- | --- | --- |
-| tokenId | Header | String | - | 토큰 ID |
-| securityGroupRuleId | Query | String | O | 조회할 보안 그룹 규칙 ID. 기재하지 않을 경우 모든 보안 그룹 규칙의 정보를 조회합니다. |
+| tokenId | Header | String | - | Token ID |
+| securityGroupRuleId | Query | String | O | ID of a security group rule to retrieve: if left empty, retrieve information of all security group rules. |
 
 #### Request Body
-이 API는 Request Body를 필요로 하지 않습니다.
+This API does not require a request body.
 
 #### Response Body
 ```json
@@ -260,18 +260,18 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Description |
 | --- | --- | --- | --- |
-| Direction | Body | String | 규칙이 적용되는 방향, "ingress" 또는 "egress" |
-| Ethernet Type | Body | String | "IPv4" 또는 "IPv6" |
-| Rule ID | Body | String | 보안 그룹 규칙 ID |
-| Port Range MAX | Body | Integer | 규칙이 적용되는 최대 포트 번호 |
-| Port Range MIN | Body | Integer | 규칙이 적용되는 최소 포트 번호 |
-| Protocol | Body | String | IP 프로토콜 "icmp", "tcp", "udp", "null" |
-| Remote Group ID | Body | String | 규칙이 적용되는 Remote Group의 ID |
-| Remote IP Prefix | Body | String | 규칙이 적용되는 Remote IP의 Prefix |
-| Security Group ID | Body | String | 규칙이 적용되는 보안 그룹의 ID |
+| Direction | Body | String | Direction where rules are applied: "ingress" or "egress" |
+| Ethernet Type | Body | String | "IPv4" or "IPv6" |
+| Rule ID | Body | String | Security group rules ID |
+| Port Range MAX | Body | Integer | Maximum port number where rules are applied |
+| Port Range MIN | Body | Integer | Minimum port number where rules are applied |
+| Protocol | Body | String | IP protocol: "icmp", "tcp", "udp", or "null" |
+| Remote Group ID | Body | String | ID of a remote group where rules are applied |
+| Remote IP Prefix | Body | String | Prefix of a remote IP where rules are applied |
+| Security Group ID | Body | String | ID of a security group where rules are applied |
 
-### 보안 그룹 규칙 생성
-새로운 보안 그룹 규칙을 생성합니다.
+### Create Security Group Rules
+Create a new security group rule.
 #### Method, URL
 ```
 POST /v1.0/appkeys/{appkey}/security-group-rules
@@ -281,7 +281,7 @@ Content-Type: application/json;charset=UTF-8
 
 |  Name | In | Type | Optional | Description |
 | --- | --- | --- | --- | --- |
-| tokenId | Header | String | - | 토큰 ID |
+| tokenId | Header | String | - | Token ID |
 
 #### Request Body
 ```json
@@ -301,14 +301,18 @@ Content-Type: application/json;charset=UTF-8
 
 |  Name | In | Type | Optional | Description |
 | --- | --- | --- | --- | --- |
-| Direction | Body | String | - | 규칙이 적용되는 방향, "ingress" 또는 "egress" |
-| Ethernet Type | Body | String | O | "IPv4" 또는 "IPv6" |
-| Port Range MAX | Body | Integer | O | 규칙이 적용되는 최대 포트 번호. 1~65535 범위. 설정 시 "protocol" 항목 생략 불가 |
-| Port Range MIN | Body | Integer | O | 규칙이 적용되는 최소 포트 번호. 1~65535 범위. 설정 시 "protocol" 항목 생략 불가 |
-| Protocol | Body | String | O | IP 프로토콜. "icmp", "tcp", "udp", "null" |
-| Remote Group ID | Body | String | O | 규칙이 적용되는 Remote 보안 그룹의 ID. <br />"remoteIpPrefix" 값을 설정할 경우 생략<Paste> |
-| Remote IP Prefix | Body | String | - | 규칙이 적용되는 Remote IP의 Prefix. <br />"remoteGroupId" 값을 설정할 경우 생략. |
-| Security Group ID | Body | String | - | 규칙이 적용되는 보안 그룹의 ID |
+| Direction | Body | String | - | Direction where rules are applied: "ingress" or "egress" |
+| Ethernet Type | Body | String | - | "IPv4" or "IPv6" |
+| Port Range MAX | Body | Integer | O | Maximum port number where rules are applied, between 1 and 65535: with this setting, cannot omit "protocol" |
+| Port Range MIN | Body | Integer | O | Minimum port number where rules are applied, between 1 and 65535: with this setting, cannot omit "protocol" |
+| Protocol | Body | String | O | IP protocol: "icmp", "tcp", "udp", or "null" |
+| Remote Group ID | Body | String | O | ID of a remote security group where rules are applied <br />: to be omitted if "remoteIpPrefix" is set <Paste> |
+| Remote IP Prefix | Body | String | O | Prefix of a remote IP where rules are applied <br />: to be omitted if "remoteGroupId" is set. |
+| Security Group ID | Body | String | - | ID of a security group where rules are applied |
+
+> [Notice]
+> If both `Remote Group ID` and` Remote IP Prefix` is omitted, the default value 0.0.0.0/0 is set to.
+> In other words, a rule that applies to all traffic is created.
 
 ##### Response Body
 ```json
@@ -334,31 +338,31 @@ Content-Type: application/json;charset=UTF-8
 
 |  Name | In | Type | Description |
 | --- | --- | --- | --- |
-| Direction | Body | String | 규칙이 적용되는 방향, "ingress" 또는 "egress" |
-| Ethernet Type | Body | String | "IPv4" 또는 "IPv6" |
-| Rule ID | Body | String | 보안 그룹 규칙 ID |
-| Port Range MAX | Body | Integer | 규칙이 적용되는 최대 포트 번호 |
-| Port Range MIN | Body | Integer | 규칙이 적용되는 최소 포트 번호 |
-| Protocol | Body | String | IP 프로토콜. "icmp", "tcp", "udp", "null" |
-| Remote Group ID | Body | String | 규칙이 적용되는 Remote 보안 그룹의 ID |
-| Remote IP Prefix | Body | String | 규칙이 적용되는 Remote IP의 Prefix |
-| Security Group ID | Body | String | 규칙이 적용되는 보안 그룹의 ID |
+| Direction | Body | String | Direction where rules are applied: "ingress" or "egress" |
+| Ethernet Type | Body | String | "IPv4" or "IPv6" |
+| Rule ID | Body | String | ID of security group rules |
+| Port Range MAX | Body | Integer | Maximum port number where rules are applied |
+| Port Range MIN | Body | Integer | Minimum port number where rules are applied |
+| Protocol | Body | String | IP protocol: "icmp", "tcp", "udp", or "null" |
+| Remote Group ID | Body | String | ID of a remote security group where rules are applied |
+| Remote IP Prefix | Body | String | Prefix of a remote IP where rules are applied |
+| Security Group ID | Body | String | ID of a security group where rules are applied |
 
-### 보안 그룹 규칙 삭제
-지정한 보안 그룹 규칙을 삭제합니다.
+### Delete Security Group Rules
+Delete specified security group rules.
 #### Method, URL
 ```
-DELETE /v1.0/appkeys/{appkey}/security-group-rules?id={securityGroupRuelsId}
+DELETE /v1.0/appkeys/{appkey}/security-group-rules?id={securityGroupRuleId}
 X-Auth-Token: {tokenId}
 ```
 
 |  Name | In | Type | Optional | Description |
 | --- | --- | --- | --- | --- |
-| tokenId | Header | String | - | 토큰 ID |
-| securityGroupRuleId | Query | String | - | 삭제할 보안 그룹 규칙 ID |
+| tokenId | Header | String | - | Token ID |
+| securityGroupRuleId | Query | String | - | ID of a security group rule to delete |
 
 #### Request Body
-이 API는 Request Body를 필요로 하지 않습니다.
+This API does not require a request body.
 
 #### Response Body
 ```json
@@ -371,21 +375,21 @@ X-Auth-Token: {tokenId}
 }
 ```
 
-## 네트워크 API
-인스턴스에서 연결할 수 있는 네트워크 정보 조회 기능을 제공합니다.
+## Network API
+Get network information which can be accessed from an instance.
 
-### 네트워크 상태
-네트워크는 다음 상태 값을 같습니다.
+### Network Status
+Networks have the following status values:
 
 | Status | Description |
 | -- | -- |
-| BUILD | 네트워크 구축 중 |
-| ACTIVE | 네트워크 활성화 상태 |
-| DOWN | 네트워크 비활성화 상태 |
-| ERROR | 에러 발생 |
+| BUILD | Network is building |
+| ACTIVE | Network is active |
+| DOWN | Network is inactive |
+| ERROR | Error has occurred |
 
-### 네트워크 정보 조회
-접근 가능한 네트워크의 정보를 조회합니다.
+### Get Network Information
+Get information of an accessible network.
 
 #### Method, URL
 ```
@@ -395,11 +399,11 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Optional |Description |
 | -- | -- | -- | -- | -- |
-| tokenId | Header | String | - | 토큰 ID |
-| networkId | Query | String | O | 조회할 네트워크 ID. 기재하지 않을 경우 모든 네트워크의 정보를 조회합니다. |
+| tokenId | Header | String | - | Token ID |
+| networkId | Query | String | O | Network ID to retrieve: if left empty, retrieve information of all networks. |
 
 #### Request Body
-이 Request는 Body를 필요로 하지 않습니다.
+This API does not require a request body.
 
 #### Response Body
 ```json
@@ -426,16 +430,16 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Description |
 |--|--|--|--|
-| Administrative State | Body | Boolean |네트워크 관리 상태. true: up, false: down |
-| Network ID | Body | String | 네트워크 ID |
-| Network Name | Body | String | 네트워크 이름 |
-| External Router Provided | Body | Boolean | 라우터를 통한 플로팅 IP 제공 가능 여부 |
-| Network Status | Body | String | 네트워크 상태. ACTIVE, DOWN, BUILD, ERROR |
-| Subnet ID | Body | String | 서브넷 ID |
+| Administrative State | Body | Boolean |Network management status: true: up, or false: down |
+| Network ID | Body | String | Network ID |
+| Network Name | Body | String | Network name |
+| External Router Provided | Body | Boolean | Availability of a floating IP provided via router |
+| Network Status | Body | String | Network status: ACTIVE, DOWN, BUILD, or ERROR |
+| Subnet ID | Body | String | Subnet ID |
 
-## 서브넷 API
-### 서브넷 정보 조회
-접근 가능한 서브넷의 정보를 조회합니다.
+## Subnet API
+### Get Subnet Information
+Get information of an accessible subnet.
 #### Method, URL
 ```
 GET /v1.0/appkeys/{appkey}/subnets
@@ -444,10 +448,10 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Optional |Description |
 | -- | -- | -- | -- | -- |
-| tokenId | Header | String | - | 토큰 ID |
+| tokenId | Header | String | - | Token ID |
 
 #### Request Body
-이 API는 Request Body를 필요로 하지 않습니다.
+This API does not require a request body.
 
 #### Response Body
 ```json
@@ -480,30 +484,30 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Description |
 |--|--|--|--|
-| Start IP | Body | String | 할당 Pool의 시작 IP. 예) 10.161.244.13 |
-| End IP | Body | String | 할당 Pool의 마지막 IP. 예) 10.161.244.121 |
-| CIDR | Body | String | Classless Inter-Domain Routing. 예) 10.161.244.0/25 |
-| Enable DHCP | Body | Boolean | DHCP 활성화 여부 |
-| Subnet ID | Body | String | 서브넷 ID |
-| IP Version | Body | Integer | 서브넷의 IP 버전 |
-| Subnet Name | Body | Integer | 서브넷 이름 |
-| Network ID | Body | Integer | 서브넷이 속한 네트워크 ID |
+| Start IP | Body | String | Starting IP of an allocated pool e.g) 10.161.244.13 |
+| End IP | Body | String | Last IP of an allocated pool e.g) 10.161.244.121 |
+| CIDR | Body | String | Refers to Classless Inter-Domain Routing, one of the ways to allocate IP addresses  e.g.) 10.161.244.0/25 |
+| Enable DHCP | Body | Boolean | Whether DHCP is enable |
+| Subnet ID | Body | String | Subnet ID |
+| IP Version | Body | Integer | IP version of a subnet |
+| Subnet Name | Body | Integer | Subnet name |
+| Network ID | Body | Integer | Network ID where a subnet belongs to |
 
-## 플로팅 IP API
-플로팅 IP 생성, 삭제, 정보 조회 기능을 제공합니다.
+## Floating IP API
+Create, Delete, and Retrieve Floating IPs.
 
-### 플로팅 IP Status
-플로팅 IP는 다음 상태값을 갖습니다.
+### Floating IP Status
+Floating IPs have the following status values:
 
 | Status | Description |
 | -- | -- |
-| ACTIVE | 플로팅 IP가 인스턴스와 연결되어 사용중인 상태 |
-| DOWN | 플로팅 IP가 연결되어 있지 않은 상태 |
-| ERROR | 에러 발생 |
+| ACTIVE | Floating IP is associated to an instance and now in use |
+| DOWN | Floating IP is not associated |
+| ERROR | Error has occurred |
 
 
-### 플로팅 IP Pool 조회
-플로팅 IP Pool 목록을 조회합니다.
+### List Pool of Floating IPs
+List the pool of floating IPs.
 
 #### Method, URL
 ```
@@ -512,10 +516,10 @@ X-Auth-Token: {tokenId}
 ```
 |  Name | In | Type | Optional | Description |
 |--|--|--|--|--|
-| tokenId | Header | String | - | 토큰 ID |
+| tokenId | Header | String | - | Token ID |
 
 #### Request Body
-이 API는 Request Body를 필요로 하지 않습니다.
+This API does not require a request body.
 
 #### Response Body
 ```json
@@ -535,12 +539,12 @@ X-Auth-Token: {tokenId}
 ```
 |  Name | In | Type | Description |
 |--|--|--|--|
-| Pool ID | Body | String | 플로팅 IP Pool 식별자 |
-| Pool Name | Body | String | 플로팅 IP Pool 이름 |
+| Pool ID | Body | String | Pool identifier of a floating IP |
+| Pool Name | Body | String | Pool name of a floating IP |
 
 
-### 플로팅 IP 조회
-사용 가능한, 또는 사용 중인 플로팅 IP 정보를 조회합니다.
+### Get Floating IP
+Get information of an available or in-use floating IP.
 #### Method, URL
 ```
 GET /v1.0/appkeys/{appkey}/floating-ips?id={floatingIpId}
@@ -549,11 +553,11 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Optional | Description |
 |--|--|--|--|--|
-| tokenId | Header | String | - |토큰 ID |
-| floatingIpId | Query | String | O | 조회할 플로팅 IP의 ID. 기재하지 않을 경우 모든 플로팅 IP의 정보를 조회합니다. |
+| tokenId | Header | String | - |Token ID |
+| floatingIpId | Query | String | O | ID of a floating IP to retrieve: if left empty, retrieve information of all floating IPs. |
 
 #### Request Body
-이 API는 Request Body를 필요로 하지 않습니다.
+This API does not require a request body.
 
 #### Response Body
 ```json
@@ -582,17 +586,17 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Description |
 |--|--|--|--|
-| Floating IP ID | Body | String | 플로팅 IP ID |
-| Floating IP Address | Body | String | 플로팅 IP 주소 |
-| Fixed IP Address | Body | String | 플로팅 IP가 연결된 인스턴스 NIC의 IP 주소. Status가 "ACTIVE" 인 경우에만 표시 |
-| Port ID | Body | String | 플로팅 IP가 연결된 포트 ID. 상태가 "ACTIVE" 인 경우에만 표시 |
-| Router ID | Body | String | 플로팅 IP의 라우터 ID. 상태가 "ACTIVE" 인 경우에만 표시 |
-| Pool ID | Body | String | 플로팅 IP가 속한 Pool 식별자 |
-| Pool Name | Body | String | 플로팅 IP가 속한 Pool 이름 |
-| Status | Body | String | 플로팅 IP의 상태 |
+| Floating IP ID | Body | String | ID of a floating IP |
+| Floating IP Address | Body | String | Address of a floating IP |
+| Fixed IP Address | Body | String | IP address of instance NIC to which floating IP is associated. Displays only when the status is "ACTIVE". |
+| Port ID | Body | String | Port ID to which a floating IP is associated. Displays only when the status is "ACTIVE". |
+| Router ID | Body | String | Router ID of a floating IP. Displays only when the status is "ACTIVE". |
+| Pool ID | Body | String | Pool identifier where a floating IP belongs to |
+| Pool Name | Body | String | Name of a pool where a floating IP belongs to |
+| Status | Body | String | Status of a floating IP |
 
-### 플로팅 IP 생성
-플로팅 IP를 생성합니다.
+### Create Floating IPs
+Create a floating IP.
 #### Method, URL
 ```
 POST /v1.0/appkeys/{appkey}/floating-ips
@@ -601,7 +605,7 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Optional | Description |
 |--|--|--|--|--|
-| tokenId | Header | String | - | 토큰 ID |
+| tokenId | Header | String | - | Token ID |
 
 #### Request Body
 ```json
@@ -614,7 +618,7 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Optional | Description |
 |--|--|--|--|--|
-|  Pool ID | Body | String | - | 플로팅 IP Pool 식별자 |
+|  Pool ID | Body | String | - | Pool identifier of a floating IP |
 
 #### Response Body
 ```json
@@ -638,14 +642,14 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Description |
 |--|--|--|--|
-| Floating IP ID | Body | String | 플로팅 IP ID |
-| Floating IP Address | Body | String | 플로팅 IP 주소 |
-| Pool ID | Body | String | 플로팅 IP가 속한 Pool 식별자 |
-| Pool Name | Body | String | 플로팅 IP가 속한 Pool 이름 |
-| Status | Body | String | 플로팅 IP의 상태 |
+| Floating IP ID | Body | String | ID of a floating IP |
+| Floating IP Address | Body | String | Address of a floating IP |
+| Pool ID | Body | String | Pool identifier to where a floating IP belongs |
+| Pool Name | Body | String | Name of a pool to where a floating IP belongs |
+| Status | Body | String | Status of a floating IP |
 
-### 플로팅 IP 삭제
-지정한 플로팅 IP를 삭제합니다. 사용중(ACTIVE)인 플로팅 IP는 연결 해제 후 삭제할 수 있습니다.
+### Delete Floating IP
+Delete a designated floating IP. For an active floating IP, disassociate first and delete.  
 #### Method, URL
 ```
 DELETE /v1.0/appkeys/{appkey}/floating-ips?id={floatingIpId}
@@ -654,11 +658,11 @@ X-Auth-Token: {tokenId}
 
 |  Name | In | Type | Optional | Description |
 |--|--|--|--|--|
-| tokenId | Header | String | - | 토큰 ID |
-| floatingIpId | Path | String | - | 삭제할 플로팅 IP ID |
+| tokenId | Header | String | - | Token ID |
+| floatingIpId | Path | String | - | ID of a floating IP to delete |
 
 #### Request Body
-이 API는 request body를 필요로 하지 않습니다.
+This API does not require a  request body.
 
 #### Response Body
 

@@ -139,8 +139,6 @@ When an instance is created, an IP address is assigned from a designated subnet.
 
 * A connection to a floating IP does not mean a change of a fixed IP to a floating IP. 
 
-* A single instance can have two subnets connected to two floating IPs, with additional configuration. For more details, refer to [Linux Advanced Routing](http://lartc.org/).
-
 * Traffic occurred to the internet direction shall be charged. 
 
 * Two instances, within a same VPC, communicating via floating IP shall be charged by the usage.  

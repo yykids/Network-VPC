@@ -1,5 +1,7 @@
 ## Network > VPC > API 가이드
 
+API는 현재 한국 리전에서만 사용할 수 있습니다.
+
 ## 사전 준비
 
 네트워크 VPC API를 사용하려면 앱키와 토큰이 필요합니다. [API Endpoint URL](/Compute/Instance/ko/api-guide/#api-endpoint-url)과 [토큰 API](/Compute/Instance/ko/api-guide/#api)를 이용하여 앱키와 토큰을 준비합니다. 앱키는 API Endpoint URL에 토큰은 Request Body에 포함하여 사용합니다.

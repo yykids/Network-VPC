@@ -1,5 +1,7 @@
 ## Network > VPC > APIガイド
 
+APIは現在、韓国リージョンでのみ使用できます。
+
 ## 事前準備
 
 ネットワークVPC APIを使用するにはアプリケーションキーとトークンが必要です。 [API Endpoint URL](/Compute/Instance/ja/api-guide/#api-endpoint-url)と[トークンAPI](/Compute/Instance/ja/api-guide/#api)を利用してアプリケーションキーとトークンを準備します。アプリケーションキーはAPI Endpoint URLにトークンはRequest Bodyに含めて使用します。

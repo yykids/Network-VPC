@@ -148,20 +148,30 @@ When an instance is created, an IP address is assigned from a designated subnet.
 
 ## Security Group 
 
-Security Group is used to protect instances from other traffic of the network. In general, "Positive Security Model" is applied to allow what is designated while blocking the others.  With a service initiated, a default security group is created, and as all traffic is blocked, even such services like "ping" and "ssh" are unavailable and are made available when they are opened. This shall apply the same for any access from the internet or a local. In addition, more security groups may be added with rules and applied to an instance.    
+Security group is used to protect instances from other traffic. In general, "Positive Security Model" is applied to allow specified traffic, while blocking the others. 
 
-For example, if a rule called "SSH" has a rule named "INGRESS TCP PORT 23", while "WEB" has "INGRESS TCP PORT 80", the two security groups, "SSH" and "WEB", can be assigned to an instance and make both available. 
+With a service initiated, a default security group is created, blocking all inbound traffic. As a result, services like 'ping' or 'ssh' become available only by setting rules that are required. Same can be applied both to external access using floating IP and internal access using private IP. 
+
+Many security groups can be set for an instance. When additional security group is created, with many rules added and set for an instance, all rules set for security groups shall be applied to the instance.   
+
+For instance, if a security group called 'CONN' has rules named 'Ingress TCP PORT 22' and 'Ingress TCP PORT 23', while a security group called 'WEB' has rules named 'Ingress TCP PORT 80' and 'Ingress TCP PORT 8080', the two security groups, 'CONN' and 'WEB', can be assigned to an instance and make the four rules all available.    
 
 
-Item | Description 
--------- | ---------- 
-Direction | Ingress refers to an inflow into an instance; on the other hands, Egress means an outflow of an instance. 
-Ether Type | Version of an IP 
-IP Protocol | Specify a particular protocol or all. 
-Port Range | Specify the range of a port, for L4 protocol. 
-Remote | Range of a remote or an IP address: for Ingress, it refers to a departure address while Egress to the destination address. 
+| Item        | Description                                                  |
+| ----------- | ------------------------------------------------------------ |
+| Flow        | Ingress refers to an inbound flow to an instance; Egress refers to an outbound flow from an instance.  |
+| Ether Type  | Version of EtherType IP: IPv4 or IPv6 can be specified.      |
+| IP Protocol | A particular protocol or all can be specified.               |
+| Port Range  | For L4 protocol, the port range can be specified.            |
+| Remote      | Range of a security group or IP address can be specified. If the flow of s rule is 'Egress', the destination is remote; if it is 'Ingress', the departure is remote. <br>Traffic departure and destination is compared depending on the flow of a rule: when a security group is specified, see if the IP belongs to instances of the specified security group; <br>when IP address or range is specified by selecting CIDR, see if the IP address or range is set. |
 
- As security groups run by "Stateful", sessions, once connected, are to be allowed even without a rule for opposite direction. For instance, if the first packet of TCP 80 that directs to an instance, by "INGRESS TCP PORT 80", has passed by the rule, then packets transferred to the TCP 80 port of the instance shall not be blocked.  Nevertheless, in the case of a non-connected directional protocol, if there is not a flow during a particular period, it shall be blocked ever since.  
+Since a security group runs by 'stateful', sessions that are once connected with a rule are allowed even without rule of the opposite flow. 
+
+For example, if the first packet of TCP 80 which directs toward an instance, has passed by the 'Ingress TCP PORT 80' rule, the transfer packet which starts from TCP 80 port of an instance shall not be blocked.  
+
+Nevertheless, if a session is closed due to failure of incoming packet which is appropriate for a particular period rule, packets of the opposite direction are also blocked.   
+
+Default security group has rules for all outbound traffic from an instance. Unless the rules are removed, all sessions starting from instances are allowed. 
 
 * Specifying a range is more effective than adding rules one by one.
 

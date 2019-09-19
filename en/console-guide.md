@@ -159,11 +159,11 @@ For instance, if a security group called 'CONN' has rules named 'Ingress TCP POR
 
 | Item        | Description                                                  |
 | ----------- | ------------------------------------------------------------ |
-| Flow        | Ingress refers to an inbound flow to an instance; Egress refers to an outbound flow from an instance.  |
-| Ether Type  | Version of EtherType IP: IPv4 or IPv6 can be specified.      |
+| Flow        | Ingress refers to an inbound flow to an instance. Egress refers to an outbound flow from an instance. |
+| Ether Type  | Version of EtherType IP. IPv4 or IPv6 can be specified.      |
 | IP Protocol | A particular protocol or all can be specified.               |
 | Port Range  | For L4 protocol, the port range can be specified.            |
-| Remote      | Range of a security group or IP address can be specified. If the flow of s rule is 'Egress', the destination is remote; if it is 'Ingress', the departure is remote. Traffic departure and destination is compared depending on the flow of a rule: when a security group is specified, see if the IP belongs to instances of the specified security group; when IP address or range is specified by selecting CIDR, see if the IP address or range is set. |
+| Remote      | Range of a security group or IP address can be specified. If the flow of a rule is 'Egress', the destination is remote. <br>If it is 'Ingress', the departure is remote. Traffic departure and destination is compared depending on the flow of a rule. <br>When a security group is specified, see if the IP belongs to instances of the specified security group. <br>When IP address or range is specified by selecting CIDR, see if the IP address or range is set. |
 
 Since a security group runs by 'stateful', sessions that are once connected with a rule are allowed even without rule of the opposite flow. 
 

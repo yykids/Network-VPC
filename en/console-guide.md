@@ -197,7 +197,7 @@ Adding more routes is available, only when available areas within VPC are design
 
 * Gateways of subnets included to a routing table are automatically added.  
 
-* "Default Routing Table" cannot be deleted. 
+* “Default routing table” cannot be deleted. It shall be deleted along with VPC on its deletion.
 
 * Gateways of subnets and internet cannot be deleted from the list of routers. 
 

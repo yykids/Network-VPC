@@ -1,5 +1,7 @@
 ## Network > VPC > API Guide
 
+API is currently available only in the Korea region.
+
 ## Prerequisites
 
 Using a network VPC API requires an appkey and a token. Get an appkey and a token by using [API Endpoint URL](/Compute/Instance/en/api-guide/#api-endpoint-url) and [Token API](/Compute/Instance/en/api-guide/#api): include the appkey to API Endpoint URL and the token to the Request Body.

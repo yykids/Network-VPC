@@ -30,7 +30,7 @@ Example | Availability
 172.16.0.0/8 | Unavailable. Out of available range. 
 192.168.0.0/16 | Available. Specified as default range. 
 192.168.0.0/24 | Available. 
-192.253.0.0/24 | Available. Out of available range. 
+192.253.0.0/24 | Unavailable. Out of available range. 
 
 <br>
 
@@ -87,7 +87,7 @@ VPCs can be deleted only when subnets are deleted altogether, and in such case, 
 
 ## Subnets 
 
-A  VPC can be subdivided into subnets that are composed of many networks. However, a subnet must be included within the range of a VPC address, with its length the same or shorter.  For example, in the case of 192.168.0.0/16, a total of 65536 IP addresses are available between 192.168.0.0 and 192.168.255.255. In addition, the smallest subnet is 30 bits and any configuration cannot be smaller than that. Subnets also adopt CIDR display, just like VPC.  
+A  VPC can be subdivided into subnets that are composed of many networks. However, a subnet must be included within the range of a VPC address, with its length the same or shorter.  For example, in the case of 192.168.0.0/16, a total of 65536 IP addresses are available between 192.168.0.0 and 192.168.255.255. In addition, the smallest subnet is 28 bits and any configuration cannot be smaller than that. Subnets also adopt CIDR display, just like VPC.  
 
 When a subnet is created, its gateway IP address is automatically designated and it cannot be modified. It is also automatically registered to a routing table included to the VPC. 
 

@@ -1,5 +1,7 @@
 ## Network > VPC > API 指南
 
+API目前仅限韩国地区使用。
+
 ## 事前准备
 
 要想使用网络 VPC API，则需要App key和令牌（token）。利用[API Endpoint URL](/Compute/Instance/zh/api-guide/#api-endpoint-url)和[令牌 API](/Compute/Instance/zh/api-guide/#api)来准备App key和令牌。 API Endpoint URL中包含App key， Request Body中包含令牌。

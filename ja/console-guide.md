@@ -173,34 +173,34 @@ TOASTは周期的にインターネットゲートウェイサーバーのソフ
 
 > [参考]同じVPC内の2個のインスタンスがFixed IPを使用してローカル通信をすると、課金しません。
 
-### 여러 개의 네트워크 인터페이스를 갖는 인스턴스에 플로팅 IP 연결하기
+### 複数のネットワークインターフェイスを持つインスタンスにFloating IP接続する
 
-여러 개의 네트워크 인터페이스를 갖는 인스턴스는 각 네트워크 인터페이스마다 플로팅 IP를 연결할 수 있습니다. 그러나 첫 번째를 제외한 나머지에 네트워크 인터페이스에 연결한 플로팅 IP로 인스턴스에 접속하기 위해서는 인스턴스의 Routing Rule 설정이 필요합니다.
+複数のネットワークインターフェイスを持つインスタンスは、ネットワークインターフェイスごとにFloating IPを接続できます。しかし最初以外のネットワークインターフェイスに接続したFloating IPでインスタンスに接続するには、インスタンスのRouting Rule設定が必要です。
 
-**TOAST에서 제공하는 공용 Linux 이미지 배포 버전 `2018.12.27` 이상**으로 생성한 인스턴스는 부팅 시 Routing Rule을 자동으로 설정하여 각각의 네트워크 인터페이스에 연결된 모든 플로팅 IP를 통해 접근이 가능합니다. 
-* 인스턴스에 접속 후, 다음과 같이 Routing Rule 설정 여부를 확인할 수 있습니다.
+**TOASTで提供する共用Linuxイメージ配布バージョン`2018.12.27`以上**で作成したインスタンスは、起動時にRouting Ruleを自動的に設定し、それぞれのネットワークインターフェイスに接続されたすべてのFloating IPを通してアクセスできます。
+* インスタンスに接続した後、次のようにRouting Ruleの設定状態を確認できます。
     ```shell
     $ ip rule
     0:      from all lookup local
-    100:    from { eth0의 IP 주소 } lookup 1
-    200:    from { eth1의 IP 주소 } lookup 2
-    300:    from { eth2의 IP 주소 } lookup 3
+    100:    from { eth0のIPアドレス} lookup 1
+    200:    from { eth1のIPアドレス} lookup 2
+    300:    from { eth2のIPアドレス} lookup 3
     ...
     32766:  from all lookup main
     32767:  from all lookup default
     ```
-    위와 같이 `ip rule` 명령을 실행했을 때 각 네트워크 인터페이스 별 Routing Rule 설정이 되어 있다면 모든 플로팅 IP를 통해 인스턴스에 접근이 가능합니다.
+   上記のように`ip rule`コマンドを実行した時、ネットワークインターフェイスごとにRouting Ruleが設定されている場合、すべてのFloating IPを通してインスタンスにアクセスできます。
 
-이 외의 이미지로 생성한 인스턴스는, 다음과 같이 인스턴스 내에 Routing Rule을 설정하여 인스턴스에 연결된 모든 플로팅 IP를 통해 접근하도록 할 수 있습니다.
+これ以外のイメージで作成したインスタンスは、次のようにインスタンス内にRouting Ruleを設定して、インスタンスに接続されたすべてのFloating IPを通してアクセスするようにできます。
 
-* 첫 번째 네트워크 인터페이스(eth0)에 연결된 플로팅 IP를 통해 인스턴스에 접속한 후, 플로팅 IP를 연결하여 접속하려는 나머지 네트워크 인터페이스들에 대해 다음과 같은 명령을 실행합니다.
+* 最初のネットワークインターフェイス(eth0)に接続されたFloating IPを通してインスタンスに接続した後、 Floating IPを接続して接続しようとする残りのネットワークインターフェイスに対して次のコマンドを実行します。
   ```shell
-  ip rule add from {네트워크 인터페이스 IP 주소}/32 table {테이블 번호} priority {우선순위}
-  ip route add default via {네트워크 인터페이스의 Default 게이트웨이 주소} table {테이블 번호}
-  ip route add {네트워크 인터페이스의 서브넷 CIDR} dev {네트워크 인터페이스 이름} table {테이블 번호}
+  ip rule add from {ネットワークインターフェイスIPアドレス}/32 table {テーブル番号} priority {優先順位}
+  ip route add default via {ネットワークインターフェイスのDefaultゲートウェイアドレス} table {テーブル番号}
+  ip route add {ネットワークインターフェイスのサブネットCIDR} dev {ネットワークインターフェイス名} table {テーブル番号}
   ```
 
-	* 예로, 인스턴스가 갖는 네트워크 인터페이스 정보가 다음과 같다고 할 때
+	* 例えば、インスタンスが持つネットワークインターフェイス情報が次のような時
       ```shell
       1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN
           link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
@@ -227,20 +227,20 @@ TOASTは周期的にインターネットゲートウェイサーバーのソフ
           inet6 fe80::f816:3eff:fe06:ac10/64 scope link
              valid_lft forever preferred_lft forever
       ```
-        `eth1`, `eth2` 에 대해 플로팅 IP로 접속하기 위해 아래와 같은 명령을 통해 Routing Rule을 설정합니다.
+        `eth1`、`eth2`に対してFloating IPで接続するために、次のコマンドを通してRouting Ruleを設定します。
 
       ```shell
-      # eth1의 플로팅 IP 접속을 위한 Routing Rule 설정
+      # eth1のFloating IP接続のためのRouting Rule設定
       ip rule add from 172.16.0.37/32 table 2 priority 200
       ip route add default via 172.16.0.1 table 2
       ip route add 172.16.0.0/24 dev eth1 table 2
 
-      # eth2의 플로팅 IP 접속을 위한 Routing Rule 설정
+      # eth2のFloating IP接続のためのRouting Rule設定
       ip rule add from 10.254.0.90/32 table 3 priority 300
       ip route add default via 10.254.0.1 table 3
       ip route add 10.254.0.0/24 dev eth2 table 3
       ```
-      명령 실행 후 다음과 같이 설정된 Routing Rule을 확인할 수 있습니다.
+    コマンド実行後、次のように設定されたRouting Ruleを確認できます。
 
       ```shell 
       $ ip rule													
@@ -259,7 +259,7 @@ TOASTは周期的にインターネットゲートウェイサーバーのソフ
       10.254.0.0/24 dev eth2  scope link
       ```
 
-* 위 Routing Rule 설정은 인스턴스를 재부팅하면 초기화 되므로, 인스턴스 재부팅 시 Routing Rule이 자동으로 설정되도록 설정하는 것이 좋습니다.
+* 上記のRouting Rule設定は、インスタンスを再起動すると初期化されるため、インスタンスの再起動時にRouting Ruleが自動的に設定されるように設定することを推奨します。
 
 ## セキュリティグループ
 

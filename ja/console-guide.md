@@ -179,7 +179,7 @@ TOASTは周期的にインターネットゲートウェイサーバーのソフ
 
 **TOASTで提供する共用Linuxイメージ配布バージョン`2018.12.27`以上**で作成したインスタンスは、起動時にRouting Ruleを自動的に設定し、それぞれのネットワークインターフェイスに接続されたすべてのFloating IPを通してアクセスできます。
 * インスタンスに接続した後、次のようにRouting Ruleの設定状態を確認できます。
-    ```shell
+    ```
     $ ip rule
     0:      from all lookup local
     100:    from { eth0のIPアドレス} lookup 1
@@ -194,14 +194,14 @@ TOASTは周期的にインターネットゲートウェイサーバーのソフ
 これ以外のイメージで作成したインスタンスは、次のようにインスタンス内にRouting Ruleを設定して、インスタンスに接続されたすべてのFloating IPを通してアクセスするようにできます。
 
 * 最初のネットワークインターフェイス(eth0)に接続されたFloating IPを通してインスタンスに接続した後、 Floating IPを接続して接続しようとする残りのネットワークインターフェイスに対して次のコマンドを実行します。
-  ```shell
+  ```
   ip rule add from {ネットワークインターフェイスIPアドレス}/32 table {テーブル番号} priority {優先順位}
   ip route add default via {ネットワークインターフェイスのDefaultゲートウェイアドレス} table {テーブル番号}
   ip route add {ネットワークインターフェイスのサブネットCIDR} dev {ネットワークインターフェイス名} table {テーブル番号}
   ```
 
 	* 例えば、インスタンスが持つネットワークインターフェイス情報が次のような時
-      ```shell
+      ```
       1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN
           link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
           inet 127.0.0.1/8 scope host lo
@@ -229,7 +229,7 @@ TOASTは周期的にインターネットゲートウェイサーバーのソフ
       ```
         `eth1`、`eth2`に対してFloating IPで接続するために、次のコマンドを通してRouting Ruleを設定します。
 
-      ```shell
+      ```
       # eth1のFloating IP接続のためのRouting Rule設定
       ip rule add from 172.16.0.37/32 table 2 priority 200
       ip route add default via 172.16.0.1 table 2
@@ -242,7 +242,7 @@ TOASTは周期的にインターネットゲートウェイサーバーのソフ
       ```
     コマンド実行後、次のように設定されたRouting Ruleを確認できます。
 
-      ```shell 
+      ```
       $ ip rule													
       0:	from all lookup local
       200:	from 172.16.0.37 lookup 2 	

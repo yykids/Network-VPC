@@ -179,7 +179,7 @@ When an instance is created, an IP address is assigned from a designated subnet.
 
 **TOAST에서 제공하는 공용 Linux 이미지 배포 버전 `2018.12.27` 이상**으로 생성한 인스턴스는 부팅 시 Routing Rule을 자동으로 설정하여 각각의 네트워크 인터페이스에 연결된 모든 플로팅 IP를 통해 접근이 가능합니다. 
 * 인스턴스에 접속 후, 다음과 같이 Routing Rule 설정 여부를 확인할 수 있습니다.
-    ```shell
+    ```
     $ ip rule
     0:      from all lookup local
     100:    from { eth0의 IP 주소 } lookup 1
@@ -194,14 +194,14 @@ When an instance is created, an IP address is assigned from a designated subnet.
 이 외의 이미지로 생성한 인스턴스는, 다음과 같이 인스턴스 내에 Routing Rule을 설정하여 인스턴스에 연결된 모든 플로팅 IP를 통해 접근하도록 할 수 있습니다.
 
 * 첫 번째 네트워크 인터페이스(eth0)에 연결된 플로팅 IP를 통해 인스턴스에 접속한 후, 플로팅 IP를 연결하여 접속하려는 나머지 네트워크 인터페이스들에 대해 다음과 같은 명령을 실행합니다.
-  ```shell
+  ```
   ip rule add from {네트워크 인터페이스 IP 주소}/32 table {테이블 번호} priority {우선순위}
   ip route add default via {네트워크 인터페이스의 Default 게이트웨이 주소} table {테이블 번호}
   ip route add {네트워크 인터페이스의 서브넷 CIDR} dev {네트워크 인터페이스 이름} table {테이블 번호}
   ```
 
 	* 예로, 인스턴스가 갖는 네트워크 인터페이스 정보가 다음과 같다고 할 때
-      ```shell
+      ```
       1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN
           link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
           inet 127.0.0.1/8 scope host lo
@@ -229,7 +229,7 @@ When an instance is created, an IP address is assigned from a designated subnet.
       ```
         `eth1`, `eth2` 에 대해 플로팅 IP로 접속하기 위해 아래와 같은 명령을 통해 Routing Rule을 설정합니다.
 
-      ```shell
+      ```
       # eth1의 플로팅 IP 접속을 위한 Routing Rule 설정
       ip rule add from 172.16.0.37/32 table 2 priority 200
       ip route add default via 172.16.0.1 table 2
@@ -242,7 +242,7 @@ When an instance is created, an IP address is assigned from a designated subnet.
       ```
       명령 실행 후 다음과 같이 설정된 Routing Rule을 확인할 수 있습니다.
 
-      ```shell 
+      ``` 
       $ ip rule													
       0:	from all lookup local
       200:	from 172.16.0.37 lookup 2 	

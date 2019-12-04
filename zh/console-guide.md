@@ -203,29 +203,29 @@ ip route add {네트워크 인터페이스의 서브넷 CIDR} dev {네트워크 
 예로, 인스턴스가 갖는 네트워크 인터페이스 정보가 다음과 같다고 할 때
 ```
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN
-link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-inet 127.0.0.1/8 scope host lo
-valid_lft forever preferred_lft forever
-inet6 ::1/128 scope host
-valid_lft forever preferred_lft forever
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
 2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1454 qdisc pfifo_fast state UP qlen 1000
-link/ether fa:16:3e:8d:71:d6 brd ff:ff:ff:ff:ff:ff
-inet 192.168.100.132/24 brd 192.168.100.255 scope global dynamic eth0
-valid_lft 86379sec preferred_lft 86379sec
-inet6 fe80::f816:3eff:fe8d:71d6/64 scope link
-valid_lft forever preferred_lft forever
+    link/ether fa:16:3e:8d:71:d6 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.100.132/24 brd 192.168.100.255 scope global dynamic eth0
+       valid_lft 86379sec preferred_lft 86379sec
+    inet6 fe80::f816:3eff:fe8d:71d6/64 scope link
+       valid_lft forever preferred_lft forever
 3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1454 qdisc pfifo_fast state UP qlen 1000
-link/ether fa:16:3e:06:96:2f brd ff:ff:ff:ff:ff:ff
-inet 172.16.0.37/24 brd 172.16.0.255 scope global dynamic eth1
-valid_lft 86381sec preferred_lft 86381sec
-inet6 fe80::f816:3eff:fe06:962f/64 scope link
-valid_lft forever preferred_lft forever
+    link/ether fa:16:3e:06:96:2f brd ff:ff:ff:ff:ff:ff
+    inet 172.16.0.37/24 brd 172.16.0.255 scope global dynamic eth1
+       valid_lft 86381sec preferred_lft 86381sec
+    inet6 fe80::f816:3eff:fe06:962f/64 scope link
+       valid_lft forever preferred_lft forever
 4: eth2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1454 qdisc pfifo_fast state UP qlen 1000
-link/ether fa:16:3e:06:ac:10 brd ff:ff:ff:ff:ff:ff
-inet 10.254.0.90/24 brd 10.254.0.255 scope global dynamic eth2
-valid_lft 86386sec preferred_lft 86386sec
-inet6 fe80::f816:3eff:fe06:ac10/64 scope link
-valid_lft forever preferred_lft forever
+    link/ether fa:16:3e:06:ac:10 brd ff:ff:ff:ff:ff:ff
+    inet 10.254.0.90/24 brd 10.254.0.255 scope global dynamic eth2
+       valid_lft 86386sec preferred_lft 86386sec
+    inet6 fe80::f816:3eff:fe06:ac10/64 scope link
+       valid_lft forever preferred_lft forever
 ```
 `eth1`, `eth2` 에 대해 플로팅 IP로 접속하기 위해 아래와 같은 명령을 통해 Routing Rule을 설정합니다.
 

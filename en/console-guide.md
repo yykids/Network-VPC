@@ -173,35 +173,35 @@ When an instance is created, an IP address is assigned from a designated subnet.
 
 > [Note] Two instances, within a same VPC, communicating locally via fixed IP shall not be charged. 
 
-### 여러 개의 네트워크 인터페이스를 갖는 인스턴스에 플로팅 IP 연결하기
+### Associating Floating IP to Instances with Many Network Interfaces 
 
-여러 개의 네트워크 인터페이스를 갖는 인스턴스는 각 네트워크 인터페이스마다 플로팅 IP를 연결할 수 있습니다. 그러나 첫 번째를 제외한 나머지에 네트워크 인터페이스에 연결한 플로팅 IP로 인스턴스에 접속하기 위해서는 인스턴스의 Routing Rule 설정이 필요합니다.
+An instance with a multiple number of network interfaces can have each of its network interface associated with floating IP. However, in order to access the instance with a floating IP which is associated to other network interfaces, except the first one, the routing rule setting must be set for the instance.  
 
-**TOAST에서 제공하는 공용 Linux 이미지 배포 버전 `2018.12.27` 이상**으로 생성한 인스턴스는 부팅 시 Routing Rule을 자동으로 설정하여 각각의 네트워크 인터페이스에 연결된 모든 플로팅 IP를 통해 접근이 가능합니다. 
+ An instance which is created with **`Dec.27,2018` or later version of TOAST Common Linux Image Deployment ** can be accessed via all floating IPs associated with each network interface, by configuring the auto routing rule for a booting. 
 
-인스턴스에 접속 후, 다음과 같이 Routing Rule 설정 여부를 확인할 수 있습니다.
+*Access an instance, and check if routing rule is set, as below: 
 ```
 $ ip rule
 0:      from all lookup local
-100:    from { eth0의 IP 주소 } lookup 1
-200:    from { eth1의 IP 주소 } lookup 2
-300:    from { eth2의 IP 주소 } lookup 3
+100:    from { IP address of eth0 } lookup 1
+200:    from { IP address of eth1 } lookup 2
+300:    from { IP address of eth2 } lookup 3
 ...
 32766:  from all lookup main
 32767:  from all lookup default
 ```
-위와 같이 ip rule 명령을 실행했을 때 각 네트워크 인터페이스 별 Routing Rule 설정이 되어 있다면 모든 플로팅 IP를 통해 인스턴스에 접근이 가능합니다.
+When the `ip rule` command is executed and the routing rule is set for each network interface, then you can access instance via all floating IPs. 
 
-이 외의 이미지로 생성한 인스턴스는, 다음과 같이 인스턴스 내에 Routing Rule을 설정하여 인스턴스에 연결된 모든 플로팅 IP를 통해 접근하도록 할 수 있습니다.
+An instance that is created by other images can be accessed via all floating IPs associated with the instance, by setting the routing rule within instance, as below: 
 
-첫 번째 네트워크 인터페이스(eth0)에 연결된 플로팅 IP를 통해 인스턴스에 접속한 후, 플로팅 IP를 연결하여 접속하려는 나머지 네트워크 인터페이스들에 대해 다음과 같은 명령을 실행합니다.
+Access instance via floating IP which is associated to the first network interface (eth0), and execute the commands as below to other network interfaces trying to access via the floating IP. 
 ```
-ip rule add from {네트워크 인터페이스 IP 주소}/32 table {테이블 번호} priority {우선순위}
-ip route add default via {네트워크 인터페이스의 Default 게이트웨이 주소} table {테이블 번호}
-ip route add {네트워크 인터페이스의 서브넷 CIDR} dev {네트워크 인터페이스 이름} table {테이블 번호}
+ip rule add from {IP address for network interface}/32 table {table number} priority {priority}
+ip route add default via {default gateway address for network interface} table {table number}
+ip route add {Subnet CIDR of network interface} dev {name of network interface} table {table number}
 ```
 
-예로, 인스턴스가 갖는 네트워크 인터페이스 정보가 다음과 같다고 할 때
+For instance, if an instance has the following network interface information
 ```
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
@@ -228,22 +228,22 @@ ip route add {네트워크 인터페이스의 서브넷 CIDR} dev {네트워크 
     inet6 fe80::f816:3eff:fe06:ac10/64 scope link
        valid_lft forever preferred_lft forever
 ```
-`eth1`, `eth2` 에 대해 플로팅 IP로 접속하기 위해 아래와 같은 명령을 통해 Routing Rule을 설정합니다.
+To access `eth1`, `eth2` via floating IP, set routing rule with the following commands 
 
 ```
-# eth1의 플로팅 IP 접속을 위한 Routing Rule 설정
+# Setting Routing Rule to Access eth1 with Floating IP 
 ip rule add from 172.16.0.37/32 table 2 priority 200
 ip route add default via 172.16.0.1 table 2
 ip route add 172.16.0.0/24 dev eth1 table 2
 
-# eth2의 플로팅 IP 접속을 위한 Routing Rule 설정
+# Setting Routing Rule to Access eth2 with Floating IP 
 ip rule add from 10.254.0.90/32 table 3 priority 300
 ip route add default via 10.254.0.1 table 3
 ip route add 10.254.0.0/24 dev eth2 table 3
 ```
-명령 실행 후 다음과 같이 설정된 Routing Rule을 확인할 수 있습니다.
+Then, you can find the routing rule set as below. 
 
-```
+``` 
 $ ip rule													
 0:	from all lookup local
 200:	from 172.16.0.37 lookup 2 	
@@ -260,7 +260,7 @@ default via 10.254.0.1 dev eth2
 10.254.0.0/24 dev eth2  scope link
 ```
 
-위 Routing Rule 설정은 인스턴스를 재부팅하면 초기화 되므로, 인스턴스 재부팅 시 Routing Rule이 자동으로 설정되도록 설정하는 것이 좋습니다.
+Since the routing rule setting returns to default along with instance rebooting, it is recommended to set auto routing rule when an instance is rebooted. 
 
 ## Security Group 
 

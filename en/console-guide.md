@@ -138,20 +138,20 @@ To restart Internet gateways, use the **! Restart** button which is created next
 Go to the project where your Internet gateway specified as maintenance target is located. 
 
 1. Any Internet gateway that has the **! Restart** button before its name requires maintenance. 
-    <image-001.png>
+    ![ig-001](http://static.toastoven.net/prod_vpc/ConsoleGuide/ig_planned_migration_guide-en-001.png)
     Put the mouse cursor on the **! Restart** button to find maintenance schedule details. 
-    <image-002.png>
+    ![ig-002](http://static.toastoven.net/prod_vpc/ConsoleGuide/ig_planned_migration_guide-en-002.png)
 
 2. Select a target Internet gateway and click the **! Restart** button next to its name. 
     It is advised to perform maintenance during time when impact on service is limited, since instances of the Internet gateway are disconnected from the Internet until restarting is completed. 
     However, instances that are connected to floating IPs are not influenced by restarting of Internet gateways. 
 
 3. Click **OK** onto the window asking of restarting Internet gateway. 
-    <image-003.png>
+    ![ig-003](http://static.toastoven.net/prod_vpc/ConsoleGuide/ig_planned_migration_guide-en-003.png)
 
 4. Wait until the Internet gateway status turns green and the **! Restart** button disappears.
     If the status does not change or the **! Restart** button remains, press 'Refresh'.  
-    <image-004.png>
+    ![ig-004](http://static.toastoven.net/prod_vpc/ConsoleGuide/ig_planned_migration_guide-en-004.png)
 
 The Internet gateway becomes inoperable while restarting is underway.
 Unless restarting Internet gateway is normally completed, it shall be automatically reported to the administrator, and you'll be contacted by TOAST.  

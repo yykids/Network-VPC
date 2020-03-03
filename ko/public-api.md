@@ -1,5 +1,6 @@
-## API 버전
+## Network > VPC > API 가이드
 
+## API 버전
 ### 버전 목록 보기
 
 TOAST 기본 인프라 서비스 Network API에서 지원하는 버전 목록을 확인할 수 있습니다.
@@ -23,7 +24,7 @@ GET /
       "id": "v2.0",
       "links": [
         {
-          "href": "http://alp-gov-neutron.iaas.tcc1.cloud.toastoven.net:9696/v2.0",
+          "href": "https://kr1-api-network.cloud.toast.com/v2.0",
           "rel": "self"
         }
       ]
@@ -61,7 +62,7 @@ X-Auth-Token: {tokenId}
 
 #### 응답
 
-| 이름 | 종류 | 속성 | 설명 |
+| 이름 | 종류 | 형식 | 설명 |
 |---|---|---|---|
 | networks | Body | Array | 네트워크 정보 객체 목록 |
 | networks.status | Body | Enum | 네트워크 상태<br>**ACTIVE**<br>**DOWN**<br>**BUILD**<br>**ERROR** |
@@ -77,8 +78,7 @@ X-Auth-Token: {tokenId}
 | networks.name | Body | String | 네트워크 이름 |
 | networks_links | Body | Array | 페이지네이션을 위한 정보 객체<br>`limit`, `offset`를 추가한 경우 반환<br>다음 목록을 가리키는 경로를 포함 |
 
-#### 예제
-<details><summary>펼쳐 보기</summary>
+<details><summary>예시</summary>
 <p>
 
 ```json
@@ -87,36 +87,16 @@ X-Auth-Token: {tokenId}
     {
       "status": "ACTIVE",
       "subnets": [
-        "3b75f258-230b-48fd-8b55-6d670bee3a27"
-      ],
-      "name": "VPN Private Network",
-      "router:external": false,
-      "tenant_id": "19eeb40d58684543aef29cbb5ebfe8f0",
-      "admin_state_up": true,
-      "mtu": 0,
-      "shared": false,
-      "port_security_enabled": true,
-      "id": "05beb50e-10b9-495f-84a9-89443b3270e4"
-    },
-    {
-      "status": "ACTIVE",
-      "subnets": [
-        "eb166bdf-dd99-4b02-ac8e-64be21dff2d5"
+        "b83863ff-0355-4c73-8c10-0bdf66a69aab"
       ],
       "name": "Default Network",
       "router:external": false,
-      "tenant_id": "19eeb40d58684543aef29cbb5ebfe8f0",
+      "tenant_id": "6cdebe3eb0094910bc41f1d42ebe4cb7",
       "admin_state_up": true,
       "mtu": 0,
       "shared": false,
       "port_security_enabled": true,
-      "id": "c46ee4e8-c9fa-462e-8a3b-55b1f11dd8f8"
-    }
-  ],
-  "networks_links": [
-    {
-      "href": "http://alp-gov-neutron.iaas.tcc1.cloud.toastoven.net:9696/v2.0/networks?tenant_id=19eeb40d58684543aef29cbb5ebfe8f0&limit=10&marker=05beb50e-10b9-495f-84a9-89443b3270e4&page_reverse=True",
-      "rel": "previous"
+      "id": "245ff686-4ca2-4176-a069-81013537ac3a"
     }
   ]
 }
@@ -124,6 +104,8 @@ X-Auth-Token: {tokenId}
 
 </p>
 </details>
+
+---
 
 ## 서브넷
 ### 서브넷 목록 보기
@@ -151,7 +133,7 @@ X-Auth-Token: {tokenId}
 
 #### 응답
 
-| 이름 | 종류 | 속성 | 설명 |
+| 이름 | 종류 | 형식 | 설명 |
 |---|---|---|---|
 | subnets | Body | Array | 서브넷 정보 객체 목록 |
 | subnets.name | Body | String | 서브넷 이름 |
@@ -174,43 +156,32 @@ X-Auth-Token: {tokenId}
 | subnets.subnetpool_id | Body | String | 서브넷 Pool ID |
 | subnets_links | Body | Array | 페이지네이션을 위한 정보 객체<br>`limit`, `offset`를 추가한 경우 반환<br>다음 목록을 가리키는 경로를 포함 |
 
-#### 예제
-<details><summary>펼쳐 보기</summary>
+<details><summary>예시</summary>
 <p>
 
 ```json
 {
   "subnets": [
     {
-      "name": "VPN Private Network",
+      "name": "default",
       "enable_dhcp": true,
-      "network_id": "05beb50e-10b9-495f-84a9-89443b3270e4",
-      "tenant_id": "19eeb40d58684543aef29cbb5ebfe8f0",
+      "network_id": "245ff686-4ca2-4176-a069-81013537ac3a",
+      "tenant_id": "6cdebe3eb0094910bc41f1d42ebe4cb7",
       "dns_nameservers": [],
-      "gateway_ip": "172.20.0.1",
+      "gateway_ip": "192.168.0.1",
       "ipv6_ra_mode": null,
       "allocation_pools": [
         {
-          "start": "172.20.0.2",
-          "end": "172.20.0.254"
+          "start": "192.168.0.2",
+          "end": "192.168.0.254"
         }
       ],
       "host_routes": [],
       "ip_version": 4,
       "ipv6_address_mode": null,
-      "cidr": "172.20.0.0/24",
-      "id": "3b75f258-230b-48fd-8b55-6d670bee3a27",
+      "cidr": "192.168.0.0/24",
+      "id": "b83863ff-0355-4c73-8c10-0bdf66a69aab",
       "subnetpool_id": null
-    }
-  ],
-  "subnets_links": [
-    {
-      "href": "http://alp-gov-neutron.iaas.tcc1.cloud.toastoven.net:9696/v2.0/subnets?tenant_id=19eeb40d58684543aef29cbb5ebfe8f0&limit=1&marker=3b75f258-230b-48fd-8b55-6d670bee3a27",
-      "rel": "next"
-    },
-    {
-      "href": "http://alp-gov-neutron.iaas.tcc1.cloud.toastoven.net:9696/v2.0/subnets?tenant_id=19eeb40d58684543aef29cbb5ebfe8f0&limit=1&marker=3b75f258-230b-48fd-8b55-6d670bee3a27&page_reverse=True",
-      "rel": "previous"
     }
   ]
 }
@@ -218,6 +189,8 @@ X-Auth-Token: {tokenId}
 
 </p>
 </details>
+
+---
 
 ## 포트
 ### 포트 목록 보기
@@ -248,7 +221,7 @@ X-Auth-Token: {tokenId}
 
 #### 응답
 
-| 이름 | 종류 | 속성 | 설명 |
+| 이름 | 종류 | 형식 | 설명 |
 |---|---|---|---|
 | ports | Body | Array | 포트 정보 객체 목록 |
 | ports.status | Body | Enum | 포트 상태<br>**ACTIVE**<br>**DOWN** |
@@ -269,8 +242,7 @@ X-Auth-Token: {tokenId}
 | ports.security_groups | Body | Array | 포트의 보안 그룹 ID 목록 |
 | ports.device_id | Body | UUID | 포트를 사용하는 리소스 ID |
 
-#### 예제
-<details><summary>펼쳐 보기</summary>
+<details><summary>예시</summary>
 <p>
 
 ```json
@@ -307,6 +279,8 @@ X-Auth-Token: {tokenId}
 </p>
 </details>
 
+---
+
 ### 포트 보기
 포트 목록을 반환합니다.
 ```
@@ -325,7 +299,7 @@ X-Auth-Token: {tokenId}
 
 #### 응답
 
-| 이름 | 종류 | 속성 | 설명 |
+| 이름 | 종류 | 형식 | 설명 |
 |---|---|---|---|
 | port | Body | Array | 포트 정보 객체 |
 | port.status | Body | Enum | 포트 상태<br>**ACTIVE**<br>**DOWN** |
@@ -346,8 +320,7 @@ X-Auth-Token: {tokenId}
 | port.security_groups | Body | Array | 포트의 보안 그룹 ID 목록 |
 | port.device_id | Body | UUID | 포트를 사용하는 리소스 ID |
 
-#### 예제
-<details><summary>펼쳐 보기</summary>
+<details><summary>예시</summary>
 <p>
 
 ```json
@@ -382,6 +355,8 @@ X-Auth-Token: {tokenId}
 </p>
 </details>
 
+---
+
 ### 포트 생성 하기
 새로운 포트를 생성합니다. 생성한 포트는 인스턴스 생성시 활용할 수 있습니다.
 ```
@@ -409,8 +384,7 @@ X-Auth-Token: {tokenId}
 | port.device_owner | Body | String | - | 포트를 사용하는 리소스 종류 |
 | port.device_id | Body | UUID | - | 포트를 사용하는 리소스 ID |
 
-#### 예제
-<details><summary>펼쳐 보기</summary>
+<details><summary>예시</summary>
 <p>
 
 ```json
@@ -428,7 +402,7 @@ X-Auth-Token: {tokenId}
 
 #### 응답
 
-| 이름 | 종류 | 속성 | 설명 |
+| 이름 | 종류 | 형식 | 설명 |
 |---|---|---|---|
 | port | Body | Array | 포트 정보 객체 |
 | port.status | Body | Enum | 포트 상태<br>**ACTIVE**<br>**DOWN** |
@@ -449,8 +423,7 @@ X-Auth-Token: {tokenId}
 | port.security_groups | Body | Array | 포트의 보안 그룹 ID 목록 |
 | port.device_id | Body | UUID | 포트를 사용하는 리소스 ID |
 
-#### 예제
-<details><summary>펼쳐 보기</summary>
+<details><summary>예시</summary>
 <p>
 
 ```json
@@ -482,6 +455,8 @@ X-Auth-Token: {tokenId}
 </p>
 </details>
 
+---
+
 ### 포트 삭제 하기
 지정한 포트를 삭제합니다.
 ```
@@ -492,7 +467,7 @@ X-Auth-Token: {tokenId}
 #### 요청
 이 API는 요청 본문을 요구하지 않습니다.
 
-| 이름 | 종류 | 속성 | 필수 | 설명 |
+| 이름 | 종류 | 형식 | 필수 | 설명 |
 |---|---|---|---|---|
 | portId | URL | UUID | O | 포트 ID |
 | tokenId | Header | String | O | 토큰 ID |
@@ -500,6 +475,7 @@ X-Auth-Token: {tokenId}
 #### 응답
 이 API는 응답 본문을 반환하지 않습니다.
 
+---
 
 ## 플로팅 IP
 ### 플로팅 IP 목록 보기
@@ -528,7 +504,7 @@ X-Auth-Token: {tokenId}
 
 #### 응답
 
-| 이름 | 종류 | 속성 | 설명 |
+| 이름 | 종류 | 형식 | 설명 |
 |---|---|---|---|
 | floatingips | Body | Array | 플로팅 IP 정보 객체 목록 |
 | floatingips.floating_network_id | Body | UUID | 플로팅 IP가 속한 외부 네트워크 ID |
@@ -540,8 +516,7 @@ X-Auth-Token: {tokenId}
 | floatingips.port_id | Body | UUID | 플로팅 IP가 연결된 포트 ID |
 | floatingips.id | Body | UUID | 플로팅 IP ID |
 
-#### 예제
-<details><summary>펼쳐 보기</summary>
+<details><summary>예시</summary>
 <p>
 
 ```json
@@ -564,6 +539,8 @@ X-Auth-Token: {tokenId}
 </p>
 </details>
 
+---
+
 ### 플로팅 IP 보기
 지정한 플로팅 IP에 대한 정보를 반환합니다.
 ```
@@ -581,7 +558,7 @@ X-Auth-Token: {tokenId}
 
 #### 응답
 
-| 이름 | 종류 | 속성 | 설명 |
+| 이름 | 종류 | 형식 | 설명 |
 |---|---|---|---|
 | floatingip | Body | Object | 플로팅 IP 정보 객체 |
 | floatingip.floating_network_id | Body | UUID | 플로팅 IP가 속한 외부 네트워크 ID |
@@ -593,8 +570,7 @@ X-Auth-Token: {tokenId}
 | floatingip.port_id | Body | UUID | 플로팅 IP가 연결된 포트 ID |
 | floatingip.id | Body | UUID | 플로팅 IP ID |
 
-#### 예제
-<details><summary>펼쳐 보기</summary>
+<details><summary>예시</summary>
 <p>
 
 ```json
@@ -614,6 +590,8 @@ X-Auth-Token: {tokenId}
 
 </p>
 </details>
+
+---
 
 ### 플로팅 IP 생성하기
 플로팅 IP를 생성합니다.
@@ -632,8 +610,7 @@ X-Auth-Token: {tokenId}
 | floatingip.floating_ip_address | Body | String | 플로팅 IP 주소 |
 | floatingip.port_id | Body | UUID | 플로팅 IP가 연결된 포트 ID |
 
-#### 예제
-<details><summary>펼쳐 보기</summary>
+<details><summary>예시</summary>
 <p>
 
 ```json
@@ -651,7 +628,7 @@ X-Auth-Token: {tokenId}
 
 #### 응답
 
-| 이름 | 종류 | 속성 | 설명 |
+| 이름 | 종류 | 형식 | 설명 |
 |---|---|---|---|
 | floatingip | Body | Object | 플로팅 IP 정보 객체 |
 | floatingip.floating_network_id | Body | UUID | 플로팅 IP가 속한 외부 네트워크 ID |
@@ -663,8 +640,7 @@ X-Auth-Token: {tokenId}
 | floatingip.port_id | Body | UUID | 플로팅 IP가 연결된 포트 ID |
 | floatingip.id | Body | UUID | 플로팅 IP ID |
 
-#### 예제
-<details><summary>펼쳐 보기</summary>
+<details><summary>예시</summary>
 <p>
 
 ```json
@@ -684,6 +660,8 @@ X-Auth-Token: {tokenId}
 
 </p>
 </details>
+
+---
 
 ### 플로팅 IP 수정하기
 플로팅 IP를 포트에 연결하거나 해제합니다.
@@ -702,8 +680,7 @@ X-Auth-Token: {tokenId}
 | floatingip.port_id | Body | UUID | O | 플로팅 IP를 연결할 포트 ID<br>해제하려면 `null`을 입력 |
 | floatingip.fixed_ip_address | Body | String | - | 고정 IP 주소<br>연결할 포트에 여러 IP가 할당된 경우<br>연결할 IP를 지정하기 위해 사용 |
 
-#### 예제
-<details><summary>펼쳐 보기</summary>
+<details><summary>예시</summary>
 <p>
 
 ```json
@@ -719,7 +696,7 @@ X-Auth-Token: {tokenId}
 
 #### 응답
 
-| 이름 | 종류 | 속성 | 설명 |
+| 이름 | 종류 | 형식 | 설명 |
 |---|---|---|---|
 | floatingip | Body | Object | 플로팅 IP 정보 객체 |
 | floatingip.floating_network_id | Body | UUID | 플로팅 IP가 속한 외부 네트워크 ID |
@@ -731,8 +708,7 @@ X-Auth-Token: {tokenId}
 | floatingip.port_id | Body | UUID | 플로팅 IP가 연결된 포트 ID |
 | floatingip.id | Body | UUID | 플로팅 IP ID |
 
-#### 예제
-<details><summary>펼쳐 보기</summary>
+<details><summary>예시</summary>
 <p>
 
 ```json
@@ -753,6 +729,7 @@ X-Auth-Token: {tokenId}
 </p>
 </details>
 
+---
 
 ### 플로팅 IP 삭제하기
 지정한 플로팅 IP를 삭제합니다.
@@ -764,13 +741,15 @@ X-Auth-Token: {tokenId}
 #### 요청
 이 API는 요청 본문을 요구하지 않습니다.
 
-| 이름 | 종류 | 속성 | 필수 | 설명 |
+| 이름 | 종류 | 형식 | 필수 | 설명 |
 |---|---|---|---|---|
 | floatingIpId | URL | UUID | O | 플로팅 IP ID |
 | tokenId | Header | String | O | 토큰 ID |
 
 #### 응답
 이 API는 응답 본문을 반환하지 않습니다.
+
+---
 
 ## 보안 그룹
 ### 보안 그룹 목록 보기
@@ -782,7 +761,7 @@ X-Auth-Token: {tokenId}
 #### 요청
 이 API는 요청 본문을 요구하지 않습니다.
 
-| 이름 | 종류 | 속성 | 필수 | 설명 |
+| 이름 | 종류 | 형식 | 필수 | 설명 |
 |---|---|---|---|---|
 | tokenId | Header | String | O | 토큰 ID |
 | id | Query | UUID | - | 조회할 보안 그룹 ID |
@@ -794,7 +773,7 @@ X-Auth-Token: {tokenId}
 
 #### 응답
 
-| 이름 | 종류 | 속성 | 설명 |
+| 이름 | 종류 | 형식 | 설명 |
 |---|---|---|---|
 | security_groups | Body | Array | 보안 그룹 목록 객체 |
 | security_groups.tenant_id | Body | String | 테넌트 ID |
@@ -803,8 +782,7 @@ X-Auth-Token: {tokenId}
 | security_groups.security_group_rules | Body | Array | 보안 그룹 규칙 목록 |
 | security_groups.name | Body | String | 보안 그룹 이름 |
 
-#### 예제
-<details><summary>펼쳐 보기</summary>
+<details><summary>예시</summary>
 <p>
 
 ```json
@@ -877,6 +855,8 @@ X-Auth-Token: {tokenId}
 </p>
 </details>
 
+---
+
 ### 보안 그룹 보기
 ```
 GET /v2.0/security-groups/{securityGroupId}
@@ -886,7 +866,7 @@ X-Auth-Token: {tokenId}
 #### 요청
 이 API는 요청 본문을 요구하지 않습니다.
 
-| 이름 | 종류 | 속성 | 필수 | 설명 |
+| 이름 | 종류 | 예시 | 필수 | 설명 |
 |---|---|---|---|---|
 | securityGroupId | Query | UUID | - | 조회할 보안 그룹 ID |
 | tokenId | Header | String | O | 토큰 ID |
@@ -894,7 +874,7 @@ X-Auth-Token: {tokenId}
 
 #### 응답
 
-| 이름 | 종류 | 속성 | 설명 |
+| 이름 | 종류 | 예시 | 설명 |
 |---|---|---|---|
 | security_group | Body | Object | 보안 그룹 객체 |
 | security_group.tenant_id | Body | String | 테넌트 ID |
@@ -903,8 +883,7 @@ X-Auth-Token: {tokenId}
 | security_group.security_group_rules | Body | Array | 보안 그룹 규칙 목록 |
 | security_group.name | Body | String | 보안 그룹 이름 |
 
-#### 예제
-<details><summary>펼쳐 보기</summary>
+<details><summary>예시</summary>
 <p>
 
 ```json
@@ -975,6 +954,8 @@ X-Auth-Token: {tokenId}
 </p>
 </details>
 
+---
+
 ### 보안 그룹 생성하기
 새로운 보안 그룹을 생성합니다.
 새로 생성된 보안 그룹은 나가는 방향의 보안 그룹 규칙을 기본적으로 포함합니다.
@@ -985,15 +966,14 @@ X-Auth-Token: {tokenId}
 
 #### 요청
 
-| 이름 | 종류 | 속성 | 필수 | 설명 |
+| 이름 | 종류 | 형식 | 필수 | 설명 |
 |---|---|---|---|---|
 | tokenId | Header | String | O | 토큰 ID |
 | security_group | Body | Object | O | 보안 그룹 생성 요청 객체 |
 | description | Body | String | - | 보안 그룹 설명 |
 | name | Body | String | O | 보안 그룹 이름 |
 
-#### 예제
-<details><summary>펼쳐 보기</summary>
+<details><summary>예시</summary>
 <p>
 
 ```json
@@ -1010,7 +990,7 @@ X-Auth-Token: {tokenId}
 
 #### 응답
 
-| 이름 | 종류 | 속성 | 설명 |
+| 이름 | 종류 | 형식 | 설명 |
 |---|---|---|---|
 | security_group | Body | Object | 보안 그룹 객체 |
 | security_group.tenant_id | Body | String | 테넌트 ID |
@@ -1019,8 +999,7 @@ X-Auth-Token: {tokenId}
 | security_group.security_group_rules | Body | Array | 보안 그룹 규칙 목록 |
 | security_group.name | Body | String | 보안 그룹 이름 |
 
-#### 예제
-<details><summary>펼쳐 보기</summary>
+<details><summary>예시</summary>
 <p>
 
 ```json
@@ -1065,6 +1044,8 @@ X-Auth-Token: {tokenId}
 </p>
 </details>
 
+---
+
 ### 보안 그룹 수정하기
 기존 보안 그룹을 수정합니다.
 ```
@@ -1074,15 +1055,14 @@ X-Auth-Token: {tokenId}
 
 #### 요청
 
-| 이름 | 종류 | 속성 | 필수 | 설명 |
+| 이름 | 종류 | 형식 | 필수 | 설명 |
 |---|---|---|---|---|
 | tokenId | Header | String | O | 토큰 ID |
 | security_group | Body | Object | O | 보안 그룹 수정 요청 객체 |
 | description | Body | String | - | 보안 그룹 설명 |
 | name | Body | String | O | 보안 그룹 이름 |
 
-#### 예제
-<details><summary>펼쳐 보기</summary>
+<details><summary>예시</summary>
 <p>
 
 ```json
@@ -1099,7 +1079,7 @@ X-Auth-Token: {tokenId}
 
 #### 응답
 
-| 이름 | 종류 | 속성 | 설명 |
+| 이름 | 종류 | 형식 | 설명 |
 |---|---|---|---|
 | security_group | Body | Object | 보안 그룹 객체 |
 | security_group.tenant_id | Body | String | 테넌트 ID |
@@ -1108,8 +1088,7 @@ X-Auth-Token: {tokenId}
 | security_group.security_group_rules | Body | Array | 보안 그룹 규칙 목록 |
 | security_group.name | Body | String | 보안 그룹 이름 |
 
-#### 예제
-<details><summary>펼쳐 보기</summary>
+<details><summary>예시</summary>
 <p>
 
 ```json
@@ -1154,6 +1133,8 @@ X-Auth-Token: {tokenId}
 </p>
 </details>
 
+---
+
 ### 보안 그룹 삭제하기
 지정한 보안 그룹을 삭제합니다.
 ```
@@ -1164,13 +1145,15 @@ X-Auth-Token: {tokenId}
 #### 요청
 이 API는 요청 본문을 요구하지 않습니다.
 
-| 이름 | 종류 | 속성 | 필수 | 설명 |
+| 이름 | 종류 | 형식 | 필수 | 설명 |
 |---|---|---|---|---|
 | securityGroupId | URL | UUID | O | 보안 그룹 ID |
 | tokenId | Header | String | O | 토큰 ID |
 
 #### 응답
 이 API는 응답 본문을 반환하지 않습니다.
+
+---
 
 ## 보안 규칙
 ### 보안 규칙 목록 보기
@@ -1182,7 +1165,7 @@ X-Auth-Token: {tokenId}
 #### 요청
 이 API는 요청 본문을 요구하지 않습니다.
 
-| 이름 | 종류 | 속성 | 필수 | 설명 |
+| 이름 | 종류 | 형식 | 필수 | 설명 |
 |---|---|---|---|---|
 | tokenId | Header | String | O | 토큰 ID |
 | id | Query | UUID | - | 조회할 보안 규칙 ID |
@@ -1202,7 +1185,7 @@ X-Auth-Token: {tokenId}
 
 #### 응답
 
-| 이름 | 종류 | 속성 | 설명 |
+| 이름 | 종류 | 형식 | 설명 |
 |---|---|---|---|
 | security_group_rules | Body | Array | 보안 규칙 객체 목록 |
 | security_group_rules.direction | Body | Enum | 보안 규칙이 적용되는 패킷 방향<br>**ingress**, **egress** |
@@ -1218,8 +1201,7 @@ X-Auth-Token: {tokenId}
 | security_group_rules.tenant_id | Body | String | 테넌트 ID |
 | security_group_rules.id | Body | UUID | 보안 규칙 ID |
 
-#### 예제
-<details><summary>펼쳐 보기</summary>
+<details><summary>예시</summary>
 <p>
 
 ```json
@@ -1245,7 +1227,9 @@ X-Auth-Token: {tokenId}
 </p>
 </details>
 
-### 보안 그룹 규칙 보기
+---
+
+### 보안 규칙 보기
 ```
 GET /v2.0/security-group-rules/{securityGroupRuleId}
 X-Auth-Token: {tokenId}
@@ -1254,7 +1238,7 @@ X-Auth-Token: {tokenId}
 #### 요청
 이 API는 요청 본문을 요구하지 않습니다.
 
-| 이름 | 종류 | 속성 | 필수 | 설명 |
+| 이름 | 종류 | 형식 | 필수 | 설명 |
 |---|---|---|---|---|
 | securityGroupRuleId | URL | UUID | O | 보안 규칙 ID |
 | tokenId | Header | String | O | 토큰 ID |
@@ -1262,7 +1246,7 @@ X-Auth-Token: {tokenId}
 
 #### 응답
 
-| 이름 | 종류 | 속성 | 설명 |
+| 이름 | 종류 | 형식 | 설명 |
 |---|---|---|---|
 | security_group_rule | Body | Object | 보안 규칙 객체 |
 | security_group_rule.direction | Body | Enum | 보안 규칙이 적용되는 패킷 방향<br>**ingress**, **egress** |
@@ -1278,8 +1262,7 @@ X-Auth-Token: {tokenId}
 | security_group_rule.tenant_id | Body | String | 테넌트 ID |
 | security_group_rule.id | Body | UUID | 보안 규칙 ID |
 
-#### 예제
-<details><summary>펼쳐 보기</summary>
+<details><summary>예시</summary>
 <p>
 
 ```json
@@ -1303,6 +1286,8 @@ X-Auth-Token: {tokenId}
 </p>
 </details>
 
+---
+
 ### 보안 규칙 생성하기
 새로운 보안 그룹 규칙을 생성합니다.
 TOAST에서는 IPv4만 사용하기 때문에 IPv4에 대한 보안 규칙만 생성할 수 있습니다.
@@ -1313,7 +1298,7 @@ X-Auth-Token: {tokenId}
 
 #### 요청
 
-| 이름 | 종류 | 속성 | 필수 | 설명 |
+| 이름 | 종류 | 형식 | 필수 | 설명 |
 |---|---|---|---|---|
 | tokenId | Header | String | O | 토큰 ID |
 | security_group_rule | Body | Object | O | 보안 규칙 생성 요청 객체 |
@@ -1328,8 +1313,7 @@ X-Auth-Token: {tokenId}
 | security_group_rule.remote_ip_prefix | Body | Enum | - | 보안 규칙의 목적지 IP 접두사 |
 | security_group_rule.description | Body | String | - | 보안 규칙 설명 |
 
-#### 예제
-<details><summary>펼쳐 보기</summary>
+<details><summary>예시</summary>
 <p>
 
 ```json
@@ -1351,7 +1335,7 @@ X-Auth-Token: {tokenId}
 
 #### 응답
 
-| 이름 | 종류 | 속성 | 설명 |
+| 이름 | 종류 | 형식 | 설명 |
 |---|---|---|---|
 | security_group_rule | Body | Object | 보안 규칙 객체 |
 | security_group_rule.direction | Body | Enum | 보안 규칙이 적용되는 패킷 방향<br>**ingress**, **egress** |
@@ -1367,8 +1351,7 @@ X-Auth-Token: {tokenId}
 | security_group_rule.tenant_id | Body | String | 테넌트 ID |
 | security_group_rule.id | Body | UUID | 보안 규칙 ID |
 
-#### 예제
-<details><summary>펼쳐 보기</summary>
+<details><summary>예시</summary>
 <p>
 
 ```json
@@ -1392,6 +1375,8 @@ X-Auth-Token: {tokenId}
 </p>
 </details>
 
+---
+
 ### 보안 규칙 삭제하기
 지정한 보안 규칙을 삭제합니다.
 ```
@@ -1402,7 +1387,7 @@ X-Auth-Token: {tokenId}
 #### 요청
 이 API는 요청 본문을 요구하지 않습니다.
 
-| 이름 | 종류 | 속성 | 필수 | 설명 |
+| 이름 | 종류 | 형식 | 필수 | 설명 |
 |---|---|---|---|---|
 | securityGroupRuleId | URL | UUID | O | 보안 규칙 ID |
 | tokenId | Header | String | O | 토큰 ID |

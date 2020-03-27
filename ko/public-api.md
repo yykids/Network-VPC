@@ -65,15 +65,15 @@ X-Auth-Token: {tokenId}
 | 이름 | 종류 | 형식 | 설명 |
 |---|---|---|---|
 | networks | Body | Array | 네트워크 정보 객체 목록 |
-| networks.status | Body | Enum | 네트워크 상태<br>**ACTIVE**<br>**DOWN**<br>**BUILD**<br>**ERROR** |
+| networks.status | Body | Enum | 네트워크 상태<br>**ACTIVE**, **DOWN**, **BUILD**, **ERROR** 중 하나. |
 | networks.subnets | Body | Array | 네트워크에 속한 서브넷들의 ID 목록 |
 | networks.name | Body | String | 네트워크 이름 |
-| networks.router:external | Body | Boolean | 네트워크의 외부 연결 여부 |
+| networks.router:external | Body | Boolean | 네트워크 외부 연결 여부 |
 | networks.tenant_id | Body | String | 테넌트 ID |
-| networks.admin_state_up | Body | Boolean | 네트워크의 관리자 제어 상태<br>`true`: 사용 가능<br>`false`: 사용 불가 |
-| networks.mtu | Body | Integer | 네트워크의 최대 전송 단위 (Maximum Transmission Unit) |
-| networks.shared | Body | Boolean | 네트워크의 공유 여부 |
-| networks.port_security_enabled | Body | Boolean | 네트워크의 포트 보안 여부<br>이 네트워크에서 생성되는 포트의 보안 활성화 여부를 결정 |
+| networks.admin_state_up | Body | Boolean | 관리자 제어 상태<br>`true`: 사용 가능<br>`false`: 사용 불가 |
+| networks.mtu | Body | Integer | 최대 전송 단위 (Maximum Transmission Unit) |
+| networks.shared | Body | Boolean | 네트워크 공유 여부 |
+| networks.port_security_enabled | Body | Boolean | 네트워크 포트 보안 여부<br>이 네트워크에서 생성되는 포트의 보안 활성화 여부를 결정 |
 | networks.id | Body | String | 네트워크 ID |
 | networks.name | Body | String | 네트워크 이름 |
 | networks_links | Body | Array | 페이지네이션을 위한 정보 객체<br>`limit`, `offset`를 추가한 경우 반환<br>다음 목록을 가리키는 경로를 포함 |
@@ -207,7 +207,7 @@ X-Auth-Token: {tokenId}
 |---|---|---|---|---|
 | tokenId | Header | String | O | 토큰 ID |
 | id | Query | UUID | - | 조회할 포트 IP ID |
-| status | Query | Enum | - | 조회할 포트 상태<br>**ACTIVE**<br>**DOWN** |
+| status | Query | Enum | - | 조회할 포트 상태<br>**ACTIVE**, **DOWN** 중 하나. |
 | display_name | Query | UUID | - | 조회할 포트 이름 |
 | admin_state | Query | Boolean | - | 조회할 포트의 관리자 제어 상태 |
 | network_id | Query | UUID | - | 조회할 포트의 네트워크 ID |
@@ -224,7 +224,7 @@ X-Auth-Token: {tokenId}
 | 이름 | 종류 | 형식 | 설명 |
 |---|---|---|---|
 | ports | Body | Array | 포트 정보 객체 목록 |
-| ports.status | Body | Enum | 포트 상태<br>**ACTIVE**<br>**DOWN** |
+| ports.status | Body | Enum | 포트 상태<br>**ACTIVE**, **DOWN** 중 하나. |
 | ports.name | Body | String | 포트 이름 |
 | ports.allowed_address_pairs | Body | Array | 포트의 주소 쌍 목록 |
 | ports.admin_state_up | Body | Boolean | 포트의 관리자 제어 상태 |
@@ -282,7 +282,7 @@ X-Auth-Token: {tokenId}
 ---
 
 ### 포트 보기
-포트 목록을 반환합니다.
+
 ```
 GET /v2.0/ports/{portId}
 X-Auth-Token: {tokenId}
@@ -302,7 +302,7 @@ X-Auth-Token: {tokenId}
 | 이름 | 종류 | 형식 | 설명 |
 |---|---|---|---|
 | port | Body | Array | 포트 정보 객체 |
-| port.status | Body | Enum | 포트 상태<br>**ACTIVE**<br>**DOWN** |
+| port.status | Body | Enum | 포트 상태<br>**ACTIVE**, **DOWN** 중 하나 |
 | port.name | Body | String | 포트 이름 |
 | port.allowed_address_pairs | Body | Array | 포트의 주소 쌍 목록 |
 | port.admin_state_up | Body | Boolean | 포트의 관리자 제어 상태 |
@@ -405,7 +405,7 @@ X-Auth-Token: {tokenId}
 | 이름 | 종류 | 형식 | 설명 |
 |---|---|---|---|
 | port | Body | Array | 포트 정보 객체 |
-| port.status | Body | Enum | 포트 상태<br>**ACTIVE**<br>**DOWN** |
+| port.status | Body | Enum | 포트 상태<br>**ACTIVE**, **DOWN** 중 하나 |
 | port.name | Body | String | 포트 이름 |
 | port.allowed_address_pairs | Body | Array | 포트의 주소 쌍 목록 |
 | port.admin_state_up | Body | Boolean | 포트의 관리자 제어 상태 |
@@ -492,7 +492,7 @@ X-Auth-Token: {tokenId}
 |---|---|---|---|---|
 | tokenId | Header | String | O | 토큰 ID |
 | id | Query | UUID | - | 조회할 플로팅 IP ID |
-| status | Query | Enum | - | 조회할 플로팅 IP의 상태<br>**ACTIVE**: 연결<br>**DOWN**: 미연결<br>**ERROR**: 할당 실패 |
+| status | Query | Enum | - | 조회할 플로팅 IP의 상태<br>**ACTIVE**: 인스턴스에 연결<br>**DOWN**: 인스턴스에 미연결<br>**ERROR**: 인스턴스에 연결 또는 할당 실패 |
 | tenant_id | Query | String | - | 조회할 플로팅 IP의 테넌트 ID |
 | floating_network_id  | Query | UUID | - | 조회할 플로팅 IP가 속한 외부 네트워크 ID |
 | fixed_ip_address | Query | String | - | 조회할 플로팅 IP가 연결된 고정 IP 주소 |
@@ -512,7 +512,7 @@ X-Auth-Token: {tokenId}
 | floatingips.fixed_ip_address | Body | String | 플로팅 IP가 연결된 고정 IP 주소 |
 | floatingips.floating_ip_address | Body | String | 플로팅 IP 주소|
 | floatingips.tenant_id | Body | String | 테넌트 ID |
-| floatingips.status | Body | Enum | 플로팅 IP의 상태 |
+| floatingips.status | Body | Enum | 플로팅 IP의 상태<br>**ACTIVE**: 인스턴스에 연결<br>**DOWN**: 인스턴스에 미연결<br>**ERROR**: 인스턴스에 연결 또는 할당 실패 |
 | floatingips.port_id | Body | UUID | 플로팅 IP가 연결된 포트 ID |
 | floatingips.id | Body | UUID | 플로팅 IP ID |
 
@@ -566,7 +566,7 @@ X-Auth-Token: {tokenId}
 | floatingip.fixed_ip_address | Body | String | 플로팅 IP가 연결된 고정 IP 주소 |
 | floatingip.floating_ip_address | Body | String | 플로팅 IP 주소 |
 | floatingip.tenant_id | Body | String | 테넌트 ID |
-| floatingip.status | Body | Enum | 플로팅 IP의 상태 |
+| floatingip.status | Body | Enum | 플로팅 IP의 상태<br>**ACTIVE**: 인스턴스에 연결<br>**DOWN**: 인스턴스에 미연결<br>**ERROR**: 인스턴스에 연결 또는 할당 실패 |
 | floatingip.port_id | Body | UUID | 플로팅 IP가 연결된 포트 ID |
 | floatingip.id | Body | UUID | 플로팅 IP ID |
 
@@ -605,10 +605,10 @@ X-Auth-Token: {tokenId}
 | 이름 | 종류 | 형식 | 필수 | 설명 |
 |---|---|---|---|---|
 | tokenId | Header | String | O | 토큰 ID |
-| floatingip | Body | Object | 플로팅 IP 생성 요청 객체 |
-| floatingip.floating_network_id | Body | UUID | 플로팅 IP가 속한 외부 네트워크 ID |
-| floatingip.floating_ip_address | Body | String | 플로팅 IP 주소 |
-| floatingip.port_id | Body | UUID | 플로팅 IP가 연결된 포트 ID |
+| floatingip | Body | Object | O | 플로팅 IP 생성 요청 객체 |
+| floatingip.floating_network_id | Body | UUID | O | 플로팅 IP가 속한 외부 네트워크 ID |
+| floatingip.floating_ip_address | Body | String | - | 플로팅 IP 주소 |
+| floatingip.port_id | Body | UUID | - | 플로팅 IP가 연결될 포트 ID |
 
 <details><summary>예시</summary>
 <p>
@@ -636,7 +636,7 @@ X-Auth-Token: {tokenId}
 | floatingip.fixed_ip_address | Body | String | 플로팅 IP가 연결된 고정 IP 주소 |
 | floatingip.floating_ip_address | Body | String | 플로팅 IP 주소 |
 | floatingip.tenant_id | Body | String | 테넌트 ID |
-| floatingip.status | Body | Enum | 플로팅 IP의 상태 |
+| floatingip.status | Body | Enum | 플로팅 IP의 상태<br>**ACTIVE**: 인스턴스에 연결<br>**DOWN**: 인스턴스에 미연결<br>**ERROR**: 인스턴스에 연결 또는 할당 실패 |
 | floatingip.port_id | Body | UUID | 플로팅 IP가 연결된 포트 ID |
 | floatingip.id | Body | UUID | 플로팅 IP ID |
 
@@ -663,8 +663,7 @@ X-Auth-Token: {tokenId}
 
 ---
 
-### 플로팅 IP 수정하기
-플로팅 IP를 포트에 연결하거나 해제합니다.
+### 플로팅 IP 연결/해제하기
 ```
 PUT /v2.0/floatingips/{floatingIpId}
 X-Auth-Token: {tokenId}
@@ -678,7 +677,7 @@ X-Auth-Token: {tokenId}
 | tokenId | Header | String | O | 토큰 ID |
 | floatingip | Body | Object | O | 플로팅 IP 수정 요청 객체 |
 | floatingip.port_id | Body | UUID | O | 플로팅 IP를 연결할 포트 ID<br>해제하려면 `null`을 입력 |
-| floatingip.fixed_ip_address | Body | String | - | 고정 IP 주소<br>연결할 포트에 여러 IP가 할당된 경우<br>연결할 IP를 지정하기 위해 사용 |
+| floatingip.fixed_ip_address | Body | String | - | 고정 IP 주소<br>연결 또는 해제할 포트에 여러 IP가 할당된 경우, 특정 IP를 지정하기 위해 사용 |
 
 <details><summary>예시</summary>
 <p>
@@ -868,7 +867,7 @@ X-Auth-Token: {tokenId}
 
 | 이름 | 종류 | 예시 | 필수 | 설명 |
 |---|---|---|---|---|
-| securityGroupId | Query | UUID | - | 조회할 보안 그룹 ID |
+| securityGroupId | Query | UUID | O | 조회할 보안 그룹 ID |
 | tokenId | Header | String | O | 토큰 ID |
 | fields | Query | String | - | 조회할 보안 그룹의 필드 이름<br>지정한 필드만 응답에 반환<br>예) `fields=id&fields=name` |
 
@@ -957,8 +956,9 @@ X-Auth-Token: {tokenId}
 ---
 
 ### 보안 그룹 생성하기
-새로운 보안 그룹을 생성합니다.
-새로 생성된 보안 그룹은 나가는 방향의 보안 그룹 규칙을 기본적으로 포함합니다.
+
+새로운 보안 그룹을 생성합니다. 새로 생성된 보안 그룹은 나가는 방향의 보안 그룹 규칙을 기본적으로 포함합니다.
+
 ```
 POST /v2.0/security-groups
 X-Auth-Token: {tokenId}
@@ -1049,7 +1049,7 @@ X-Auth-Token: {tokenId}
 ### 보안 그룹 수정하기
 기존 보안 그룹을 수정합니다.
 ```
-PUT /v2.0/security-groups
+PUT /v2.0/security-groups/{securityGroupId}
 X-Auth-Token: {tokenId}
 ```
 
@@ -1058,9 +1058,10 @@ X-Auth-Token: {tokenId}
 | 이름 | 종류 | 형식 | 필수 | 설명 |
 |---|---|---|---|---|
 | tokenId | Header | String | O | 토큰 ID |
+| securityGroupId | URL | UUID | O | 보안 그룹 ID |
 | security_group | Body | Object | O | 보안 그룹 수정 요청 객체 |
 | description | Body | String | - | 보안 그룹 설명 |
-| name | Body | String | O | 보안 그룹 이름 |
+| name | Body | String | - | 보안 그룹 이름 |
 
 <details><summary>예시</summary>
 <p>
@@ -1169,10 +1170,10 @@ X-Auth-Token: {tokenId}
 |---|---|---|---|---|
 | tokenId | Header | String | O | 토큰 ID |
 | id | Query | UUID | - | 조회할 보안 규칙 ID |
-| remote_group_id | Query | UUID | - | 조회할 보안 규칙의 목적지 보안 그룹 ID |
+| remote_group_id | Query | UUID | - | 조회할 보안 규칙의 원격 보안 그룹 ID |
 | protocol | Query | String | - | 조회할 보안 규칙의 프로토콜 |
-| direction | Query | Enum | - | 조회할 보안 규칙이 적용되는 패킷 방향<br>**ingress**, **egress** |
-| ethertype | Query | Enum | - | 조회할 보안 규칙의 이더넷 버전<br>**IPv4** 또는 **IPv6** |
+| direction | Query | Enum | - | 조회할 보안 규칙이 적용되는 패킷 방향<br>**ingress** 또는 **egress** |
+| ethertype | Query | Enum | - | 조회할 보안 규칙의 네트워크 트래픽 `Ethertype` 값<br>**IPv4** 또는 **IPv6** |
 | port_range_max | Query | Integer | - | 조회할 보안 규칙의 포트 범위 최댓값 |
 | port_range_min | Query | Integer | - | 조회할 보안 규칙의 포트 범위 최솟값 |
 | security_group_id | Query | UUID | - | 조회할 보안 규칙이 속한 보안 그룹 ID |
@@ -1188,14 +1189,13 @@ X-Auth-Token: {tokenId}
 | 이름 | 종류 | 형식 | 설명 |
 |---|---|---|---|
 | security_group_rules | Body | Array | 보안 규칙 객체 목록 |
-| security_group_rules.direction | Body | Enum | 보안 규칙이 적용되는 패킷 방향<br>**ingress**, **egress** |
-| ethertype | Query | Enum | - | 보안 규칙의 이더넷 버전<br>**IPv4** 또는 **IPv6** |
+| security_group_rules.direction | Body | Enum | 보안 규칙이 적용되는 패킷 방향<br>**ingress** 또는 **egress** |
+| security_group_rules.ethertype | Body | Enum | 보안 규칙의 네트워크 트래픽 `Ethertype` 값<br>**IPv4** 또는 **IPv6** |
 | security_group_rules.protocol | Body | String | 보안 규칙의 프로토콜 이름 |
 | security_group_rules.description | Body | String | 보안 규칙 설명 |
-| security_group_rules.port_range_max | Body | Integer | 조회할 보안 규칙의 포트 범위 최댓값 |
-| security_group_rules.port_range_min | Body | Integer | 조회할 보안 규칙의 포트 범위 최솟값 |
-| security_group_rules.direction | Body | Enum | 보안 규칙이 적용되는 패킷 방향<br>**ingress**, **egress** |
-| security_group_rules.remote_group_id | Body | UUID | 보안 규칙이 적용되는 패킷 방향<br>**ingress**, **egress** |
+| security_group_rules.port_range_max | Body | Integer | 보안 규칙의 포트 범위 최댓값 |
+| security_group_rules.port_range_min | Body | Integer | 보안 규칙의 포트 범위 최솟값 |
+| security_group_rules.remote_group_id | Body | UUID | 보안 규칙의 원격 보안 그룹 ID |
 | security_group_rules.remote_ip_prefix | Body | Enum | 보안 규칙의 목적지 IP 접두사 |
 | security_group_rules.security_group_id | Body | UUID | 보안 규칙이 속한 보안 그룹 ID |
 | security_group_rules.tenant_id | Body | String | 테넌트 ID |
@@ -1249,14 +1249,13 @@ X-Auth-Token: {tokenId}
 | 이름 | 종류 | 형식 | 설명 |
 |---|---|---|---|
 | security_group_rule | Body | Object | 보안 규칙 객체 |
-| security_group_rule.direction | Body | Enum | 보안 규칙이 적용되는 패킷 방향<br>**ingress**, **egress** |
-| security_group_rule.ethertype | Body | Enum | - | 보안 규칙의 이더넷 버전<br>**IPv4** 또는 **IPv6** |
+| security_group_rule.direction | Body | Enum | 보안 규칙이 적용되는 패킷 방향<br>**ingress** 또는 **egress** |
+| security_group_rule.ethertype | Body | Enum | 보안 규칙의 네트워크 트래픽 `Ethertype` 값<br>**IPv4** 또는 **IPv6** |
 | security_group_rule.protocol | Body | String | 보안 규칙의 프로토콜 이름 |
 | security_group_rule.description | Body | String | 보안 규칙 설명 |
 | security_group_rule.port_range_max | Body | Integer | 조회할 보안 규칙의 포트 범위 최댓값 |
 | security_group_rule.port_range_min | Body | Integer | 조회할 보안 규칙의 포트 범위 최솟값 |
-| security_group_rule.direction | Body | Enum | 보안 규칙이 적용되는 패킷 방향<br>**ingress**, **egress** |
-| security_group_rule.remote_group_id | Body | UUID | 보안 규칙의 목적지 보안 그룹 ID |
+| security_group_rule.remote_group_id | Body | UUID | 보안 규칙의 원격 보안 그룹 ID |
 | security_group_rule.remote_ip_prefix | Body | Enum | 보안 규칙의 목적지 IP 접두사 |
 | security_group_rule.security_group_id | Body | UUID | 보안 규칙이 속한 보안 그룹 ID |
 | security_group_rule.tenant_id | Body | String | 테넌트 ID |
@@ -1289,8 +1288,9 @@ X-Auth-Token: {tokenId}
 ---
 
 ### 보안 규칙 생성하기
-새로운 보안 그룹 규칙을 생성합니다.
-TOAST에서는 IPv4만 사용하기 때문에 IPv4에 대한 보안 규칙만 생성할 수 있습니다.
+
+새로운 보안 그룹 규칙을 생성합니다. IPv4에 대한 보안 규칙만 생성할 수 있습니다.
+
 ```
 POST /v2.0/security-group-rules
 X-Auth-Token: {tokenId}
@@ -1302,14 +1302,13 @@ X-Auth-Token: {tokenId}
 |---|---|---|---|---|
 | tokenId | Header | String | O | 토큰 ID |
 | security_group_rule | Body | Object | O | 보안 규칙 생성 요청 객체 |
-| security_group_rule.remote_group_id | Body | UUID | - | 보안 규칙의 목적지 보안 그룹 ID |
+| security_group_rule.remote_group_id | Body | UUID | - | 보안 규칙의 원격 보안 그룹 ID |
 | security_group_rule.direction | Body | Enum | O | 보안 규칙이 적용되는 패킷 방향<br>**ingress**, **egress** |
-| security_group_rule.ethertype | Body | Enum | - | 보안 규칙의 이더넷 버전<br>**IPv4** 또는 **IPv6** |
-| security_group_rule.protocol | Body | String | O | 보안 규칙의 프로토콜 이름 |
+| security_group_rule.ethertype | Body | Enum | - | `IPv4`로 지정. 생략 시에 `IPv4`로 지정 |
+| security_group_rule.protocol | Body | String | O | 보안 규칙의 프로토콜 이름. 생략 시에 모든 프로토콜에 적용. |
 | security_group_rule.port_range_max | Body | Integer | - | 보안 규칙의 포트 범위 최댓값 |
 | security_group_rule.port_range_min | Body | Integer | - | 보안 규칙의 포트 범위 최솟값 |
 | security_group_rule.security_group_id | Body | UUID | O | 보안 규칙이 속한 보안 그룹 ID |
-| security_group_rule.remote_group_id | Body | UUID | - | 보안 규칙의 목적지 보안 그룹 ID |
 | security_group_rule.remote_ip_prefix | Body | Enum | - | 보안 규칙의 목적지 IP 접두사 |
 | security_group_rule.description | Body | String | - | 보안 규칙 설명 |
 
@@ -1338,14 +1337,13 @@ X-Auth-Token: {tokenId}
 | 이름 | 종류 | 형식 | 설명 |
 |---|---|---|---|
 | security_group_rule | Body | Object | 보안 규칙 객체 |
-| security_group_rule.direction | Body | Enum | 보안 규칙이 적용되는 패킷 방향<br>**ingress**, **egress** |
-| security_group_rule.ethertype | Body | Enum | 보안 규칙의 이더넷 버전<br>**IPv4** 또는 **IPv6** |
+| security_group_rule.direction | Body | Enum | 보안 규칙이 적용되는 패킷 방향<br>**ingress** 또는 **egress** |
+| security_group_rule.ethertype | Body | Enum | 보안 규칙의 네트워크 트래픽 `Ethertype` 값<br>**IPv4** 또는 **IPv6** |
 | security_group_rule.protocol | Body | String | 보안 규칙의 프로토콜 이름 |
 | security_group_rule.description | Body | String | 보안 규칙 설명 |
 | security_group_rule.port_range_max | Body | Integer | 조회할 보안 규칙의 포트 범위 최댓값 |
 | security_group_rule.port_range_min | Body | Integer | 조회할 보안 규칙의 포트 범위 최솟값 |
-| security_group_rule.direction | Body | Enum | 보안 규칙이 적용되는 패킷 방향<br>**ingress**, **egress** |
-| security_group_rule.remote_group_id | Body | UUID | 보안 규칙의 목적지 보안 그룹 ID |
+| security_group_rule.remote_group_id | Body | UUID | 보안 규칙의 원격 보안 그룹 ID |
 | security_group_rule.remote_ip_prefix | Body | Enum | 보안 규칙의 목적지 IP 접두사 |
 | security_group_rule.security_group_id | Body | UUID | 보안 규칙이 속한 보안 그룹 ID |
 | security_group_rule.tenant_id | Body | String | 테넌트 ID |

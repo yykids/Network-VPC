@@ -1,4 +1,13 @@
-## Network > VPC > API 가이드
+## Network > VPC > API v2 가이드
+
+API를 사용하려면 API 엔드포인트와 토큰 등이 필요합니다. [API 사용 준비](/Compute/Compute/ko/identity-api/)를 참고하여 API 사용에 필요한 정보를 준비합니다.
+
+VPC API는 `network` 서비스 엔드포인트를 이용합니다. 정확한 엔드포인트는 토큰 발급 응답의 `serviceCatalog`를 참조합니다.
+
+| 서비스 | 리전 | 엔드포인트 |
+|---|---|---|
+| network | 한국(판교) 리전<br>한국(평촌) 리전<br>일본 리전 | https://kr1-api-network.infrastructure.cloud.toast.com<br>https://kr2-api-network.infrastructure.cloud.toast.com<br>https://jp1-api-network.infrastructure.cloud.toast.com |
+
 
 ## API 버전
 ### 버전 목록 보기
@@ -124,7 +133,7 @@ X-Auth-Token: {tokenId}
 | id | Query | UUID | - | 조회할 서브넷 ID |
 | name | Query | String | - | 조회할 서브넷 이름 |
 | enable_dhcp | Query | Boolean | - | 조회할 서브넷의 DHCP 활성화 여부 |
-| network_id | Query | Boolean | - | 조회할 서브넷의 네트워크 ID |
+| network_id | Query | UUID | - | 조회할 서브넷의 네트워크 ID |
 | cidr | Query | String | - | 조회할 서브넷 CIDR |
 | shared | Query | Boolean | - | 조회할 서브넷의 공유 여부 |
 | sort_dir | Query | Enum | - | 조회할 서브넷의 정렬 방향<br>`sort_key`에서 지정한 필드를 기준으로 정렬<br>**asc**, **desc** 중 하나 |
@@ -139,7 +148,7 @@ X-Auth-Token: {tokenId}
 | subnets.name | Body | String | 서브넷 이름 |
 | subnets.enable_dhcp | Body | Boolean | 서브넷의 DHCP 활성화 여부 |
 | subnets.network_id | Body | UUID | 서브넷의 네트워크 ID |
-| subnets.tenant_id | Body | Boolean | 테넌트 ID |
+| subnets.tenant_id | Body | String | 테넌트 ID |
 | subnets.dns_nameservers | Body | Array | 서브넷에 연결괸 DNS 네임서버 목록 |
 | subnets.gateway_ip | Body | String | 서브넷의 게이트웨이 IP |
 | subnets.ipv6_ra_mode | Body | Boolean | IPv6의 Router Advertisement 모드 |
@@ -152,8 +161,8 @@ X-Auth-Token: {tokenId}
 | subnets.ip_version | Body | Integer | IP 프로토콜 버전<br>4 또는 6 |
 | subnets.ipv6_address_mode | Body | String | IPv6의 주소 할당 모드 |
 | subnets.cidr | Body | String | 서브넷의 CIDR |
-| subnets.id | Body | String | 서브넷의 ID |
-| subnets.subnetpool_id | Body | String | 서브넷 Pool ID |
+| subnets.id | Body | UUID | 서브넷의 ID |
+| subnets.subnetpool_id | Body | UUID | 서브넷 Pool ID |
 | subnets_links | Body | Array | 페이지네이션을 위한 정보 객체<br>`limit`, `offset`를 추가한 경우 반환<br>다음 목록을 가리키는 경로를 포함 |
 
 <details><summary>예시</summary>
@@ -301,7 +310,7 @@ X-Auth-Token: {tokenId}
 
 | 이름 | 종류 | 형식 | 설명 |
 |---|---|---|---|
-| port | Body | Array | 포트 정보 객체 |
+| port | Body | Object | 포트 정보 객체 |
 | port.status | Body | Enum | 포트 상태<br>**ACTIVE**, **DOWN** 중 하나 |
 | port.name | Body | String | 포트 이름 |
 | port.allowed_address_pairs | Body | Array | 포트의 주소 쌍 목록 |
@@ -370,6 +379,8 @@ X-Auth-Token: {tokenId}
 |---|---|---|---|---|
 | tokenId | Header | String | O | 토큰 ID |
 | port | Body | Object | O | 포트 생성 요청 객체 |
+| port.name | Body | String | - | 포트 이름 |
+| port.network_id | Body | UUID | O | 포트의 네트워크 ID |
 | port.admin_state_up | Body | Boolean | - | 포트의 관리자 제어 상태 |
 | port.mac_address | Body | String | - | 포트의 MAC 주소 |
 | port.port_id | Body | UUID | - | 플로팅 IP가 연결된 포트 ID |

@@ -8,42 +8,7 @@ VPC API는 `network` 타입 엔드포인트를 이용합니다. 정확한 엔드
 |---|---|---|
 | network | 한국(판교) 리전<br>한국(평촌) 리전<br>일본 리전 | https://kr1-api-network.infrastructure.cloud.toast.com<br>https://kr2-api-network.infrastructure.cloud.toast.com<br>https://jp1-api-network.infrastructure.cloud.toast.com |
 
-
-## API 버전
-### 버전 목록 보기
-
-TOAST 기본 인프라 서비스 Network API에서 지원하는 버전 목록을 확인할 수 있습니다.
-
-```
-GET /
-```
-
-#### 요청
-이 API는 요청 본문을 요구하지 않습니다.
-
-#### 응답
-<details><summary>펼쳐 보기</summary>
-<p>
-
-```json
-{
-  "versions": [
-    {
-      "status": "CURRENT",
-      "id": "v2.0",
-      "links": [
-        {
-          "href": "https://kr1-api-network.cloud.toast.com/v2.0",
-          "rel": "self"
-        }
-      ]
-    }
-  ]
-}
-```
-
-</p>
-</details>
+API 응답에 가이드에 명시되지 않은 필드가 노출될 수 있습니다. 이런 필드는 TOAST 내부 용도로 사용되며 사전 공지없이 변경될 수 있으므로 사용하지 않습니다.
 
 ## 네트워크
 ### 네트워크 목록 보기
@@ -106,6 +71,21 @@ X-Auth-Token: {tokenId}
       "shared": false,
       "port_security_enabled": true,
       "id": "245ff686-4ca2-4176-a069-81013537ac3a"
+    },
+    {
+      "name": "public_network",
+      "id": "b04b1c31-f2e9-4ae0-a264-02b7d61ad618",
+      "status": "ACTIVE",
+      "shared": true,
+      "subnets": [
+        "6b3f7d6d-df61-4345-beb5-1621fd274659",
+        "f22ae5cb-5e52-4704-9c31-83dc3826efb7"
+      ],
+      "admin_state_up": true,
+      "port_security_enabled": true,
+      "router:external": true,
+      "tenant_id": "e873d250f2ca40b78e2c12cfbaaeb740",
+      "mtu": 0
     }
   ]
 }
@@ -258,7 +238,7 @@ X-Auth-Token: {tokenId}
 {
   "ports": [
     {
-      "status": "DOWN",
+      "status": "ACTIVE",
       "name": "",
       "allowed_address_pairs": [],
       "admin_state_up": true,
@@ -335,7 +315,7 @@ X-Auth-Token: {tokenId}
 ```json
 {
   "port": {
-    "status": "DOWN",
+    "status": "ACTIVE",
     "name": "",
     "allowed_address_pairs": [],
     "admin_state_up": true,
@@ -696,7 +676,7 @@ X-Auth-Token: {tokenId}
 ```json
 {
     "floatingip": {
-        "port_id": "fc861431-0e6c-4842-a0ed-e2363f9bc3a8"
+        "port_id": "af41e9f7-18ae-43c5-8b7e-7026f792bf3a"
     }
 }
 ```
@@ -724,14 +704,14 @@ X-Auth-Token: {tokenId}
 ```json
 {
   "floatingip": {
-    "floating_network_id": "4b61db01-8183-4540-b2a3-47254a58298d",
-    "router_id": null,
-    "fixed_ip_address": null,
-    "floating_ip_address": "133.186.242.214",
-    "tenant_id": "19eeb40d58684543aef29cbb5ebfe8f0",
+    "floating_network_id": "b04b1c31-f2e9-4ae0-a264-02b7d61ad618",
+    "router_id": "4337119f-8c72-40bf-818a-21258ecb86db",
+    "fixed_ip_address": "192.168.22.96",
+    "floating_ip_address": "133.186.147.40",
+    "tenant_id": "f5073eaa26b64cffbee89411df94ce01",
     "status": "DOWN",
-    "port_id": null,
-    "id": "fed3fcf6-59b1-4f43-93e5-23a47cb5452e"
+    "port_id": "af41e9f7-18ae-43c5-8b7e-7026f792bf3a",
+    "id": "5338b5b2-9d80-46b5-ba13-2fd13f5c498a"
   }
 }
 ```
@@ -1316,7 +1296,7 @@ X-Auth-Token: {tokenId}
 | security_group_rule.remote_group_id | Body | UUID | - | 보안 규칙의 원격 보안 그룹 ID |
 | security_group_rule.direction | Body | Enum | O | 보안 규칙이 적용되는 패킷 방향<br>**ingress**, **egress** |
 | security_group_rule.ethertype | Body | Enum | - | `IPv4`로 지정. 생략 시에 `IPv4`로 지정 |
-| security_group_rule.protocol | Body | String | O | 보안 규칙의 프로토콜 이름. 생략 시에 모든 프로토콜에 적용. |
+| security_group_rule.protocol | Body | String | - | 보안 규칙의 프로토콜 이름. 생략 시에 모든 프로토콜에 적용. |
 | security_group_rule.port_range_max | Body | Integer | - | 보안 규칙의 포트 범위 최댓값 |
 | security_group_rule.port_range_min | Body | Integer | - | 보안 규칙의 포트 범위 최솟값 |
 | security_group_rule.security_group_id | Body | UUID | O | 보안 규칙이 속한 보안 그룹 ID |

@@ -962,7 +962,7 @@ X-Auth-Token: {tokenId}
 | tokenId | Header | String | O | 토큰 ID |
 | security_group | Body | Object | O | 보안 그룹 생성 요청 객체 |
 | description | Body | String | - | 보안 그룹 설명 |
-| name | Body | String | O | 보안 그룹 이름 |
+| name | Body | String | - | 보안 그룹 이름 |
 
 <details><summary>예시</summary>
 <p>

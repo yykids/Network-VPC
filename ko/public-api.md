@@ -45,12 +45,12 @@ X-Auth-Token: {tokenId}
 | networks.router:external | Body | Boolean | 네트워크 외부 연결 여부 |
 | networks.tenant_id | Body | String | 테넌트 ID |
 | networks.admin_state_up | Body | Boolean | 관리자 제어 상태<br>`true`: 사용 가능<br>`false`: 사용 불가 |
-| networks.mtu | Body | Integer | 최대 전송 단위 (Maximum Transmission Unit) |
+| networks.mtu | Body | Integer | 최대 전송 단위(Maximum Transmission Unit) |
 | networks.shared | Body | Boolean | 네트워크 공유 여부 |
 | networks.port_security_enabled | Body | Boolean | 네트워크 포트 보안 여부<br>이 네트워크에서 생성되는 포트의 보안 활성화 여부를 결정 |
 | networks.id | Body | String | 네트워크 ID |
 | networks.name | Body | String | 네트워크 이름 |
-| networks_links | Body | Array | 페이지네이션을 위한 정보 객체<br>`limit`, `offset`를 추가한 경우 반환<br>다음 목록을 가리키는 경로를 포함 |
+| networks_links | Body | Array | 페이지 매김(페이지네이션)을 위한 정보 객체<br>`limit`, `offset`를 추가한 경우 반환<br>다음 목록을 가리키는 경로를 포함 |
 
 <details><summary>예시</summary>
 <p>
@@ -143,7 +143,7 @@ X-Auth-Token: {tokenId}
 | subnets.cidr | Body | String | 서브넷의 CIDR |
 | subnets.id | Body | UUID | 서브넷의 ID |
 | subnets.subnetpool_id | Body | UUID | 서브넷 Pool ID |
-| subnets_links | Body | Array | 페이지네이션을 위한 정보 객체<br>`limit`, `offset`를 추가한 경우 반환<br>다음 목록을 가리키는 경로를 포함 |
+| subnets_links | Body | Array | 페이지 매김(페이지네이션)을 위한 정보 객체<br>`limit`, `offset`를 추가한 경우 반환<br>다음 목록을 가리키는 경로를 포함 |
 
 <details><summary>예시</summary>
 <p>
@@ -347,7 +347,7 @@ X-Auth-Token: {tokenId}
 ---
 
 ### 포트 생성 하기
-새로운 포트를 생성합니다. 생성한 포트는 인스턴스 생성시 활용할 수 있습니다.
+새로운 포트를 생성합니다. 생성한 포트는 인스턴스 생성 시 활용할 수 있습니다.
 ```
 POST /v2.0/ports
 X-Auth-Token: {tokenId}

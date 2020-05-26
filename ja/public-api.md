@@ -1,58 +1,84 @@
-## Network > VPC > API v2 가이드
+﻿## Network > VPC > APIガイド
 
-API를 사용하려면 API 엔드포인트와 토큰 등이 필요합니다. [API 사용 준비](/Compute/Compute/ko/identity-api/)를 참고하여 API 사용에 필요한 정보를 준비합니다.
+## APIバージョン
+### バージョンリスト表示
 
-VPC API는 `network` 타입 엔드포인트를 이용합니다. 정확한 엔드포인트는 토큰 발급 응답의 `serviceCatalog`를 참조합니다.
+TOAST基本インフラサービスNetwork APIでサポートするバージョンリストを確認できます。
 
-| 타입 | 리전 | 엔드포인트 |
-|---|---|---|
-| network | 한국(판교) 리전<br>일본 리전 | https://kr1-api-network.infrastructure.cloud.toast.com<br>https://jp1-api-network.infrastructure.cloud.toast.com |
+```
+GET /
+```
 
-API 응답에 가이드에 명시되지 않은 필드가 노출될 수 있습니다. 이런 필드는 TOAST 내부 용도로 사용되며 사전 공지없이 변경될 수 있으므로 사용하지 않습니다.
+#### リクエスト
+このAPIはリクエスト本文を要求しません。
 
-## 네트워크
-### 네트워크 목록 보기
-사용 가능한 네트워크 목록을 반환합니다.
+#### レスポンス
+<details><summary>さらに表示</summary>
+<p>
+
+```json
+{
+  "versions": [
+    {
+      "status": "CURRENT",
+      "id": "v2.0",
+      "links": [
+        {
+          "href": "https://kr1-api-network.cloud.toast.com/v2.0",
+          "rel": "self"
+        }
+      ]
+    }
+  ]
+}
+```
+
+</p>
+</details>
+
+## ネットワーク
+### ネットワークリスト表示
+使用可能なネットワークリストを返します。
 ```
 GET /v2.0/networks
 X-Auth-Token: {tokenId}
 ```
 
-#### 요청
-이 API는 요청 본문을 요구하지 않습니다.
+#### リクエスト
+このAPIはリクエスト本文を要求しません。
 
-| 이름 | 종류 | 형식 | 필수 | 설명 |
+| 名前 | 種類 | 形式 | 必須 | 説明 |
 |---|---|---|---|---|
-| tokenId | Header | String | O | 토큰 ID |
-| id | Query | UUID | - | 조회할 네트워크 ID |
-| name | Query | String | - | 조회할 네트워크 이름 |
-| provider:network_type | Query | Enum | - | 조회할 네트워크 타입<br>`flat`, `vlan` 중 하나 |
-| router:external | Query | Boolean | - | 조회할 네트워크의 외부 연결 여부 |
-| shared | Query | Boolean | - | 조회할 네트워크의 공유 여부 |
-| tenant_id | Query | String | - | 조회할 네트워크가 속한 테넌트 ID |
-| sort_dir | Query | Enum | - | 조회할 네트워크의 정렬 방향<br>`sort_key`에서 지정한 필드를 기준으로 정렬<br>**asc**, **desc** 중 하나 |
-| sort_key | Query | String | - | 조회할 네트워크의 정렬 키<br>`sort_dir`에서 지정한 방향대로 정렬 |
-| fields | Query | String | - | 조회할 네트워크의 필드 이름<br>예) `fields=id&fields=name` |
+| tokenId | Header | String | O | トークンID |
+| id | Query | UUID | - | 照会するネットワークID |
+| name | Query | String | - | 照会するネットワーク名 |
+| provider:network_type | Query | Enum | - | 照会するネットワークタイプ<br>`flat`、`vlan`のどちらか |
+| router:external | Query | Boolean | - | 照会するネットワークの外部接続有無 |
+| shared | Query | Boolean | - | 照会するネットワークの共有有無 |
+| tenant_id | Query | String | - | 照会するネットワークが属しているテナントID |
+| sort_dir | Query | Enum | - | 照会するネットワークのソート方向<br>`sort_key`で指定したフィールドを基準にソート<br>**asc**、**desc**のどちらか |
+| sort_key | Query | String | - | 照会するネットワークのソートキー<br>`sort_dir`で指定した方向通りにソート |
+| fields | Query | String | - | 照会するネットワークのフィールド名<br>例) `fields=id&fields=name` |
 
-#### 응답
+#### レスポンス
 
-| 이름 | 종류 | 형식 | 설명 |
+| 名前 | 種類 | 形式 | 説明 |
 |---|---|---|---|
-| networks | Body | Array | 네트워크 정보 객체 목록 |
-| networks.status | Body | Enum | 네트워크 상태<br>**ACTIVE**, **DOWN**, **BUILD**, **ERROR** 중 하나. |
-| networks.subnets | Body | Array | 네트워크에 속한 서브넷들의 ID 목록 |
-| networks.name | Body | String | 네트워크 이름 |
-| networks.router:external | Body | Boolean | 네트워크 외부 연결 여부 |
-| networks.tenant_id | Body | String | 테넌트 ID |
-| networks.admin_state_up | Body | Boolean | 관리자 제어 상태<br>`true`: 사용 가능<br>`false`: 사용 불가 |
-| networks.mtu | Body | Integer | 최대 전송 단위(Maximum Transmission Unit) |
-| networks.shared | Body | Boolean | 네트워크 공유 여부 |
-| networks.port_security_enabled | Body | Boolean | 네트워크 포트 보안 여부<br>이 네트워크에서 생성되는 포트의 보안 활성화 여부를 결정 |
-| networks.id | Body | String | 네트워크 ID |
-| networks.name | Body | String | 네트워크 이름 |
-| networks_links | Body | Array | 페이지 매김(페이지네이션)을 위한 정보 객체<br>`limit`, `offset`를 추가한 경우 반환<br>다음 목록을 가리키는 경로를 포함 |
+| networks | Body | Array | ネットワーク情報オブジェクトリスト |
+| networks.status | Body | Enum | ネットワークの状態<br>**ACTIVE**、**DOWN**、**BUILD**、**ERROR**のいずれか。 |
+| networks.subnets | Body | Array | ネットワークに属しているサブネットのIDリスト |
+| networks.name | Body | String | ネットワーク名 |
+| networks.router:external | Body | Boolean | ネットワーク外部接続有無 |
+| networks.tenant_id | Body | String | テナントID |
+| networks.admin_state_up | Body | Boolean | 管理者制御状態<br>`true`：使用可能<br>`false`：使用不可 |
+| networks.mtu | Body | Integer | 最大転送単位(Maximum Transmission Unit) |
+| networks.shared | Body | Boolean | ネットワーク共有有無 |
+| networks.port_security_enabled | Body | Boolean | ネットワークポートのセキュリティ有無<br>このネットワークで作成されるポートのセキュリティ有無を決定 |
+| networks.id | Body | String | ネットワークID |
+| networks.name | Body | String | ネットワーク名 |
+| networks_links | Body | Array | ページネーション用の情報オブジェクト<br>`limit`、`offset`を追加した場合に返す<br>次のリストを指すパスを含む |
 
-<details><summary>예시</summary>
+<details><summary>例</summary>
 <p>
 
 ```json
@@ -71,21 +97,6 @@ X-Auth-Token: {tokenId}
       "shared": false,
       "port_security_enabled": true,
       "id": "245ff686-4ca2-4176-a069-81013537ac3a"
-    },
-    {
-      "name": "public_network",
-      "id": "b04b1c31-f2e9-4ae0-a264-02b7d61ad618",
-      "status": "ACTIVE",
-      "shared": true,
-      "subnets": [
-        "6b3f7d6d-df61-4345-beb5-1621fd274659",
-        "f22ae5cb-5e52-4704-9c31-83dc3826efb7"
-      ],
-      "admin_state_up": true,
-      "port_security_enabled": true,
-      "router:external": true,
-      "tenant_id": "e873d250f2ca40b78e2c12cfbaaeb740",
-      "mtu": 0
     }
   ]
 }
@@ -96,56 +107,56 @@ X-Auth-Token: {tokenId}
 
 ---
 
-## 서브넷
-### 서브넷 목록 보기
-사용 가능한 서브넷 목록을 반환합니다.
+## サブネット
+### サブネットリスト表示
+使用可能なサブネットリストを返します。
 ```
 GET /v2.0/subnets
 X-Auth-Token: {tokenId}
 ```
 
-#### 요청
-이 API는 요청 본문을 요구하지 않습니다.
+#### リクエスト
+このAPIはリクエスト本文を要求しません。
 
-| 이름 | 종류 | 형식 | 필수 | 설명 |
+| 名前 | 種類 | 形式 | 必須 | 説明 |
 |---|---|---|---|---|
-| tokenId | Header | String | O | 토큰 ID |
-| id | Query | UUID | - | 조회할 서브넷 ID |
-| name | Query | String | - | 조회할 서브넷 이름 |
-| enable_dhcp | Query | Boolean | - | 조회할 서브넷의 DHCP 활성화 여부 |
-| network_id | Query | UUID | - | 조회할 서브넷의 네트워크 ID |
-| cidr | Query | String | - | 조회할 서브넷 CIDR |
-| shared | Query | Boolean | - | 조회할 서브넷의 공유 여부 |
-| sort_dir | Query | Enum | - | 조회할 서브넷의 정렬 방향<br>`sort_key`에서 지정한 필드를 기준으로 정렬<br>**asc**, **desc** 중 하나 |
-| sort_key | Query | String | - | 조회할 서브넷의 정렬 키<br>`sort_dir`에서 지정한 방향대로 정렬 |
-| fields | Query | String | - | 조회할 서브넷의 필드 이름<br>예) `fields=id&fields=name` |
+| tokenId | Header | String | O | トークンID |
+| id | Query | UUID | - | 照会するサブネットID |
+| name | Query | String | - | 照会するサブネット名 |
+| enable_dhcp | Query | Boolean | - | 照会するサブネットのDHCP有無 |
+| network_id | Query | UUID | - | 照会するサブネットのネットワークID |
+| cidr | Query | String | - | 照会するサブネットのCIDR |
+| shared | Query | Boolean | - | 照会するサブネットの共有有無 |
+| sort_dir | Query | Enum | - | 照会するサブネットのソート方向<br>`sort_key`で指定したフィールドを基準にソート<br>**asc**、**desc**のいずれか |
+| sort_key | Query | String | - | 照会するサブネットのソートキー<br>`sort_dir`で指定した方向通りにソート |
+| fields | Query | String | - | 照会するサブネットのフィールド名<br>例) `fields=id&fields=name` |
 
-#### 응답
+#### レスポンス
 
-| 이름 | 종류 | 형식 | 설명 |
+| 名前 | 種類 | 形式 | 説明 |
 |---|---|---|---|
-| subnets | Body | Array | 서브넷 정보 객체 목록 |
-| subnets.name | Body | String | 서브넷 이름 |
-| subnets.enable_dhcp | Body | Boolean | 서브넷의 DHCP 활성화 여부 |
-| subnets.network_id | Body | UUID | 서브넷의 네트워크 ID |
-| subnets.tenant_id | Body | String | 테넌트 ID |
-| subnets.dns_nameservers | Body | Array | 서브넷에 연결괸 DNS 네임서버 목록 |
-| subnets.gateway_ip | Body | String | 서브넷의 게이트웨이 IP |
-| subnets.ipv6_ra_mode | Body | Boolean | IPv6의 Router Advertisement 모드 |
-| subnets.allocation_pools | Body | Array | 서브넷 IP 범위 객체 목록 |
-| subnets.allocation_pools.start | Body | String | 서브넷 IP 범위의 시작 IP 주소 |
-| subnets.allocation_pools.end | Body | String | 서브넷 IP 범위의 마지막 IP 주소 |
-| subnets.host_routes | Body | Array | 서브넷의 추가 경로 정보 목록 |
-| subnets.host_routes.destination | Body | String | 목적지<br>목적지 주소가 `destination`이면<br>`nexthop`으로 지정된 주소로 전달 |
-| subnets.host_routes.nexthop | Body | String | 다음 hop 주소 |
-| subnets.ip_version | Body | Integer | IP 프로토콜 버전<br>4 또는 6 |
-| subnets.ipv6_address_mode | Body | String | IPv6의 주소 할당 모드 |
-| subnets.cidr | Body | String | 서브넷의 CIDR |
-| subnets.id | Body | UUID | 서브넷의 ID |
-| subnets.subnetpool_id | Body | UUID | 서브넷 Pool ID |
-| subnets_links | Body | Array | 페이지 매김(페이지네이션)을 위한 정보 객체<br>`limit`, `offset`를 추가한 경우 반환<br>다음 목록을 가리키는 경로를 포함 |
+| subnets | Body | Array | サブネット情報オブジェクトリスト |
+| subnets.name | Body | String | サブネット名 |
+| subnets.enable_dhcp | Body | Boolean | サブネットのDHCP有無 |
+| subnets.network_id | Body | UUID | サブネットのネットワークID |
+| subnets.tenant_id | Body | String | テナントID |
+| subnets.dns_nameservers | Body | Array | サブネットに接続されたDNSネームサーバーリスト |
+| subnets.gateway_ip | Body | String | サブネットのゲートウェイIP |
+| subnets.ipv6_ra_mode | Body | Boolean | IPv6のRouter Advertisementモード |
+| subnets.allocation_pools | Body | Array | サブネットIP範囲オブジェクトリスト |
+| subnets.allocation_pools.start | Body | String | サブネットIP範囲の最初のIPアドレス |
+| subnets.allocation_pools.end | Body | String | サブネットIP範囲の最後のIPアドレス |
+| subnets.host_routes | Body | Array | サブネットの追加パス情報リスト |
+| subnets.host_routes.destination | Body | String | 宛先<br>宛先アドレスが`destination`の場合<br>`nexthop`に指定されたアドレスへ伝達 |
+| subnets.host_routes.nexthop | Body | String | 次のhopアドレス |
+| subnets.ip_version | Body | Integer | IPプロトコルバージョン<br>4または6 |
+| subnets.ipv6_address_mode | Body | String | IPv6のアドレス割り当てモード |
+| subnets.cidr | Body | String | サブネットのCIDR |
+| subnets.id | Body | UUID | サブネットのID |
+| subnets.subnetpool_id | Body | UUID | サブネットPool ID |
+| subnets_links | Body | Array | ページネーション用の情報オブジェクト<br>`limit`、`offset`を追加した場合に返す<br>次のリストを指すパスを含む |
 
-<details><summary>예시</summary>
+<details><summary>例</summary>
 <p>
 
 ```json
@@ -181,64 +192,64 @@ X-Auth-Token: {tokenId}
 
 ---
 
-## 포트
-### 포트 목록 보기
-포트 목록을 반환합니다.
+## ポート
+### ポートリスト表示
+ポートリストを返します。
 ```
 GET /v2.0/ports
 X-Auth-Token: {tokenId}
 ```
 
-#### 요청
-이 API는 요청 본문을 요구하지 않습니다.
+#### リクエスト
+このAPIはリクエスト本文を要求しません。
 
-| 이름 | 종류 | 형식 | 필수 | 설명 |
+| 名前 | 種類 | 形式 | 必須 | 説明 |
 |---|---|---|---|---|
-| tokenId | Header | String | O | 토큰 ID |
-| id | Query | UUID | - | 조회할 포트 IP ID |
-| status | Query | Enum | - | 조회할 포트 상태<br>**ACTIVE**, **DOWN** 중 하나. |
-| display_name | Query | UUID | - | 조회할 포트 이름 |
-| admin_state | Query | Boolean | - | 조회할 포트의 관리자 제어 상태 |
-| network_id | Query | UUID | - | 조회할 포트의 네트워크 ID |
-| tenant_id | Query | String | - | 조회할 포트의 테넌트 ID |
-| device_owner | Query | String | - | 조회할 포트를 사용하는 리소스 종류 |
-| mac_address | Query | String | - | 조회할 포트의 MAC 주소 |
-| port_id | Query | UUID | - | 조회할 포트 ID |
-| security_groups | Query | UUID | - | 조회할 포트의 보안 그룹 ID |
-| device_id | Query | UUID | - | 조회할 포트를 사용하는 리소스 ID |
-| fields | Query | String | - | 조회할 포트의 필드 이름<br>예) `fields=id&fields=name` |
+| tokenId | Header | String | O | トークンID |
+| id | Query | UUID | - | 照会するポートIP ID |
+| status | Query | Enum | - | 照会するポート状態<br>**ACTIVE**、**DOWN**のいずれか。 |
+| display_name | Query | UUID | - | 照会するポート名 |
+| admin_state | Query | Boolean | - | 照会するポートの管理者制御状態 |
+| network_id | Query | UUID | - | 照会するポートのネットワークID |
+| tenant_id | Query | String | - | 照会するポートのテナントID |
+| device_owner | Query | String | - | 照会するポートを使用するリソースの種類 |
+| mac_address | Query | String | - | 照会するポートのMACアドレス |
+| port_id | Query | UUID | - | 照会するポートのID |
+| security_groups | Query | UUID | - | 照会するポートのセキュリティグループID |
+| device_id | Query | UUID | - | 照会するポートを使用するリソースID |
+| fields | Query | String | - | 照会するポートのフィールド名<br>例) `fields=id&fields=name` |
 
-#### 응답
+#### レスポンス
 
-| 이름 | 종류 | 형식 | 설명 |
+| 名前 | 種類 | 形式 | 説明 |
 |---|---|---|---|
-| ports | Body | Array | 포트 정보 객체 목록 |
-| ports.status | Body | Enum | 포트 상태<br>**ACTIVE**, **DOWN** 중 하나. |
-| ports.name | Body | String | 포트 이름 |
-| ports.allowed_address_pairs | Body | Array | 포트의 주소 쌍 목록 |
-| ports.admin_state_up | Body | Boolean | 포트의 관리자 제어 상태 |
-| ports.network_id | Body | UUID | 포트의 네트워크 ID |
-| ports.tenant_id | Body | String | 테넌트 ID |
-| ports.extra_dhcp_opts | Body | Array | 추가 DHCP 설정 |
-| ports.binding:vnic_type | Body | String | 포트 타입 |
-| ports.device_owner | Body | String | 포트를 사용하는 리소스 종류 |
-| ports.mac_address | Body | String | 포트의 MAC 주소 |
-| ports.port_security_enabled | Body | Boolean | 포트의 보안 상태<br>활성화된 경우 보안 그룹 적용 가능 |
-| ports.fixed_ips | Body | Array | 포트의 고정 IP 목록 |
-| ports.fixed_ips.subnet_id | Body | UUID | 포트의 고정 IP의 서브넷 ID |
-| ports.fixed_ips.ip_address | Body | String | 포트의 고정 IP 주소 |
-| ports.id | Body | UUID | 포트의 ID |
-| ports.security_groups | Body | Array | 포트의 보안 그룹 ID 목록 |
-| ports.device_id | Body | UUID | 포트를 사용하는 리소스 ID |
+| ports | Body | Array | ポート情報オブジェクトリスト |
+| ports.status | Body | Enum | ポート状態<br>**ACTIVE**、**DOWN**のいずれか。 |
+| ports.name | Body | String | ポート名 |
+| ports.allowed_address_pairs | Body | Array | ポートのアドレスペアリスト |
+| ports.admin_state_up | Body | Boolean | ポートの管理者制御状態 |
+| ports.network_id | Body | UUID | ポートのネットワークID |
+| ports.tenant_id | Body | String | テナントID |
+| ports.extra_dhcp_opts | Body | Array | 追加DHCP設定 |
+| ports.binding:vnic_type | Body | String | ポートタイプ |
+| ports.device_owner | Body | String | ポートを使用するリソースの種類 |
+| ports.mac_address | Body | String | ポートのMACアドレス |
+| ports.port_security_enabled | Body | Boolean | ポートのセキュリティ状態<br>アクティブの場合、セキュリティグループを適用可能 |
+| ports.fixed_ips | Body | Array | ポートの固定IPリスト |
+| ports.fixed_ips.subnet_id | Body | UUID | ポートの固定IPのサブネットID |
+| ports.fixed_ips.ip_address | Body | String | ポートの固定IPアドレス |
+| ports.id | Body | UUID | ポートのID |
+| ports.security_groups | Body | Array | ポートのセキュリティグループIDリスト |
+| ports.device_id | Body | UUID | ポートを使用するリソースID |
 
-<details><summary>예시</summary>
+<details><summary>例</summary>
 <p>
 
 ```json
 {
   "ports": [
     {
-      "status": "ACTIVE",
+      "status": "DOWN",
       "name": "",
       "allowed_address_pairs": [],
       "admin_state_up": true,
@@ -270,52 +281,52 @@ X-Auth-Token: {tokenId}
 
 ---
 
-### 포트 보기
+### ポート表示
 
 ```
 GET /v2.0/ports/{portId}
 X-Auth-Token: {tokenId}
 ```
 
-#### 요청
-이 API는 요청 본문을 요구하지 않습니다.
+#### リクエスト
+このAPIはリクエスト本文を要求しません。
 
-| 이름 | 종류 | 형식 | 필수 | 설명 |
+| 名前 | 種類 | 形式 | 必須 | 説明 |
 |---|---|---|---|---|
-| portId | URL | UUID | O | 포트 ID |
-| tokenId | Header | String | O | 토큰 ID |
-| fields | Query | String | - | 조회할 포트의 필드 이름<br>예) `fields=id&fields=name` |
+| portId | URL | UUID | O | ポートID |
+| tokenId | Header | String | O | トークンID |
+| fields | Query | String | - | 照会するポートのフィールド名<br>例) `fields=id&fields=name` |
 
-#### 응답
+#### レスポンス
 
-| 이름 | 종류 | 형식 | 설명 |
+| 名前 | 種類 | 形式 | 説明 |
 |---|---|---|---|
-| port | Body | Object | 포트 정보 객체 |
-| port.status | Body | Enum | 포트 상태<br>**ACTIVE**, **DOWN** 중 하나 |
-| port.name | Body | String | 포트 이름 |
-| port.allowed_address_pairs | Body | Array | 포트의 주소 쌍 목록 |
-| port.admin_state_up | Body | Boolean | 포트의 관리자 제어 상태 |
-| port.network_id | Body | UUID | 포트의 네트워크 ID |
-| port.tenant_id | Body | String | 테넌트 ID |
-| port.extra_dhcp_opts | Body | Array | 추가 DHCP 설정 |
-| port.binding:vnic_type | Body | String | 포트 타입 |
-| port.device_owner | Body | String | 포트를 사용하는 리소스 종류 |
-| port.mac_address | Body | String | 포트의 MAC 주소 |
-| port.port_security_enabled | Body | Boolean | 포트의 보안 상태<br>활성화된 경우 보안 그룹 적용 가능 |
-| port.fixed_ips | Body | Array | 포트의 고정 IP 목록 |
-| port.fixed_ips.subnet_id | Body | UUID | 포트의 고정 IP의 서브넷 ID |
-| port.fixed_ips.ip_address | Body | String | 포트의 고정 IP 주소 |
-| port.id | Body | UUID | 포트의 ID |
-| port.security_groups | Body | Array | 포트의 보안 그룹 ID 목록 |
-| port.device_id | Body | UUID | 포트를 사용하는 리소스 ID |
+| port | Body | Object | ポート情報オブジェクト |
+| port.status | Body | Enum | ポート状態<br>**ACTIVE**、**DOWN**のいずれか |
+| port.name | Body | String | ポート名 |
+| port.allowed_address_pairs | Body | Array | ポートのアドレスペアリスト |
+| port.admin_state_up | Body | Boolean | ポートの管理者制御状態 |
+| port.network_id | Body | UUID | ポートのネットワークID |
+| port.tenant_id | Body | String | テナントID |
+| port.extra_dhcp_opts | Body | Array | 追加DHCP設定 |
+| port.binding:vnic_type | Body | String | ポートタイプ |
+| port.device_owner | Body | String | ポートを使用するリソースの種類 |
+| port.mac_address | Body | String | ポートのMACアドレス |
+| port.port_security_enabled | Body | Boolean | ポートのセキュリティ状態<br>アクティブの場合、セキュリティグループを適用可能 |
+| port.fixed_ips | Body | Array | ポートの固定IPリスト |
+| port.fixed_ips.subnet_id | Body | UUID | ポートの固定IPのサブネットID |
+| port.fixed_ips.ip_address | Body | String | ポートの固定IPアドレス |
+| port.id | Body | UUID | ポートのID |
+| port.security_groups | Body | Array | ポートのセキュリティグループIDリスト |
+| port.device_id | Body | UUID | ポートを使用するリソースID |
 
-<details><summary>예시</summary>
+<details><summary>例</summary>
 <p>
 
 ```json
 {
   "port": {
-    "status": "ACTIVE",
+    "status": "DOWN",
     "name": "",
     "allowed_address_pairs": [],
     "admin_state_up": true,
@@ -346,36 +357,36 @@ X-Auth-Token: {tokenId}
 
 ---
 
-### 포트 생성 하기
-새로운 포트를 생성합니다. 생성한 포트는 인스턴스 생성 시 활용할 수 있습니다.
+### ポートを作成する
+新しいポートを作成します。作成したポートはインスタンス作成時に活用できます。
 ```
 POST /v2.0/ports
 X-Auth-Token: {tokenId}
 ```
 
-#### 요청
+#### リクエスト
 
-| 이름 | 종류 | 형식 | 필수 | 설명 |
+| 名前 | 種類 | 形式 | 必須 | 説明 |
 |---|---|---|---|---|
-| tokenId | Header | String | O | 토큰 ID |
-| port | Body | Object | O | 포트 생성 요청 객체 |
-| port.name | Body | String | - | 포트 이름 |
-| port.network_id | Body | UUID | O | 포트의 네트워크 ID |
-| port.admin_state_up | Body | Boolean | - | 포트의 관리자 제어 상태 |
-| port.mac_address | Body | String | - | 포트의 MAC 주소 |
-| port.port_id | Body | UUID | - | 플로팅 IP가 연결된 포트 ID |
-| port.fixed_ips | Body | Array | - | 포트의 고정 IP 목록 |
-| port.fixed_ips.subnet_id | Body | UUID | - | 포트의 고정 IP의 서브넷 ID |
-| port.fixed_ips.ip_address | Body | String | - | 포트의 고정 IP 주소 |
-| port.security_groups | Body | Array | - | 포트의 보안 그룹 ID 목록 |
-| port.allowed_address_pairs | Body | Array | - | 포트의 주소 쌍 목록 |
-| port.allowed_address_pairs.ip_address | Body | String | - | 포트의 IP 주소 |
-| port.allowed_address_pairs.mac_address | Body | String | - | 포트의 MAC 주소 |
-| port.extra_dhcp_opts | Body | Array | - | 추가 DHCP 설정 |
-| port.device_owner | Body | String | - | 포트를 사용하는 리소스 종류 |
-| port.device_id | Body | UUID | - | 포트를 사용하는 리소스 ID |
+| tokenId | Header | String | O | トークンID |
+| port | Body | Object | O | ポート作成リクエストオブジェクト |
+| port.name | Body | String | - | ポート名 |
+| port.network_id | Body | UUID | O | ポートのネットワークID |
+| port.admin_state_up | Body | Boolean | - | ポートの管理者制御状態 |
+| port.mac_address | Body | String | - | ポートのMACアドレス |
+| port.port_id | Body | UUID | - | Floating IPが接続されたポートID |
+| port.fixed_ips | Body | Array | - | ポートの固定IPリスト |
+| port.fixed_ips.subnet_id | Body | UUID | - | ポートの固定IPのサブネットID |
+| port.fixed_ips.ip_address | Body | String | - | ポートの固定IPアドレス |
+| port.security_groups | Body | Array | - | ポートのセキュリティグループIDリスト |
+| port.allowed_address_pairs | Body | Array | - | ポートのアドレスペアリスト |
+| port.allowed_address_pairs.ip_address | Body | String | - | ポートのIPアドレス |
+| port.allowed_address_pairs.mac_address | Body | String | - | ポートのMACアドレス |
+| port.extra_dhcp_opts | Body | Array | - | 追加DHCP設定 |
+| port.device_owner | Body | String | - | ポートを使用するリソースの種類 |
+| port.device_id | Body | UUID | - | ポートを使用するリソースID |
 
-<details><summary>예시</summary>
+<details><summary>例</summary>
 <p>
 
 ```json
@@ -391,30 +402,30 @@ X-Auth-Token: {tokenId}
 </p>
 </details>
 
-#### 응답
+#### レスポンス
 
-| 이름 | 종류 | 형식 | 설명 |
+| 名前 | 種類 | 形式 | 説明 |
 |---|---|---|---|
-| port | Body | Array | 포트 정보 객체 |
-| port.status | Body | Enum | 포트 상태<br>**ACTIVE**, **DOWN** 중 하나 |
-| port.name | Body | String | 포트 이름 |
-| port.allowed_address_pairs | Body | Array | 포트의 주소 쌍 목록 |
-| port.admin_state_up | Body | Boolean | 포트의 관리자 제어 상태 |
-| port.network_id | Body | UUID | 포트의 네트워크 ID |
-| port.tenant_id | Body | String | 테넌트 ID |
-| port.extra_dhcp_opts | Body | Array | 추가 DHCP 설정 |
-| port.binding:vnic_type | Body | String | 포트 타입 |
-| port.device_owner | Body | String | 포트를 사용하는 리소스 종류 |
-| port.mac_address | Body | String | 포트의 MAC 주소 |
-| port.port_security_enabled | Body | Boolean | 포트의 보안 상태<br>활성화된 경우 보안 그룹 적용 가능 |
-| port.fixed_ips | Body | Array | 포트의 고정 IP 목록 |
-| port.fixed_ips.subnet_id | Body | UUID | 포트의 고정 IP의 서브넷 ID |
-| port.fixed_ips.ip_address | Body | String | 포트의 고정 IP 주소 |
-| port.id | Body | UUID | 포트의 ID |
-| port.security_groups | Body | Array | 포트의 보안 그룹 ID 목록 |
-| port.device_id | Body | UUID | 포트를 사용하는 리소스 ID |
+| port | Body | Array | ポート情報オブジェクト |
+| port.status | Body | Enum | ポートの状態<br>**ACTIVE**、**DOWN**のいずれか |
+| port.name | Body | String | ポート名 |
+| port.allowed_address_pairs | Body | Array | ポートのアドレスペアリスト |
+| port.admin_state_up | Body | Boolean | ポートの管理者制御状態 |
+| port.network_id | Body | UUID | ポートのネットワークID |
+| port.tenant_id | Body | String | テナントID |
+| port.extra_dhcp_opts | Body | Array | 追加DHCP設定 |
+| port.binding:vnic_type | Body | String | ポートタイプ |
+| port.device_owner | Body | String | ポートを使用するリソースの種類 |
+| port.mac_address | Body | String | ポートのMACアドレス |
+| port.port_security_enabled | Body | Boolean | ポートのセキュリティ状態<br>アクティブの場合、セキュリティグループを適用可能 |
+| port.fixed_ips | Body | Array | ポートの固定IPリスト |
+| port.fixed_ips.subnet_id | Body | UUID | ポートの固定IPのサブネットID |
+| port.fixed_ips.ip_address | Body | String | ポートの固定IPアドレス |
+| port.id | Body | UUID | ポートのID |
+| port.security_groups | Body | Array | ポートのセキュリティグループIDリスト |
+| port.device_id | Body | UUID | ポートを使用するリソースID |
 
-<details><summary>예시</summary>
+<details><summary>例</summary>
 <p>
 
 ```json
@@ -448,66 +459,66 @@ X-Auth-Token: {tokenId}
 
 ---
 
-### 포트 삭제 하기
-지정한 포트를 삭제합니다.
+### ポートを削除する
+指定したポートを削除します。
 ```
 DELETE /v2.0/ports/{portId}
 X-Auth-Token: {tokenId}
 ```
 
-#### 요청
-이 API는 요청 본문을 요구하지 않습니다.
+#### リクエスト
+このAPIはリクエスト本文を要求しません。
 
-| 이름 | 종류 | 형식 | 필수 | 설명 |
+| 名前 | 種類 | 形式 | 必須 | 説明 |
 |---|---|---|---|---|
-| portId | URL | UUID | O | 포트 ID |
-| tokenId | Header | String | O | 토큰 ID |
+| portId | URL | UUID | O | ポートID |
+| tokenId | Header | String | O | トークンID |
 
-#### 응답
-이 API는 응답 본문을 반환하지 않습니다.
+#### レスポンス
+このAPIはレスポンス本文を返しません。
 
 ---
 
-## 플로팅 IP
-### 플로팅 IP 목록 보기
-플로팅 IP 목록을 반환합니다.
+## Floating IP
+### Floating IPリスト表示
+Floating IPリストを返します。
 ```
 GET /v2.0/floatingips
 X-Auth-Token: {tokenId}
 ```
 
-#### 요청
-이 API는 요청 본문을 요구하지 않습니다.
+#### リクエスト
+このAPIはリクエスト本文を要求しません。
 
-| 이름 | 종류 | 형식 | 필수 | 설명 |
+| 名前 | 種類 | 形式 | 必須 | 説明 |
 |---|---|---|---|---|
-| tokenId | Header | String | O | 토큰 ID |
-| id | Query | UUID | - | 조회할 플로팅 IP ID |
-| status | Query | Enum | - | 조회할 플로팅 IP의 상태<br>**ACTIVE**: 인스턴스에 연결<br>**DOWN**: 인스턴스에 미연결<br>**ERROR**: 인스턴스에 연결 또는 할당 실패 |
-| tenant_id | Query | String | - | 조회할 플로팅 IP의 테넌트 ID |
-| floating_network_id  | Query | UUID | - | 조회할 플로팅 IP가 속한 외부 네트워크 ID |
-| fixed_ip_address | Query | String | - | 조회할 플로팅 IP가 연결된 고정 IP 주소 |
-| floating_ip_address | Query | String | - | 조회할 플로팅 IP 주소 |
-| port_id | Query | UUID | - | 조회할 플로팅 IP가 연결된 포트 ID |
-| sort_dir | Query | Enum | - | 조회할 플로팅 IP의 정렬 방향<br>`sort_key`에서 지정한 필드를 기준으로 정렬<br>**asc**, **desc** 중 하나 |
-| sort_key | Query | String | - | 조회할 플로팅 IP의 정렬 키<br>`sort_dir`에서 지정한 방향대로 정렬 |
-| fields | Query | String | - | 조회할 플로팅 IP의 필드 이름<br>예) `fields=id&fields=name` |
+| tokenId | Header | String | O | トークンID |
+| id | Query | UUID | - | 照会するFloating IP ID |
+| status | Query | Enum | - | 照会するFloating IPの状態<br>**ACTIVE**：インスタンスに接続<br>**DOWN**：インスタンスに未接続<br>**ERROR**：インスタンスに接続または割り当てに失敗 |
+| tenant_id | Query | String | - | 照会するFloating IPのテナントID |
+| floating_network_id  | Query | UUID | - | 照会するFloating IPが属している外部ネットワークID |
+| fixed_ip_address | Query | String | - | 照会するFloating IPが接続された固定IPアドレス |
+| floating_ip_address | Query | String | - | 照会するFloating IPアドレス |
+| port_id | Query | UUID | - | 照会するFloating IPが接続されたポートID |
+| sort_dir | Query | Enum | - | 照会するFloating IPのソート方向<br>`sort_key`で指定したフィールドを基準にソート<br>**asc**、**desc**のいずれか |
+| sort_key | Query | String | - | 照会するFloating IPのソートキー<br>`sort_dir`で指定した方向通りにソート |
+| fields | Query | String | - | 照会するFloating IPのフィールド名<br>例) `fields=id&fields=name` |
 
-#### 응답
+#### レスポンス
 
-| 이름 | 종류 | 형식 | 설명 |
+| 名前 | 種類 | 形式 | 説明 |
 |---|---|---|---|
-| floatingips | Body | Array | 플로팅 IP 정보 객체 목록 |
-| floatingips.floating_network_id | Body | UUID | 플로팅 IP가 속한 외부 네트워크 ID |
-| floatingips.router_id | Body | UUID | 플로팅 IP가 연결된 라우터 ID |
-| floatingips.fixed_ip_address | Body | String | 플로팅 IP가 연결된 고정 IP 주소 |
-| floatingips.floating_ip_address | Body | String | 플로팅 IP 주소|
-| floatingips.tenant_id | Body | String | 테넌트 ID |
-| floatingips.status | Body | Enum | 플로팅 IP의 상태<br>**ACTIVE**: 인스턴스에 연결<br>**DOWN**: 인스턴스에 미연결<br>**ERROR**: 인스턴스에 연결 또는 할당 실패 |
-| floatingips.port_id | Body | UUID | 플로팅 IP가 연결된 포트 ID |
-| floatingips.id | Body | UUID | 플로팅 IP ID |
+| floatingips | Body | Array | Floating IP情報オブジェクトリスト |
+| floatingips.floating_network_id | Body | UUID | Floating IPが属している外部ネットワークID |
+| floatingips.router_id | Body | UUID | Floating IPが接続されたルーターID |
+| floatingips.fixed_ip_address | Body | String | Floating IPが接続された固定IPアドレス |
+| floatingips.floating_ip_address | Body | String | Floating IPアドレス|
+| floatingips.tenant_id | Body | String | テナントID |
+| floatingips.status | Body | Enum | Floating IPの状態<br>**ACTIVE**：インスタンスに接続<br>**DOWN**：インスタンスに未接続<br>**ERROR**：インスタンスに接続または割り当て失敗 |
+| floatingips.port_id | Body | UUID | Floating IPが接続されたポートID |
+| floatingips.id | Body | UUID | Floating IP ID |
 
-<details><summary>예시</summary>
+<details><summary>例</summary>
 <p>
 
 ```json
@@ -532,36 +543,36 @@ X-Auth-Token: {tokenId}
 
 ---
 
-### 플로팅 IP 보기
-지정한 플로팅 IP에 대한 정보를 반환합니다.
+### Floating IP表示
+指定したFloating IPの情報を返します。
 ```
 GET /v2.0/floatingips/{floatingIpId}
 X-Auth-Token: {tokenId}
 ```
 
-#### 요청
-이 API는 요청 본문을 요구하지 않습니다.
+#### リクエスト
+このAPIはリクエスト本文を要求しません。
 
-| 이름 | 종류 | 형식 | 필수 | 설명 |
+| 名前 | 種類 | 形式 | 必須 | 説明 |
 |---|---|---|---|---|
-| floatingIpId | URL | UUID | O | 플로팅 IP ID |
-| tokenId | Header | String | O | 토큰 ID |
+| floatingIpId | URL | UUID | O | Floating IP ID |
+| tokenId | Header | String | O | トークンID |
 
-#### 응답
+#### レスポンス
 
-| 이름 | 종류 | 형식 | 설명 |
+| 名前 | 種類 | 形式 | 説明 |
 |---|---|---|---|
-| floatingip | Body | Object | 플로팅 IP 정보 객체 |
-| floatingip.floating_network_id | Body | UUID | 플로팅 IP가 속한 외부 네트워크 ID |
-| floatingip.router_id | Body | UUID | 플로팅 IP가 연결된 라우터 ID |
-| floatingip.fixed_ip_address | Body | String | 플로팅 IP가 연결된 고정 IP 주소 |
-| floatingip.floating_ip_address | Body | String | 플로팅 IP 주소 |
-| floatingip.tenant_id | Body | String | 테넌트 ID |
-| floatingip.status | Body | Enum | 플로팅 IP의 상태<br>**ACTIVE**: 인스턴스에 연결<br>**DOWN**: 인스턴스에 미연결<br>**ERROR**: 인스턴스에 연결 또는 할당 실패 |
-| floatingip.port_id | Body | UUID | 플로팅 IP가 연결된 포트 ID |
-| floatingip.id | Body | UUID | 플로팅 IP ID |
+| floatingip | Body | Object | Floating IP情報オブジェクト |
+| floatingip.floating_network_id | Body | UUID | Floating IPが属している外部ネットワークID |
+| floatingip.router_id | Body | UUID | Floating IPが接続されたルーターID |
+| floatingip.fixed_ip_address | Body | String | Floating IPが接続された固定IPアドレス |
+| floatingip.floating_ip_address | Body | String | Floating IPアドレス |
+| floatingip.tenant_id | Body | String | テナントID |
+| floatingip.status | Body | Enum | Floating IPの状態<br>**ACTIVE**：インスタンスに接続<br>**DOWN**：インスタンスに未接続<br>**ERROR**：インスタンスに接続または割り当て失敗 |
+| floatingip.port_id | Body | UUID | Floating IPが接続されたポートID |
+| floatingip.id | Body | UUID | Floating IP ID |
 
-<details><summary>예시</summary>
+<details><summary>例</summary>
 <p>
 
 ```json
@@ -584,24 +595,24 @@ X-Auth-Token: {tokenId}
 
 ---
 
-### 플로팅 IP 생성하기
-플로팅 IP를 생성합니다.
+### Floating IPを作成する
+Floating IPを作成します。
 ```
 POST /v2.0/floatingips
 X-Auth-Token: {tokenId}
 ```
 
-#### 요청
+#### リクエスト
 
-| 이름 | 종류 | 형식 | 필수 | 설명 |
+| 名前 | 種類 | 形式 | 必須 | 説明 |
 |---|---|---|---|---|
-| tokenId | Header | String | O | 토큰 ID |
-| floatingip | Body | Object | O | 플로팅 IP 생성 요청 객체 |
-| floatingip.floating_network_id | Body | UUID | O | 플로팅 IP가 속한 외부 네트워크 ID |
-| floatingip.floating_ip_address | Body | String | - | 플로팅 IP 주소 |
-| floatingip.port_id | Body | UUID | - | 플로팅 IP가 연결될 포트 ID |
+| tokenId | Header | String | O | トークンID |
+| floatingip | Body | Object | O | Floating IP作成リクエストオブジェクト |
+| floatingip.floating_network_id | Body | UUID | O | Floating IPが属している外部ネットワークID |
+| floatingip.floating_ip_address | Body | String | - | Floating IPアドレス |
+| floatingip.port_id | Body | UUID | - | Floating IPが接続されるポートID |
 
-<details><summary>예시</summary>
+<details><summary>例</summary>
 <p>
 
 ```json
@@ -617,21 +628,21 @@ X-Auth-Token: {tokenId}
 </p>
 </details>
 
-#### 응답
+#### レスポンス
 
-| 이름 | 종류 | 형식 | 설명 |
+| 名前 | 種類 | 形式 | 説明 |
 |---|---|---|---|
-| floatingip | Body | Object | 플로팅 IP 정보 객체 |
-| floatingip.floating_network_id | Body | UUID | 플로팅 IP가 속한 외부 네트워크 ID |
-| floatingip.router_id | Body | UUID | 플로팅 IP가 연결된 라우터 ID |
-| floatingip.fixed_ip_address | Body | String | 플로팅 IP가 연결된 고정 IP 주소 |
-| floatingip.floating_ip_address | Body | String | 플로팅 IP 주소 |
-| floatingip.tenant_id | Body | String | 테넌트 ID |
-| floatingip.status | Body | Enum | 플로팅 IP의 상태<br>**ACTIVE**: 인스턴스에 연결<br>**DOWN**: 인스턴스에 미연결<br>**ERROR**: 인스턴스에 연결 또는 할당 실패 |
-| floatingip.port_id | Body | UUID | 플로팅 IP가 연결된 포트 ID |
-| floatingip.id | Body | UUID | 플로팅 IP ID |
+| floatingip | Body | Object | Floating IP情報オブジェクト |
+| floatingip.floating_network_id | Body | UUID | Floating IPが属している外部ネットワークID |
+| floatingip.router_id | Body | UUID | Floating IPが接続されたルーターID |
+| floatingip.fixed_ip_address | Body | String | Floating IPが接続された固定IPアドレス |
+| floatingip.floating_ip_address | Body | String | Floating IPアドレス |
+| floatingip.tenant_id | Body | String | テナントID |
+| floatingip.status | Body | Enum | Floating IPの状態<br>**ACTIVE**：インスタンスに接続<br>**DOWN**：インスタンスに未接続<br>**ERROR**：インスタンスに接続または割り当て失敗 |
+| floatingip.port_id | Body | UUID | Floating IPが接続されたポートID |
+| floatingip.id | Body | UUID | Floating IP ID |
 
-<details><summary>예시</summary>
+<details><summary>例</summary>
 <p>
 
 ```json
@@ -654,29 +665,29 @@ X-Auth-Token: {tokenId}
 
 ---
 
-### 플로팅 IP 연결/해제하기
+### Floating IPを接続/解除する
 ```
 PUT /v2.0/floatingips/{floatingIpId}
 X-Auth-Token: {tokenId}
 ```
 
-#### 요청
+#### リクエスト
 
-| 이름 | 종류 | 형식 | 필수 | 설명 |
+| 名前 | 種類 | 形式 | 必須 | 説明 |
 |---|---|---|---|---|
-| floatingIpId | URL | UUID | 플로팅 IP ID |
-| tokenId | Header | String | O | 토큰 ID |
-| floatingip | Body | Object | O | 플로팅 IP 수정 요청 객체 |
-| floatingip.port_id | Body | UUID | O | 플로팅 IP를 연결할 포트 ID<br>해제하려면 `null`을 입력 |
-| floatingip.fixed_ip_address | Body | String | - | 고정 IP 주소<br>연결 또는 해제할 포트에 여러 IP가 할당된 경우, 특정 IP를 지정하기 위해 사용 |
+| floatingIpId | URL | UUID | Floating IP ID |
+| tokenId | Header | String | O | トークンID |
+| floatingip | Body | Object | O | Floating IP修正リクエストオブジェクト |
+| floatingip.port_id | Body | UUID | O | Floating IPを接続するポートID<br>解除するには`null`を入力 |
+| floatingip.fixed_ip_address | Body | String | - | 固定IPアドレス<br>接続または解除するポートに複数のIPが割り当てられている場合、特定IPを指定するために使用 |
 
-<details><summary>예시</summary>
+<details><summary>例</summary>
 <p>
 
 ```json
 {
     "floatingip": {
-        "port_id": "af41e9f7-18ae-43c5-8b7e-7026f792bf3a"
+        "port_id": "fc861431-0e6c-4842-a0ed-e2363f9bc3a8"
     }
 }
 ```
@@ -684,34 +695,34 @@ X-Auth-Token: {tokenId}
 </p>
 </details>
 
-#### 응답
+#### レスポンス
 
-| 이름 | 종류 | 형식 | 설명 |
+| 名前 | 種類 | 形式 | 説明 |
 |---|---|---|---|
-| floatingip | Body | Object | 플로팅 IP 정보 객체 |
-| floatingip.floating_network_id | Body | UUID | 플로팅 IP가 속한 외부 네트워크 ID |
-| floatingip.router_id | Body | UUID | 플로팅 IP가 연결된 라우터 ID |
-| floatingip.fixed_ip_address | Body | String | 플로팅 IP가 연결된 고정 IP 주소 |
-| floatingip.floating_ip_address | Body | String | 플로팅 IP 주소 |
-| floatingip.tenant_id | Body | String | 테넌트 ID |
-| floatingip.status | Body | Enum | 플로팅 IP의 상태 |
-| floatingip.port_id | Body | UUID | 플로팅 IP가 연결된 포트 ID |
-| floatingip.id | Body | UUID | 플로팅 IP ID |
+| floatingip | Body | Object | Floating IP情報オブジェクト |
+| floatingip.floating_network_id | Body | UUID | Floating IPが属している外部ネットワークID |
+| floatingip.router_id | Body | UUID | Floating IPが接続されたルーターID |
+| floatingip.fixed_ip_address | Body | String | Floating IPが接続された固定IPアドレス |
+| floatingip.floating_ip_address | Body | String | Floating IPアドレス |
+| floatingip.tenant_id | Body | String | テナントID |
+| floatingip.status | Body | Enum | Floating IPの状態 |
+| floatingip.port_id | Body | UUID | Floating IPが接続されたポートID |
+| floatingip.id | Body | UUID | Floating IP ID |
 
-<details><summary>예시</summary>
+<details><summary>例</summary>
 <p>
 
 ```json
 {
   "floatingip": {
-    "floating_network_id": "b04b1c31-f2e9-4ae0-a264-02b7d61ad618",
-    "router_id": "4337119f-8c72-40bf-818a-21258ecb86db",
-    "fixed_ip_address": "192.168.22.96",
-    "floating_ip_address": "133.186.147.40",
-    "tenant_id": "f5073eaa26b64cffbee89411df94ce01",
+    "floating_network_id": "4b61db01-8183-4540-b2a3-47254a58298d",
+    "router_id": null,
+    "fixed_ip_address": null,
+    "floating_ip_address": "133.186.242.214",
+    "tenant_id": "19eeb40d58684543aef29cbb5ebfe8f0",
     "status": "DOWN",
-    "port_id": "af41e9f7-18ae-43c5-8b7e-7026f792bf3a",
-    "id": "5338b5b2-9d80-46b5-ba13-2fd13f5c498a"
+    "port_id": null,
+    "id": "fed3fcf6-59b1-4f43-93e5-23a47cb5452e"
   }
 }
 ```
@@ -721,58 +732,58 @@ X-Auth-Token: {tokenId}
 
 ---
 
-### 플로팅 IP 삭제하기
-지정한 플로팅 IP를 삭제합니다.
+### Floating IPを削除する
+指定したFloating IPを削除します。
 ```
 DELETE /v2.0/floatingips/{floatingIpId}
 X-Auth-Token: {tokenId}
 ```
 
-#### 요청
-이 API는 요청 본문을 요구하지 않습니다.
+#### リクエスト
+このAPIはリクエスト本文を要求しません。
 
-| 이름 | 종류 | 형식 | 필수 | 설명 |
+| 名前 | 種類 | 形式 | 必須 | 説明 |
 |---|---|---|---|---|
-| floatingIpId | URL | UUID | O | 플로팅 IP ID |
-| tokenId | Header | String | O | 토큰 ID |
+| floatingIpId | URL | UUID | O | Floating IP ID |
+| tokenId | Header | String | O | トークンID |
 
-#### 응답
-이 API는 응답 본문을 반환하지 않습니다.
+#### レスポンス
+このAPIはレスポンス本文を返しません。
 
 ---
 
-## 보안 그룹
-### 보안 그룹 목록 보기
+## セキュリティグループ
+### セキュリティグループリスト表示
 ```
 GET /v2.0/security-groups
 X-Auth-Token: {tokenId}
 ```
 
-#### 요청
-이 API는 요청 본문을 요구하지 않습니다.
+#### リクエスト
+このAPIはリクエスト本文を要求しません。
 
-| 이름 | 종류 | 형식 | 필수 | 설명 |
+| 名前 | 種類 | 形式 | 必須 | 説明 |
 |---|---|---|---|---|
-| tokenId | Header | String | O | 토큰 ID |
-| id | Query | UUID | - | 조회할 보안 그룹 ID |
-| tenant_id | Query | String | - | 조회할 보안 그룹의 테넌트 ID |
-| name | Query | String | - | 조회할 보안 그룹의 이름 |
-| sort_dir | Query | Enum | - | 조회할 보안 그룹의 정렬 방향<br>`sort_key`에서 지정한 필드를 기준으로 정렬<br>**asc**, **desc** 중 하나 |
-| sort_key | Query | String | - | 조회할 보안 그룹의 정렬 키<br>`sort_dir`에서 지정한 방향대로 정렬 |
-| fields | Query | String | - | 조회할 보안 그룹의 필드 이름<br>예) `fields=id&fields=name` |
+| tokenId | Header | String | O | トークンID |
+| id | Query | UUID | - | 照会するセキュリティグループID |
+| tenant_id | Query | String | - | 照会するセキュリティグループのテナントID |
+| name | Query | String | - | 照会するセキュリティグループの名前 |
+| sort_dir | Query | Enum | - | 照会するセキュリティグループのソート方向<br>`sort_key`で指定したフィールドを基準にソート<br>**asc**、**desc**のいずれか |
+| sort_key | Query | String | - | 照会するセキュリティグループのソートキー<br>`sort_dir`で指定した方向通りにソート |
+| fields | Query | String | - | 照会するセキュリティグループのフィールド名<br>例) `fields=id&fields=name` |
 
-#### 응답
+#### レスポンス
 
-| 이름 | 종류 | 형식 | 설명 |
+| 名前 | 種類 | 形式 | 説明 |
 |---|---|---|---|
-| security_groups | Body | Array | 보안 그룹 목록 객체 |
-| security_groups.tenant_id | Body | String | 테넌트 ID |
-| security_groups.description | Body | String | 보안 그룹 설명 |
-| security_groups.id | Body | UUID | 보안 그룹 ID |
-| security_groups.security_group_rules | Body | Array | 보안 그룹 규칙 목록 |
-| security_groups.name | Body | String | 보안 그룹 이름 |
+| security_groups | Body | Array | セキュリティグループリストオブジェクト |
+| security_groups.tenant_id | Body | String | テナントID |
+| security_groups.description | Body | String | セキュリティグループの説明 |
+| security_groups.id | Body | UUID | セキュリティグループID |
+| security_groups.security_group_rules | Body | Array | セキュリティグループルールリスト |
+| security_groups.name | Body | String | セキュリティグループ名 |
 
-<details><summary>예시</summary>
+<details><summary>例</summary>
 <p>
 
 ```json
@@ -847,33 +858,33 @@ X-Auth-Token: {tokenId}
 
 ---
 
-### 보안 그룹 보기
+### セキュリティグループ表示
 ```
 GET /v2.0/security-groups/{securityGroupId}
 X-Auth-Token: {tokenId}
 ```
 
-#### 요청
-이 API는 요청 본문을 요구하지 않습니다.
+#### リクエスト
+このAPIはリクエスト本文を要求しません。
 
-| 이름 | 종류 | 예시 | 필수 | 설명 |
+| 名前 | 種類 | 例 | 必須 | 説明 |
 |---|---|---|---|---|
-| securityGroupId | Query | UUID | O | 조회할 보안 그룹 ID |
-| tokenId | Header | String | O | 토큰 ID |
-| fields | Query | String | - | 조회할 보안 그룹의 필드 이름<br>지정한 필드만 응답에 반환<br>예) `fields=id&fields=name` |
+| securityGroupId | Query | UUID | O | 照会するセキュリティグループID |
+| tokenId | Header | String | O | トークンID |
+| fields | Query | String | - | 照会するセキュリティグループのフィールド名<br>指定したフィールドのみレスポンスに返す<br>例) `fields=id&fields=name` |
 
-#### 응답
+#### レスポンス
 
-| 이름 | 종류 | 예시 | 설명 |
+| 名前 | 種類 | 例 | 説明 |
 |---|---|---|---|
-| security_group | Body | Object | 보안 그룹 객체 |
-| security_group.tenant_id | Body | String | 테넌트 ID |
-| security_group.description | Body | String | 보안 그룹 설명 |
-| security_group.id | Body | UUID | 보안 그룹 ID |
-| security_group.security_group_rules | Body | Array | 보안 그룹 규칙 목록 |
-| security_group.name | Body | String | 보안 그룹 이름 |
+| security_group | Body | Object | セキュリティグループオブジェクト |
+| security_group.tenant_id | Body | String | テナントID |
+| security_group.description | Body | String | セキュリティグループの説明 |
+| security_group.id | Body | UUID | セキュリティグループID |
+| security_group.security_group_rules | Body | Array | セキュリティグループルールリスト |
+| security_group.name | Body | String | セキュリティグループ名 |
 
-<details><summary>예시</summary>
+<details><summary>例</summary>
 <p>
 
 ```json
@@ -946,25 +957,25 @@ X-Auth-Token: {tokenId}
 
 ---
 
-### 보안 그룹 생성하기
+### セキュリティグループを作成する
 
-새로운 보안 그룹을 생성합니다. 새로 생성된 보안 그룹은 나가는 방향의 보안 그룹 규칙을 기본적으로 포함합니다.
+新しいセキュリティグループを作成します。新たに作成されたセキュリティグループは、出る方向のセキュリティグループルールを基本的に含んでいます。
 
 ```
 POST /v2.0/security-groups
 X-Auth-Token: {tokenId}
 ```
 
-#### 요청
+#### リクエスト
 
-| 이름 | 종류 | 형식 | 필수 | 설명 |
+| 名前 | 種類 | 形式 | 必須 | 説明 |
 |---|---|---|---|---|
-| tokenId | Header | String | O | 토큰 ID |
-| security_group | Body | Object | O | 보안 그룹 생성 요청 객체 |
-| description | Body | String | - | 보안 그룹 설명 |
-| name | Body | String | - | 보안 그룹 이름 |
+| tokenId | Header | String | O | トークンID |
+| security_group | Body | Object | O | セキュリティグループ作成リクエストオブジェクト |
+| description | Body | String | - | セキュリティグループの説明 |
+| name | Body | String | O | セキュリティグループ名 |
 
-<details><summary>예시</summary>
+<details><summary>例</summary>
 <p>
 
 ```json
@@ -979,18 +990,18 @@ X-Auth-Token: {tokenId}
 </p>
 </details>
 
-#### 응답
+#### レスポンス
 
-| 이름 | 종류 | 형식 | 설명 |
+| 名前 | 種類 | 形式 | 説明 |
 |---|---|---|---|
-| security_group | Body | Object | 보안 그룹 객체 |
-| security_group.tenant_id | Body | String | 테넌트 ID |
-| security_group.description | Body | String | 보안 그룹 설명 |
-| security_group.id | Body | UUID | 보안 그룹 ID |
-| security_group.security_group_rules | Body | Array | 보안 그룹 규칙 목록 |
-| security_group.name | Body | String | 보안 그룹 이름 |
+| security_group | Body | Object | セキュリティグループオブジェクト |
+| security_group.tenant_id | Body | String | テナントID |
+| security_group.description | Body | String | セキュリティグループの説明 |
+| security_group.id | Body | UUID | セキュリティグループID |
+| security_group.security_group_rules | Body | Array | セキュリティグループルールリスト |
+| security_group.name | Body | String | セキュリティグループ名 |
 
-<details><summary>예시</summary>
+<details><summary>例</summary>
 <p>
 
 ```json
@@ -1037,24 +1048,24 @@ X-Auth-Token: {tokenId}
 
 ---
 
-### 보안 그룹 수정하기
-기존 보안 그룹을 수정합니다.
+### セキュリティグループを修正する
+既存セキュリティグループを修正します。
 ```
 PUT /v2.0/security-groups/{securityGroupId}
 X-Auth-Token: {tokenId}
 ```
 
-#### 요청
+#### リクエスト
 
-| 이름 | 종류 | 형식 | 필수 | 설명 |
+| 名前 | 種類 | 形式 | 必須 | 説明 |
 |---|---|---|---|---|
-| tokenId | Header | String | O | 토큰 ID |
-| securityGroupId | URL | UUID | O | 보안 그룹 ID |
-| security_group | Body | Object | O | 보안 그룹 수정 요청 객체 |
-| description | Body | String | - | 보안 그룹 설명 |
-| name | Body | String | - | 보안 그룹 이름 |
+| tokenId | Header | String | O | トークンID |
+| securityGroupId | URL | UUID | O | セキュリティグループID |
+| security_group | Body | Object | O | セキュリティグループ修正リクエストオブジェクト |
+| description | Body | String | - | セキュリティグループの説明 |
+| name | Body | String | - | セキュリティグループ名 |
 
-<details><summary>예시</summary>
+<details><summary>例</summary>
 <p>
 
 ```json
@@ -1069,18 +1080,18 @@ X-Auth-Token: {tokenId}
 </p>
 </details>
 
-#### 응답
+#### レスポンス
 
-| 이름 | 종류 | 형식 | 설명 |
+| 名前 | 種類 | 形式 | 説明 |
 |---|---|---|---|
-| security_group | Body | Object | 보안 그룹 객체 |
-| security_group.tenant_id | Body | String | 테넌트 ID |
-| security_group.description | Body | String | 보안 그룹 설명 |
-| security_group.id | Body | UUID | 보안 그룹 ID |
-| security_group.security_group_rules | Body | Array | 보안 그룹 규칙 목록 |
-| security_group.name | Body | String | 보안 그룹 이름 |
+| security_group | Body | Object | セキュリティグループオブジェクト |
+| security_group.tenant_id | Body | String | テナントID |
+| security_group.description | Body | String | セキュリティグループの説明 |
+| security_group.id | Body | UUID | セキュリティグループID |
+| security_group.security_group_rules | Body | Array | セキュリティグループルールリスト |
+| security_group.name | Body | String | セキュリティグループ名 |
 
-<details><summary>예시</summary>
+<details><summary>例</summary>
 <p>
 
 ```json
@@ -1127,72 +1138,72 @@ X-Auth-Token: {tokenId}
 
 ---
 
-### 보안 그룹 삭제하기
-지정한 보안 그룹을 삭제합니다.
+### セキュリティグループを削除する
+指定したセキュリティグループを削除します。
 ```
 DELETE /v2.0/security-groups/{securityGroupId}
 X-Auth-Token: {tokenId}
 ```
 
-#### 요청
-이 API는 요청 본문을 요구하지 않습니다.
+#### リクエスト
+このAPIはリクエスト本文を要求しません。
 
-| 이름 | 종류 | 형식 | 필수 | 설명 |
+| 名前 | 種類 | 形式 | 必須 | 説明 |
 |---|---|---|---|---|
-| securityGroupId | URL | UUID | O | 보안 그룹 ID |
-| tokenId | Header | String | O | 토큰 ID |
+| securityGroupId | URL | UUID | O | セキュリティグループID |
+| tokenId | Header | String | O | トークンID |
 
-#### 응답
-이 API는 응답 본문을 반환하지 않습니다.
+#### レスポンス
+このAPIはレスポンス本文を返しません。
 
 ---
 
-## 보안 규칙
-### 보안 규칙 목록 보기
+## セキュリティルール
+### セキュリティルールリスト表示
 ```
 GET /v2.0/security-group-rules
 X-Auth-Token: {tokenId}
 ```
 
-#### 요청
-이 API는 요청 본문을 요구하지 않습니다.
+#### リクエスト
+このAPIはリクエスト本文を要求しません。
 
-| 이름 | 종류 | 형식 | 필수 | 설명 |
+| 名前 | 種類 | 形式 | 必須 | 説明 |
 |---|---|---|---|---|
-| tokenId | Header | String | O | 토큰 ID |
-| id | Query | UUID | - | 조회할 보안 규칙 ID |
-| remote_group_id | Query | UUID | - | 조회할 보안 규칙의 원격 보안 그룹 ID |
-| protocol | Query | String | - | 조회할 보안 규칙의 프로토콜 |
-| direction | Query | Enum | - | 조회할 보안 규칙이 적용되는 패킷 방향<br>**ingress** 또는 **egress** |
-| ethertype | Query | Enum | - | 조회할 보안 규칙의 네트워크 트래픽 `Ethertype` 값<br>**IPv4** 또는 **IPv6** |
-| port_range_max | Query | Integer | - | 조회할 보안 규칙의 포트 범위 최댓값 |
-| port_range_min | Query | Integer | - | 조회할 보안 규칙의 포트 범위 최솟값 |
-| security_group_id | Query | UUID | - | 조회할 보안 규칙이 속한 보안 그룹 ID |
-| tenant_id | Query | String | - | 조회할 보안 규칙의 테넌트 ID |
-| remote_ip_prefix | Query | String | - | 조회할 보안 규칙의 목적지 IP 접두사 |
-| description | Query | String | - | 조회할 보안 규칙의 설명 |
-| sort_dir | Query | Enum | - | 조회할 보안 규칙의 정렬 방향<br>`sort_key`에서 지정한 필드를 기준으로 정렬<br>**asc**, **desc** 중 하나 |
-| sort_key | Query | String | - | 조회할 보안 규칙의 정렬 키<br>`sort_dir`에서 지정한 방향대로 정렬 |
-| fields | Query | String | - | 조회할 보안 규칙의 필드 이름<br>예) `fields=id&fields=name` |
+| tokenId | Header | String | O | トークンID |
+| id | Query | UUID | - | 照会するセキュリティルールID |
+| remote_group_id | Query | UUID | - | 照会するセキュリティルールの遠隔セキュリティグループID |
+| protocol | Query | String | - | 照会するセキュリティルールのプロトコル |
+| direction | Query | Enum | - | 照会するセキュリティルールが適用されるパケットの方向<br>**ingress**または**egress** |
+| ethertype | Query | Enum | - | 照会するセキュリティルールのネットワークトラフィック`Ethertype`値<br>**IPv4**または**IPv6** |
+| port_range_max | Query | Integer | - | 照会するセキュリティルールのポート範囲最大値 |
+| port_range_min | Query | Integer | - | 照会するセキュリティルールのポート範囲最小値 |
+| security_group_id | Query | UUID | - | 照会するセキュリティルールが属しているセキュリティグループID |
+| tenant_id | Query | String | - | 照会するセキュリティルールのテナントID |
+| remote_ip_prefix | Query | String | - | 照会するセキュリティルールの宛先IPのプリフィックス |
+| description | Query | String | - | 照会するセキュリティルールの説明 |
+| sort_dir | Query | Enum | - | 照会するセキュリティルールのソート方向<br>`sort_key`で指定したフィールドを基準にソート<br>**asc**、**desc**のいずれか |
+| sort_key | Query | String | - | 照会するセキュリティルールのソートキー<br>`sort_dir`で指定した方向通りにソート |
+| fields | Query | String | - | 照会するセキュリティルールのフィールド名<br>例) `fields=id&fields=name` |
 
-#### 응답
+#### レスポンス
 
-| 이름 | 종류 | 형식 | 설명 |
+| 名前 | 種類 | 形式 | 説明 |
 |---|---|---|---|
-| security_group_rules | Body | Array | 보안 규칙 객체 목록 |
-| security_group_rules.direction | Body | Enum | 보안 규칙이 적용되는 패킷 방향<br>**ingress** 또는 **egress** |
-| security_group_rules.ethertype | Body | Enum | 보안 규칙의 네트워크 트래픽 `Ethertype` 값<br>**IPv4** 또는 **IPv6** |
-| security_group_rules.protocol | Body | String | 보안 규칙의 프로토콜 이름 |
-| security_group_rules.description | Body | String | 보안 규칙 설명 |
-| security_group_rules.port_range_max | Body | Integer | 보안 규칙의 포트 범위 최댓값 |
-| security_group_rules.port_range_min | Body | Integer | 보안 규칙의 포트 범위 최솟값 |
-| security_group_rules.remote_group_id | Body | UUID | 보안 규칙의 원격 보안 그룹 ID |
-| security_group_rules.remote_ip_prefix | Body | Enum | 보안 규칙의 목적지 IP 접두사 |
-| security_group_rules.security_group_id | Body | UUID | 보안 규칙이 속한 보안 그룹 ID |
-| security_group_rules.tenant_id | Body | String | 테넌트 ID |
-| security_group_rules.id | Body | UUID | 보안 규칙 ID |
+| security_group_rules | Body | Array | セキュリティルールオブジェクトリスト |
+| security_group_rules.direction | Body | Enum | セキュリティルールが適用されるパケットの方向<br>**ingress**または**egress** |
+| security_group_rules.ethertype | Body | Enum | セキュリティルールのネットワークトラフィック`Ethertype`値<br>**IPv4**または**IPv6** |
+| security_group_rules.protocol | Body | String | セキュリティルールのプロトコル名 |
+| security_group_rules.description | Body | String | セキュリティルールの説明 |
+| security_group_rules.port_range_max | Body | Integer | セキュリティルールのポート範囲最大値 |
+| security_group_rules.port_range_min | Body | Integer | セキュリティルールのポート範囲最小値 |
+| security_group_rules.remote_group_id | Body | UUID | セキュリティルールの遠隔セキュリティグループID |
+| security_group_rules.remote_ip_prefix | Body | Enum | セキュリティルールの宛先IPのプリフィックス |
+| security_group_rules.security_group_id | Body | UUID | セキュリティルールが属しているセキュリティグループID |
+| security_group_rules.tenant_id | Body | String | テナントID |
+| security_group_rules.id | Body | UUID | セキュリティルールID |
 
-<details><summary>예시</summary>
+<details><summary>例</summary>
 <p>
 
 ```json
@@ -1220,39 +1231,39 @@ X-Auth-Token: {tokenId}
 
 ---
 
-### 보안 규칙 보기
+### セキュリティルール表示
 ```
 GET /v2.0/security-group-rules/{securityGroupRuleId}
 X-Auth-Token: {tokenId}
 ```
 
-#### 요청
-이 API는 요청 본문을 요구하지 않습니다.
+#### リクエスト
+このAPIはリクエスト本文を要求しません。
 
-| 이름 | 종류 | 형식 | 필수 | 설명 |
+| 名前 | 種類 | 形式 | 必須 | 説明 |
 |---|---|---|---|---|
-| securityGroupRuleId | URL | UUID | O | 보안 규칙 ID |
-| tokenId | Header | String | O | 토큰 ID |
-| fields | Query | String | - | 조회할 보안 규칙의 필드 이름<br>예) `fields=id&fields=name` |
+| securityGroupRuleId | URL | UUID | O | セキュリティルールID |
+| tokenId | Header | String | O | トークンID |
+| fields | Query | String | - | 照会するセキュリティルールのフィールド名<br>例) `fields=id&fields=name` |
 
-#### 응답
+#### レスポンス
 
-| 이름 | 종류 | 형식 | 설명 |
+| 名前 | 種類 | 形式 | 説明 |
 |---|---|---|---|
-| security_group_rule | Body | Object | 보안 규칙 객체 |
-| security_group_rule.direction | Body | Enum | 보안 규칙이 적용되는 패킷 방향<br>**ingress** 또는 **egress** |
-| security_group_rule.ethertype | Body | Enum | 보안 규칙의 네트워크 트래픽 `Ethertype` 값<br>**IPv4** 또는 **IPv6** |
-| security_group_rule.protocol | Body | String | 보안 규칙의 프로토콜 이름 |
-| security_group_rule.description | Body | String | 보안 규칙 설명 |
-| security_group_rule.port_range_max | Body | Integer | 조회할 보안 규칙의 포트 범위 최댓값 |
-| security_group_rule.port_range_min | Body | Integer | 조회할 보안 규칙의 포트 범위 최솟값 |
-| security_group_rule.remote_group_id | Body | UUID | 보안 규칙의 원격 보안 그룹 ID |
-| security_group_rule.remote_ip_prefix | Body | Enum | 보안 규칙의 목적지 IP 접두사 |
-| security_group_rule.security_group_id | Body | UUID | 보안 규칙이 속한 보안 그룹 ID |
-| security_group_rule.tenant_id | Body | String | 테넌트 ID |
-| security_group_rule.id | Body | UUID | 보안 규칙 ID |
+| security_group_rule | Body | Object | セキュリティルールオブジェクト |
+| security_group_rule.direction | Body | Enum | セキュリティルールが適用されるパケットの方向<br>**ingress**または**egress** |
+| security_group_rule.ethertype | Body | Enum | セキュリティルールのネットワークトラフィック`Ethertype`値<br>**IPv4**または**IPv6** |
+| security_group_rule.protocol | Body | String | セキュリティルールのプロトコル名 |
+| security_group_rule.description | Body | String | セキュリティルールの説明 |
+| security_group_rule.port_range_max | Body | Integer | 照会するセキュリティルールのポート範囲最大値 |
+| security_group_rule.port_range_min | Body | Integer | 照会するセキュリティルールのポート範囲最小値 |
+| security_group_rule.remote_group_id | Body | UUID | セキュリティルールの遠隔セキュリティグループID |
+| security_group_rule.remote_ip_prefix | Body | Enum | セキュリティルールの宛先IPのプリフィックス |
+| security_group_rule.security_group_id | Body | UUID | セキュリティルールが属しているセキュリティグループID |
+| security_group_rule.tenant_id | Body | String | テナントID |
+| security_group_rule.id | Body | UUID | セキュリティルールID |
 
-<details><summary>예시</summary>
+<details><summary>例</summary>
 <p>
 
 ```json
@@ -1278,32 +1289,32 @@ X-Auth-Token: {tokenId}
 
 ---
 
-### 보안 규칙 생성하기
+### セキュリティルールを作成する
 
-새로운 보안 그룹 규칙을 생성합니다. IPv4에 대한 보안 규칙만 생성할 수 있습니다.
+新しいセキュリティグループルールを作成します。 IPv4に対するセキュリティルールのみ作成できます。
 
 ```
 POST /v2.0/security-group-rules
 X-Auth-Token: {tokenId}
 ```
 
-#### 요청
+#### リクエスト
 
-| 이름 | 종류 | 형식 | 필수 | 설명 |
+| 名前 | 種類 | 形式 | 必須 | 説明 |
 |---|---|---|---|---|
-| tokenId | Header | String | O | 토큰 ID |
-| security_group_rule | Body | Object | O | 보안 규칙 생성 요청 객체 |
-| security_group_rule.remote_group_id | Body | UUID | - | 보안 규칙의 원격 보안 그룹 ID |
-| security_group_rule.direction | Body | Enum | O | 보안 규칙이 적용되는 패킷 방향<br>**ingress**, **egress** |
-| security_group_rule.ethertype | Body | Enum | - | `IPv4`로 지정. 생략 시에 `IPv4`로 지정 |
-| security_group_rule.protocol | Body | String | - | 보안 규칙의 프로토콜 이름. 생략 시에 모든 프로토콜에 적용. |
-| security_group_rule.port_range_max | Body | Integer | - | 보안 규칙의 포트 범위 최댓값 |
-| security_group_rule.port_range_min | Body | Integer | - | 보안 규칙의 포트 범위 최솟값 |
-| security_group_rule.security_group_id | Body | UUID | O | 보안 규칙이 속한 보안 그룹 ID |
-| security_group_rule.remote_ip_prefix | Body | Enum | - | 보안 규칙의 목적지 IP 접두사 |
-| security_group_rule.description | Body | String | - | 보안 규칙 설명 |
+| tokenId | Header | String | O | トークンID |
+| security_group_rule | Body | Object | O | セキュリティルール作成リクエストオブジェクト |
+| security_group_rule.remote_group_id | Body | UUID | - | セキュリティルールの遠隔セキュリティグループID |
+| security_group_rule.direction | Body | Enum | O | セキュリティルールが適用されるパケットの方向<br>**ingress**、**egress** |
+| security_group_rule.ethertype | Body | Enum | - | `IPv4`に指定。省略すると`IPv4`に指定 |
+| security_group_rule.protocol | Body | String | O | セキュリティルールのプロトコル名。省略するとすべてのプロトコルに適用。 |
+| security_group_rule.port_range_max | Body | Integer | - | セキュリティルールのポート範囲最大値 |
+| security_group_rule.port_range_min | Body | Integer | - | セキュリティルールのポート範囲最小値 |
+| security_group_rule.security_group_id | Body | UUID | O | セキュリティルールが属しているセキュリティグループID |
+| security_group_rule.remote_ip_prefix | Body | Enum | - | セキュリティルールの宛先IPのプリフィックス |
+| security_group_rule.description | Body | String | - | セキュリティルールの説明 |
 
-<details><summary>예시</summary>
+<details><summary>例</summary>
 <p>
 
 ```json
@@ -1323,24 +1334,24 @@ X-Auth-Token: {tokenId}
 </p>
 </details>
 
-#### 응답
+#### レスポンス
 
-| 이름 | 종류 | 형식 | 설명 |
+| 名前 | 種類 | 形式 | 説明 |
 |---|---|---|---|
-| security_group_rule | Body | Object | 보안 규칙 객체 |
-| security_group_rule.direction | Body | Enum | 보안 규칙이 적용되는 패킷 방향<br>**ingress** 또는 **egress** |
-| security_group_rule.ethertype | Body | Enum | 보안 규칙의 네트워크 트래픽 `Ethertype` 값<br>**IPv4** 또는 **IPv6** |
-| security_group_rule.protocol | Body | String | 보안 규칙의 프로토콜 이름 |
-| security_group_rule.description | Body | String | 보안 규칙 설명 |
-| security_group_rule.port_range_max | Body | Integer | 조회할 보안 규칙의 포트 범위 최댓값 |
-| security_group_rule.port_range_min | Body | Integer | 조회할 보안 규칙의 포트 범위 최솟값 |
-| security_group_rule.remote_group_id | Body | UUID | 보안 규칙의 원격 보안 그룹 ID |
-| security_group_rule.remote_ip_prefix | Body | Enum | 보안 규칙의 목적지 IP 접두사 |
-| security_group_rule.security_group_id | Body | UUID | 보안 규칙이 속한 보안 그룹 ID |
-| security_group_rule.tenant_id | Body | String | 테넌트 ID |
-| security_group_rule.id | Body | UUID | 보안 규칙 ID |
+| security_group_rule | Body | Object | セキュリティルールオブジェクト |
+| security_group_rule.direction | Body | Enum | セキュリティルールが適用されるパケットの方向<br>**ingress**または**egress** |
+| security_group_rule.ethertype | Body | Enum | セキュリティルールのネットワークトラフィック`Ethertype`値<br>**IPv4**または**IPv6** |
+| security_group_rule.protocol | Body | String | セキュリティルールのプロトコル名 |
+| security_group_rule.description | Body | String | セキュリティルールの説明 |
+| security_group_rule.port_range_max | Body | Integer | 照会するセキュリティルールのポート範囲最大値 |
+| security_group_rule.port_range_min | Body | Integer | 照会するセキュリティルールのポート範囲最小値 |
+| security_group_rule.remote_group_id | Body | UUID | セキュリティルールの遠隔セキュリティグループID |
+| security_group_rule.remote_ip_prefix | Body | Enum | セキュリティルールの宛先IPのプリフィックス |
+| security_group_rule.security_group_id | Body | UUID | セキュリティルールが属しているセキュリティグループID |
+| security_group_rule.tenant_id | Body | String | テナントID |
+| security_group_rule.id | Body | UUID | セキュリティルールID |
 
-<details><summary>예시</summary>
+<details><summary>例</summary>
 <p>
 
 ```json
@@ -1366,20 +1377,20 @@ X-Auth-Token: {tokenId}
 
 ---
 
-### 보안 규칙 삭제하기
-지정한 보안 규칙을 삭제합니다.
+### セキュリティルールを削除する
+指定したセキュリティルールを削除します。
 ```
 DELETE /v2.0/security-group-rules/{securityGroupRuleId}
 X-Auth-Token: {tokenId}
 ```
 
-#### 요청
-이 API는 요청 본문을 요구하지 않습니다.
+#### リクエスト
+このAPIはリクエスト本文を要求しません。
 
-| 이름 | 종류 | 형식 | 필수 | 설명 |
+| 名前 | 種類 | 形式 | 必須 | 説明 |
 |---|---|---|---|---|
-| securityGroupRuleId | URL | UUID | O | 보안 규칙 ID |
-| tokenId | Header | String | O | 토큰 ID |
+| securityGroupRuleId | URL | UUID | O | セキュリティルールID |
+| tokenId | Header | String | O | トークンID |
 
-#### 응답
-이 API는 응답 본문을 반환하지 않습니다.
+#### レスポンス
+このAPIはレスポンス本文を返しません。

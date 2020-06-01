@@ -1,4 +1,4 @@
-﻿## Network > VPC > APIガイド
+## Network > VPC > APIガイド
 
 ## APIバージョン
 ### バージョンリスト表示

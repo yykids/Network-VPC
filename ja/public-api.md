@@ -1,40 +1,14 @@
-## Network > VPC > APIガイド
+## Network > VPC > API v2ガイド
 
-## APIバージョン
-### バージョンリスト表示
+APIを使用するにはAPIエンドポイントとトークンなどが必要です。[API使用準備](/Compute/Compute/ko/identity-api/)を参照してAPIを使用するのに必要な情報を準備します。
 
-TOAST基本インフラサービスNetwork APIでサポートするバージョンリストを確認できます。
+VPC APIは`network`タイプエンドポイントを利用します。正確なエンドポイントはトークン発行レスポンスの`serviceCatalog`を参照します。
 
-```
-GET /
-```
+| タイプ | リージョン | エンドポイント |
+|---|---|---|
+| network | 韓国(パンギョ)リージョン<br>日本リージョン | https://kr1-api-network.infrastructure.cloud.toast.com<br>https://jp1-api-network.infrastructure.cloud.toast.com |
 
-#### リクエスト
-このAPIはリクエスト本文を要求しません。
-
-#### レスポンス
-<details><summary>さらに表示</summary>
-<p>
-
-```json
-{
-  "versions": [
-    {
-      "status": "CURRENT",
-      "id": "v2.0",
-      "links": [
-        {
-          "href": "https://kr1-api-network.cloud.toast.com/v2.0",
-          "rel": "self"
-        }
-      ]
-    }
-  ]
-}
-```
-
-</p>
-</details>
+APIレスポンスにガイドに明示されていないフィールドが表示される場合があります。それらのフィールドは、TOAST内部用途で使用され、事前に告知せずに変更する場合があるため使用しないでください。
 
 ## ネットワーク
 ### ネットワークリスト表示
@@ -97,6 +71,21 @@ X-Auth-Token: {tokenId}
       "shared": false,
       "port_security_enabled": true,
       "id": "245ff686-4ca2-4176-a069-81013537ac3a"
+    },
+    {
+      "name": "public_network",
+      "id": "b04b1c31-f2e9-4ae0-a264-02b7d61ad618",
+      "status": "ACTIVE",
+      "shared": true,
+      "subnets": [
+        "6b3f7d6d-df61-4345-beb5-1621fd274659",
+        "f22ae5cb-5e52-4704-9c31-83dc3826efb7"
+      ],
+      "admin_state_up": true,
+      "port_security_enabled": true,
+      "router:external": true,
+      "tenant_id": "e873d250f2ca40b78e2c12cfbaaeb740",
+      "mtu": 0
     }
   ]
 }
@@ -249,7 +238,7 @@ X-Auth-Token: {tokenId}
 {
   "ports": [
     {
-      "status": "DOWN",
+      "status": "ACTIVE",
       "name": "",
       "allowed_address_pairs": [],
       "admin_state_up": true,
@@ -326,7 +315,7 @@ X-Auth-Token: {tokenId}
 ```json
 {
   "port": {
-    "status": "DOWN",
+    "status": "ACTIVE",
     "name": "",
     "allowed_address_pairs": [],
     "admin_state_up": true,
@@ -687,7 +676,7 @@ X-Auth-Token: {tokenId}
 ```json
 {
     "floatingip": {
-        "port_id": "fc861431-0e6c-4842-a0ed-e2363f9bc3a8"
+        "port_id": "af41e9f7-18ae-43c5-8b7e-7026f792bf3a"
     }
 }
 ```
@@ -715,14 +704,14 @@ X-Auth-Token: {tokenId}
 ```json
 {
   "floatingip": {
-    "floating_network_id": "4b61db01-8183-4540-b2a3-47254a58298d",
-    "router_id": null,
-    "fixed_ip_address": null,
-    "floating_ip_address": "133.186.242.214",
-    "tenant_id": "19eeb40d58684543aef29cbb5ebfe8f0",
+    "floating_network_id": "b04b1c31-f2e9-4ae0-a264-02b7d61ad618",
+    "router_id": "4337119f-8c72-40bf-818a-21258ecb86db",
+    "fixed_ip_address": "192.168.22.96",
+    "floating_ip_address": "133.186.147.40",
+    "tenant_id": "f5073eaa26b64cffbee89411df94ce01",
     "status": "DOWN",
-    "port_id": null,
-    "id": "fed3fcf6-59b1-4f43-93e5-23a47cb5452e"
+    "port_id": "af41e9f7-18ae-43c5-8b7e-7026f792bf3a",
+    "id": "5338b5b2-9d80-46b5-ba13-2fd13f5c498a"
   }
 }
 ```
@@ -973,7 +962,7 @@ X-Auth-Token: {tokenId}
 | tokenId | Header | String | O | トークンID |
 | security_group | Body | Object | O | セキュリティグループ作成リクエストオブジェクト |
 | description | Body | String | - | セキュリティグループの説明 |
-| name | Body | String | O | セキュリティグループ名 |
+| name | Body | String | - | セキュリティグループ名 |
 
 <details><summary>例</summary>
 <p>
@@ -1307,7 +1296,7 @@ X-Auth-Token: {tokenId}
 | security_group_rule.remote_group_id | Body | UUID | - | セキュリティルールの遠隔セキュリティグループID |
 | security_group_rule.direction | Body | Enum | O | セキュリティルールが適用されるパケットの方向<br>**ingress**、**egress** |
 | security_group_rule.ethertype | Body | Enum | - | `IPv4`に指定。省略すると`IPv4`に指定 |
-| security_group_rule.protocol | Body | String | O | セキュリティルールのプロトコル名。省略するとすべてのプロトコルに適用。 |
+| security_group_rule.protocol | Body | String | - | セキュリティルールのプロトコル名。省略するとすべてのプロトコルに適用。 |
 | security_group_rule.port_range_max | Body | Integer | - | セキュリティルールのポート範囲最大値 |
 | security_group_rule.port_range_min | Body | Integer | - | セキュリティルールのポート範囲最小値 |
 | security_group_rule.security_group_id | Body | UUID | O | セキュリティルールが属しているセキュリティグループID |

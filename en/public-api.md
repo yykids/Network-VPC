@@ -606,7 +606,6 @@ X-Auth-Token: {tokenId}
 | tokenId | Header | String | O | Token ID |
 | floatingip | Body | Object | O | Object requesting of creating floating IP |
 | floatingip.floating_network_id | Body | UUID | O | ID of external network including floating IP |
-| floatingip.floating_ip_address | Body | String | - | Floating IP address |
 | floatingip.port_id | Body | UUID | - | ID of port to be attached with floating IP |
 
 <details><summary>Example</summary>
@@ -617,7 +616,6 @@ X-Auth-Token: {tokenId}
 {
   "floatingip": {
     "floating_network_id": "4b61db01-8183-4540-b2a3-47254a58298d",
-    "floating_ip_address": "133.186.242.214",
     "port_id": null
   }
 }

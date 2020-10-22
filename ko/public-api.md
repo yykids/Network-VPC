@@ -598,7 +598,6 @@ X-Auth-Token: {tokenId}
 | tokenId | Header | String | O | 토큰 ID |
 | floatingip | Body | Object | O | 플로팅 IP 생성 요청 객체 |
 | floatingip.floating_network_id | Body | UUID | O | 플로팅 IP가 속한 외부 네트워크 ID |
-| floatingip.floating_ip_address | Body | String | - | 플로팅 IP 주소 |
 | floatingip.port_id | Body | UUID | - | 플로팅 IP가 연결될 포트 ID |
 
 <details><summary>예시</summary>
@@ -608,7 +607,6 @@ X-Auth-Token: {tokenId}
 {
   "floatingip": {
     "floating_network_id": "4b61db01-8183-4540-b2a3-47254a58298d",
-    "floating_ip_address": "133.186.242.214",
     "port_id": null
   }
 }

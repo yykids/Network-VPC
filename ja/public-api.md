@@ -598,7 +598,6 @@ X-Auth-Token: {tokenId}
 | tokenId | Header | String | O | トークンID |
 | floatingip | Body | Object | O | Floating IP作成リクエストオブジェクト |
 | floatingip.floating_network_id | Body | UUID | O | Floating IPが属している外部ネットワークID |
-| floatingip.floating_ip_address | Body | String | - | Floating IPアドレス |
 | floatingip.port_id | Body | UUID | - | Floating IPが接続されるポートID |
 
 <details><summary>例</summary>
@@ -608,7 +607,6 @@ X-Auth-Token: {tokenId}
 {
   "floatingip": {
     "floating_network_id": "4b61db01-8183-4540-b2a3-47254a58298d",
-    "floating_ip_address": "133.186.242.214",
     "port_id": null
   }
 }
